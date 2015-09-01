@@ -1,0 +1,18 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.5.4	//
+!_TAG_REVISION_NAME	MCHPTags	//
+!_TAG_REVISION_VERSION	6.0.1	//
+CONFIG::(CN_ON|CN_IDLE_CON)	X:\mx_test.X\test_main.c	77;"	d	line:77	file:
+INTERRUPT::(CHANGE_INT_ON|CHANGE_INT_PRI_	X:\mx_test.X\test_main.c	80;"	d	line:80	file:
+MAX_SPI_TXFER_SIZE::512	X:\mx_test.X\test_main.c	84;"	d	line:84	file:
+MIN_SPI_TXFER_SIZE::8	X:\mx_test.X\test_main.c	83;"	d	line:83	file:
+PINS::(CN15_ENABLE)	X:\mx_test.X\test_main.c	78;"	d	line:78	file:
+PULLUPS::(CN15_PULLUP_ENABLE)	X:\mx_test.X\test_main.c	79;"	d	line:79	file:
+ReadCoreTimer	X:\mx_test.X\test_main.c	110;"	p	line:110	file:
+SYS_FREQ::(50000000L)	X:\mx_test.X\test_main.c	81;"	d	line:81	file:
+a	X:\mx_test.X\test_main.c	102;"	l	line:102
+main	X:\mx_test.X\test_main.c	100;"	f	line:100	signature:(void)

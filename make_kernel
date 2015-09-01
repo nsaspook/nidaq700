@@ -1,0 +1,1 @@
+make-kpkg -j4  --initrd --append-to-version=-mycustomkernel kernel_image
