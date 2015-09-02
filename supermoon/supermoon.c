@@ -148,6 +148,141 @@ The output range is 0 to 4095 for 0.0 to 2.048 onboard devices (output resolutio
 #include <linux/list.h>  
 #include "comedi_8254.h"  
 
+
+/* Command Definitions */
+#define ADS1220_CMD_RDATA    	0x10
+#define ADS1220_CMD_RREG     	0x20
+#define ADS1220_CMD_WREG     	0x40
+#define ADS1220_CMD_SYNC    	0x08
+#define ADS1220_CMD_SHUTDOWN    0x02
+#define ADS1220_CMD_RESET    	0x06
+
+/* ADS1220 Register Definitions */
+#define ADS1220_0_REGISTER   	0x00
+#define ADS1220_1_REGISTER     	0x01
+#define ADS1220_2_REGISTER     	0x02
+#define ADS1220_3_REGISTER    	0x03
+
+/* ADS1220 Register 0 Definition */
+//   Bit 7   |   Bit 6   |   Bit 5   |   Bit 4   |   Bit 3   |   Bit 2   |   Bit 1   |   Bit 0 
+//--------------------------------------------------------------------------------------------
+//                     MUX [3:0]                 |             GAIN[2:0]             | PGA_BYPASS
+//
+// Define MUX
+#define ADS1220_MUX_0_1   	0x00
+#define ADS1220_MUX_0_2   	0x10
+#define ADS1220_MUX_0_3   	0x20
+#define ADS1220_MUX_1_2   	0x30
+#define ADS1220_MUX_1_3   	0x40
+#define ADS1220_MUX_2_3   	0x50
+#define ADS1220_MUX_1_0   	0x60
+#define ADS1220_MUX_3_2   	0x70
+#define ADS1220_MUX_0_G		0x80
+#define ADS1220_MUX_1_G   	0x90
+#define ADS1220_MUX_2_G   	0xa0
+#define ADS1220_MUX_3_G   	0xb0
+#define ADS1220_MUX_EX_VREF 0xc0
+#define ADS1220_MUX_AVDD   	0xd0
+#define ADS1220_MUX_DIV2   	0xe0
+
+// Define GAIN
+#define ADS1220_GAIN_1      0x00
+#define ADS1220_GAIN_2      0x02
+#define ADS1220_GAIN_4      0x04
+#define ADS1220_GAIN_8      0x06
+#define ADS1220_GAIN_16     0x08
+#define ADS1220_GAIN_32     0x0a
+#define ADS1220_GAIN_64     0x0c
+#define ADS1220_GAIN_128    0x0e
+
+// Define PGA_BYPASS
+#define ADS1220_PGA_BYPASS 	0x01
+
+/* ADS1220 Register 1 Definition */
+//   Bit 7   |   Bit 6   |   Bit 5   |   Bit 4   |   Bit 3   |   Bit 2   |   Bit 1   |   Bit 0 
+//--------------------------------------------------------------------------------------------
+//                DR[2:0]            |      MODE[1:0]        |     CM    |     TS    |    BCS
+//
+// Define DR (data rate)
+#define ADS1220_DR_20		0x00
+#define ADS1220_DR_45		0x20
+#define ADS1220_DR_90		0x40
+#define ADS1220_DR_175		0x60
+#define ADS1220_DR_330		0x80
+#define ADS1220_DR_600		0xa0
+#define ADS1220_DR_1000		0xc0
+
+// Define MODE of Operation
+#define ADS1220_MODE_NORMAL 0x00
+#define ADS1220_MODE_DUTY	0x08
+#define ADS1220_MODE_TURBO 	0x10
+#define ADS1220_MODE_DCT	0x18
+
+// Define CM (conversion mode)
+#define ADS1220_CC			0x04
+
+// Define TS (temperature sensor)
+#define ADS1220_TEMP_SENSOR	0x02
+
+// Define BCS (burnout current source)
+#define ADS1220_BCS			0x01
+
+/* ADS1220 Register 2 Definition */
+//   Bit 7   |   Bit 6   |   Bit 5   |   Bit 4   |   Bit 3   |   Bit 2   |   Bit 1   |   Bit 0 
+//--------------------------------------------------------------------------------------------
+//         VREF[1:0]     |        50/60[1:0]     |    PSW    |             IDAC[2:0]
+//
+// Define VREF
+#define ADS1220_VREF_INT	0x00
+#define ADS1220_VREF_EX_DED	0x40
+#define ADS1220_VREF_EX_AIN	0x80
+#define ADS1220_VREF_SUPPLY	0xc0
+
+// Define 50/60 (filter response)
+#define ADS1220_REJECT_OFF	0x00
+#define ADS1220_REJECT_BOTH	0x10
+#define ADS1220_REJECT_50	0x20
+#define ADS1220_REJECT_60	0x30
+
+// Define PSW (low side power switch)
+#define ADS1220_PSW_SW		0x08
+
+// Define IDAC (IDAC current)
+#define ADS1220_IDAC_OFF	0x00
+#define ADS1220_IDAC_10		0x01
+#define ADS1220_IDAC_50		0x02
+#define ADS1220_IDAC_100	0x03
+#define ADS1220_IDAC_250	0x04
+#define ADS1220_IDAC_500	0x05
+#define ADS1220_IDAC_1000	0x06
+#define ADS1220_IDAC_2000	0x07
+
+/* ADS1220 Register 3 Definition */
+//   Bit 7   |   Bit 6   |   Bit 5   |   Bit 4   |   Bit 3   |   Bit 2   |   Bit 1   |   Bit 0 
+//--------------------------------------------------------------------------------------------
+//               I1MUX[2:0]          |               I2MUX[2:0]          |   DRDYM   | RESERVED
+//
+// Define I1MUX (current routing)
+#define ADS1220_IDAC1_OFF	0x00
+#define ADS1220_IDAC1_AIN0	0x20
+#define ADS1220_IDAC1_AIN1	0x40
+#define ADS1220_IDAC1_AIN2	0x60
+#define ADS1220_IDAC1_AIN3	0x80
+#define ADS1220_IDAC1_REFP0	0xa0
+#define ADS1220_IDAC1_REFN0	0xc0
+
+// Define I2MUX (current routing)
+#define ADS1220_IDAC2_OFF	0x00
+#define ADS1220_IDAC2_AIN0	0x04
+#define ADS1220_IDAC2_AIN1	0x08
+#define ADS1220_IDAC2_AIN2	0x0c
+#define ADS1220_IDAC2_AIN3	0x10
+#define ADS1220_IDAC2_REFP0	0x14
+#define ADS1220_IDAC2_REFN0	0x18
+
+// define DRDYM (DOUT/DRDY behaviour)
+
+#define ADS1220_DRDY_MODE	0x02
 /*
  * for optional SPI framework patch
  */
@@ -470,8 +605,8 @@ static void daqgert_handle_ao_eoc(struct comedi_device *,
 static void my_timer_ai_callback(unsigned long);
 static void daqgert_ai_set_chan_range(struct comedi_device *,
 				      uint32_t, char);
-static uint32_t daqgert_ai_get_sample(struct comedi_device *,
-				      struct comedi_subdevice *);
+static int32_t daqgert_ai_get_sample(struct comedi_device *,
+				     struct comedi_subdevice *);
 static void daqgert_ao_put_sample(struct comedi_device *,
 				  struct comedi_subdevice *,
 				  uint32_t);
@@ -1145,8 +1280,8 @@ static void daqgert_ao_put_sample(struct comedi_device *dev,
 /*
  * returns one value from the ADC device
  */
-static uint32_t daqgert_ai_get_sample(struct comedi_device *dev,
-				      struct comedi_subdevice *s)
+static int32_t daqgert_ai_get_sample(struct comedi_device *dev,
+				     struct comedi_subdevice *s)
 {
 	struct daqgert_private *devpriv = dev->private;
 	struct spi_param_type *spi_data = s->private;
@@ -1154,7 +1289,7 @@ static uint32_t daqgert_ai_get_sample(struct comedi_device *dev,
 	struct comedi_spigert *pdata = spi->dev.platform_data;
 	struct spi_message m;
 	int32_t chan;
-	uint32_t val;
+	int32_t val;
 
 	mutex_lock(&devpriv->drvdata_lock);
 	chan = CR_CHAN(devpriv->ai_chan);
@@ -1180,8 +1315,21 @@ static uint32_t daqgert_ai_get_sample(struct comedi_device *dev,
 			spi_write_then_read(spi_data->spi, pdata->tx_buff, 1,
 					pdata->rx_buff, 1);
 			val += pdata->rx_buff[0] << 8;
-		} else {
-			val = 0; /* place keeper */
+		} else { /* read the ads1220 3 byte data result */
+			pdata->one_t.len = 4;
+			pdata->tx_buff[0] = ADS1220_CMD_RDATA;
+			spi_message_init_with_transfers(&m,
+							&pdata->one_t, 1);
+			spi_bus_lock(spi_data->spi->master);
+			spi_sync_locked(spi_data->spi, &m); /* exchange SPI data */
+			spi_bus_unlock(spi_data->spi->master);
+			val = pdata->rx_buff[1];
+			val = (val << 8) | pdata->rx_buff[2];
+			val = (val << 8) | pdata->rx_buff[3];
+
+			// sign extend data
+			if (val & 0x800000)
+				val |= 0xff000000;
 		}
 		devpriv->ai_count++;
 	} else { /* Gertboard onboard ADC device */
@@ -1216,6 +1364,7 @@ static uint32_t daqgert_ai_get_sample(struct comedi_device *dev,
 	mutex_unlock(&devpriv->drvdata_lock);
 	clear_bit(SPI_AI_RUN, &devpriv->state_bits);
 	smp_mb__after_atomic();
+	// return val & s->maxdata;
 	return val & s->maxdata;
 }
 
@@ -1227,7 +1376,8 @@ static void daqgert_handle_ai_eoc(struct comedi_device *dev,
 {
 	struct daqgert_private *devpriv = dev->private;
 	struct comedi_cmd *cmd = &s->async->cmd;
-	uint32_t next_chan, val;
+	uint32_t next_chan;
+	uint32_t val;
 	uint32_t chan = s->async->cur_chan;
 
 	val = daqgert_ai_get_sample(dev, s);
@@ -2405,6 +2555,7 @@ static int32_t daqgert_auto_attach(struct comedi_device *dev,
 	int32_t num_ai_chan, num_ao_chan, num_dio_chan = NUM_DIO_CHAN;
 	struct daqgert_private *devpriv;
 	struct comedi_spigert *pdata;
+	struct spi_message m;
 
 	/* 
 	 * auto free on exit of comedi
@@ -2481,14 +2632,31 @@ static int32_t daqgert_auto_attach(struct comedi_device *dev,
 				"assigned to adc devices\n",
 				pdata->slave.spi->chip_select,
 				pdata->slave.spi->max_speed_hz);
+			pdata->one_t.tx_buf = pdata->tx_buff;
+			pdata->one_t.rx_buf = pdata->rx_buff;
 			if (daqgert_conf == 4) { /* ads1220 mode */
+				/* 
+				 * 43h, 00h, 04h, 10h,and 00h
+				 * gain 1, conversion mode, reject 50/60Hz, current off
+				 */
+				pdata->one_t.len = 5;
+				pdata->tx_buff[0] = 43;
+				pdata->tx_buff[0] = 00;
+				pdata->tx_buff[0] = 04;
+				pdata->tx_buff[0] = 10;
+				pdata->tx_buff[0] = 00;
+				spi_message_init_with_transfers(&m,
+								&pdata->one_t, 1);
+				spi_bus_lock(pdata->slave.spi->master);
+				spi_sync_locked(pdata->slave.spi, &m); /* exchange SPI data */
+				spi_bus_unlock(pdata->slave.spi->master);
+
+				spi_w8r8(pdata->slave.spi, ADS1220_CMD_SYNC);
 				dev_info(dev->class_dev,
 					"setup: bpw %u, mode 0x%x\n",
 					pdata->slave.spi->bits_per_word,
 					pdata->slave.spi->mode);
 			}
-			pdata->one_t.tx_buf = pdata->tx_buff;
-			pdata->one_t.rx_buf = pdata->rx_buff;
 			clear_bit(CSnA, &spi_device_missing);
 		} else {
 			devpriv->ao_spi = &pdata->slave;
@@ -2987,8 +3155,10 @@ static int32_t daqgert_spi_probe(struct comedi_device * dev,
 		}
 		return spi_adc->chan;
 	} else {
+		spi_w8r8(spi_adc->spi, ADS1220_CMD_RESET);
+		usleep_range(300, 350);
 		spi_adc->pic18 = 1; /* ACP1220 mode */
-		spi_adc->chan = 4;
+		spi_adc->chan = 2;
 		spi_adc->range = 0; /* range 2.048 */
 		spi_adc->bits = 0;
 		dev_info(dev->class_dev,
