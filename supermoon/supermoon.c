@@ -2636,6 +2636,7 @@ static int32_t daqgert_auto_attach(struct comedi_device *dev,
 			pdata->one_t.rx_buf = pdata->rx_buff;
 			if (daqgert_conf == 4) { /* ads1220 mode */
 				/* 
+				 * setup ads1220 registers
 				 * 43h, 00h, 04h, 10h,and 00h
 				 * gain 1, conversion mode, reject 50/60Hz, current off
 				 */
@@ -2651,7 +2652,7 @@ static int32_t daqgert_auto_attach(struct comedi_device *dev,
 				spi_sync_locked(pdata->slave.spi, &m); /* exchange SPI data */
 				spi_bus_unlock(pdata->slave.spi->master);
 
-				spi_w8r8(pdata->slave.spi, ADS1220_CMD_SYNC);
+				spi_w8r8(pdata->slave.spi, ADS1220_CMD_SYNC); /* start conversions */
 				dev_info(dev->class_dev,
 					"setup: bpw %u, mode 0x%x\n",
 					pdata->slave.spi->bits_per_word,
