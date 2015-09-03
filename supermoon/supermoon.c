@@ -1131,6 +1131,32 @@ static int32_t wiringPiSetupGpio(struct comedi_device *dev)
 	return 0;
 }
 
+void ADS1220WriteRegister(int StartAddress, int NumRegs, unsigned * pData, struct comedi_device *dev)
+{
+	int i;
+	struct daqgert_private *devpriv = dev->private;
+	struct spi_param_type *spi_data = s->private;
+	struct spi_device *spi = spi_data->spi;
+	struct comedi_spigert *pdata = spi->dev.platform_data;
+	struct spi_message m;
+
+	// load the command byte
+	pdata->tx_buff[0] = ADS1220_CMD_WREG | (((StartAddress << 2) & 0x0c) | ((NumRegs - 1)&0x03));
+
+	// load the data bytes
+	for (i = 0; i < NumRegs; i++) {
+		pdata->tx_buff[i + 1] = *pData++;
+	}
+
+	pdata->one_t.len = NumRegs + 2;
+	spi_message_init_with_transfers(&m, &pdata->one_t, 1);
+	spi_bus_lock(pdata->slave.spi->master);
+	spi_sync_locked(pdata->slave.spi, &m); /* exchange SPI data */
+	spi_bus_unlock(pdata->slave.spi->master);
+
+	return;
+}
+
 /* 
  * chip byte offsets for arrays for 10 or 12 bit devices 
  */
@@ -2464,6 +2490,12 @@ static int32_t daqgert_ai_rinsn(struct comedi_device *dev,
 	if (unlikely(!devpriv))
 		return -EFAULT;
 
+	mutex_lock(&devpriv->cmd_lock);
+	if (unlikely(test_bit(AI_CMD_RUNNING, &devpriv->state_bits)))
+		goto ai_read_exit;
+
+	devpriv->ai_hunk = false;
+	devpriv->ai_chan = CR_CHAN(insn->chanspec);
 	if (devpriv->ai_spi->device_type == ADS1220) {
 		/* set channel input modes */
 		if (aref == AREF_DIFF)
@@ -2473,12 +2505,7 @@ static int32_t daqgert_ai_rinsn(struct comedi_device *dev,
 			;
 		/* set the input mode and range */
 	}
-	mutex_lock(&devpriv->cmd_lock);
-	if (unlikely(test_bit(AI_CMD_RUNNING, &devpriv->state_bits)))
-		goto ai_read_exit;
 
-	devpriv->ai_hunk = false;
-	devpriv->ai_chan = CR_CHAN(insn->chanspec);
 	/* convert n samples */
 	for (n = 0; n < insn->n; n++) {
 		data[n] = daqgert_ai_get_sample(dev, s);
