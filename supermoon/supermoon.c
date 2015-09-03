@@ -8,7 +8,7 @@
  *	Analog +- 2.5VDC from Zener regulators for the bipolar input stage with external 2.5VDC Zener input
  *	protection.
  * 
- *	Leds: + supply, - supply, DRDY__ LOW
+ *	LEDs: + supply, - supply, DRDY__ LOW
  * 
  *	Board jumpers J1 Left to Right
  *	1 3.3VDC digital supply for direct connection to RPi2 board
