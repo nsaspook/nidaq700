@@ -1,7 +1,17 @@
 /*
  *     comedi/drivers/supermoon.c
- *	A special version for the TI ADS1220 SD ADC converter chip for solar panel panel light detection
- *	ADC is in continuous conversion mode
+ * 
+ *	A special version for the TI ADS1220 SD ADC converter chip (and MCP3911 later) for low voltage sensing and
+ *	solar panel panel light detection. +- 2.048, 1.024 and 0.512 voltage ranges @ 20 bits of usable resolution
+ *	ADC is in continuous conversion mode @20SPS, PGA disabled and gain from 1, 2 and 4 in differential
+ *	signal detection mode, 50/60Hz rejection enabled. 30kHz SPI clock
+ *	Analog +- 2.5VDC from Zener regulators for the bipolar input stage with external 2.5VDC Zener input
+ *	protection.
+ * 
+ *	Board jumpers J1 Left to Right
+ *	1 3.3VDC digital supply for direct connection to RPi2 board
+ *	2 5.0VDC digital supply for optical interconnects for 5VDC or 3.3VDC SPI interfaces
+ *	3 Enable 5VDC power
  *
  *     COMEDI - Linux Control and Measurement Device Interface
  *     Copyright (C) 1998 David A. Schleef <ds@schleef.org>
@@ -48,6 +58,7 @@ Updated: Sept 2015 12:07:20 +0000
 
 The DAQ-GERT appears in Comedi as a  digital I/O subdevice (0) with
 17 or 21 or 30 channels, 
+a analog input subdevice (1) with 2 differential-ended channels with ADC1220 adc, OR
 a analog input subdevice (1) with 2 single-ended channels with onboard adc, OR
 a analog input subdevice (1) with single-ended channels set by the SPI slave device
 and a analog output subdevice(2) with 2 channels with onboard dac
@@ -505,9 +516,9 @@ static const struct comedi_lrange daqgert_ao_range = {1,
 static const struct comedi_lrange range_ads1220_ai = {
 	3,
 	{
-		BIP_RANGE(2.5),
-		BIP_RANGE(5),
-		BIP_RANGE(10)
+		BIP_RANGE(2.048),
+		BIP_RANGE(1.024),
+		BIP_RANGE(0.512)
 	}
 };
 
@@ -2826,18 +2837,17 @@ static int32_t daqgert_auto_attach(struct comedi_device *dev,
 		if (devpriv->ai_spi->device_type == ADS1220) {
 			s->maxdata = (1 << 24) - 1;
 			s->range_table = &range_ads1220_ai;
-			s->n_chan = 4;
-			s->len_chanlist = 4;
+			s->n_chan = 2;
+			s->len_chanlist = 2;
 			if (devpriv->smp) {
-				s->subdev_flags = SDF_READABLE | SDF_GROUND | SDF_DIFF
-					| SDF_CMD_READ | SDF_COMMON;
+				s->subdev_flags = SDF_READABLE | SDF_DIFF
+					| SDF_CMD_READ;
 				s->do_cmdtest = daqgert_ai_cmdtest;
 				s->do_cmd = daqgert_ai_cmd;
 				s->poll = daqgert_ai_poll;
 				s->cancel = daqgert_ai_cancel;
 			} else {
-				s->subdev_flags = SDF_READABLE | SDF_GROUND | SDF_DIFF
-					| SDF_COMMON;
+				s->subdev_flags = SDF_READABLE | SDF_DIFF;
 			}
 		}
 		dev->read_subdev = s;
