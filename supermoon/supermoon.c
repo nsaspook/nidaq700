@@ -14,6 +14,23 @@
  *	1 3.3VDC digital supply for direct connection to RPi2 board
  *	2 5.0VDC digital supply for optical interconnects for 5VDC or 3.3VDC SPI interfaces
  *	3 Enable 5VDC power
+ * 
+ * DIP8 Pins for MCP3002 header
+ * 25K22	RPi DIP8 header		IDC 10 pin connector header ON SLAVE
+ * Pin 21   RB0	SPI Chip-Select	Pin 1		8	CS
+ * Pin 22   RB1	SPI Clock	Pin 7		7	SCK
+ * Pin 23   RB2	SPI Data In	Pin 5		6	SDI
+ * Pin 24   RB3	SPI Data Out	Pin 6		5	SDO
+ * Pin 8    Vss			Pin 4		10	GND
+ * Pin 20   Vdd			Pin 8		9	Vdd 3.3/5.0VDC
+ * Pin 2    RA0	ANA0		Pin 2		1	nc
+ * Pin 3    RA1	ANA1		Pin 3		2	nc
+ * 
+ *	PIC 8722 SPI slave connect
+ *	TRISDbits.TRISD6 = 1; // SCK SSP2 pins in SLAVE mode
+ *	TRISDbits.TRISD5 = 1; // SDI
+ *	TRISDbits.TRISD4 = 0; // SDO
+ *	TRISDbits.TRISD7 = 1; // SS2
  *
  *     COMEDI - Linux Control and Measurement Device Interface
  *     Copyright (C) 1998 David A. Schleef <ds@schleef.org>
