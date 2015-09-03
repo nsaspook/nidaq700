@@ -2665,7 +2665,7 @@ static int32_t daqgert_auto_attach(struct comedi_device *dev,
 
 				spi_w8r8(pdata->slave.spi, ADS1220_CMD_SYNC); /* start conversions */
 				dev_info(dev->class_dev,
-					"setup: bpw %u, mode 0x%x\n",
+					"ADS1220 setup: bpw %u, mode 0x%x\n",
 					pdata->slave.spi->bits_per_word,
 					pdata->slave.spi->mode);
 			}
