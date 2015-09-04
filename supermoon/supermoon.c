@@ -1157,6 +1157,42 @@ void ADS1220WriteRegister(int StartAddress, int NumRegs, unsigned * pData, struc
 	return;
 }
 
+int ADS1220SetChannel(int Mux, struct comedi_device *dev)
+{
+	unsigned int cMux = Mux;
+	// write the register value containing the new value back to the ADS
+	ADS1220WriteRegister(ADS1220_0_REGISTER, 0x01, &cMux, dev);
+
+	return ADS1220_NO_ERROR;
+}
+
+int ADS1220SetGain(int Gain, struct comedi_device *dev)
+{
+	unsigned int cGain = Gain;
+	// write the register value containing the new code back to the ADS
+	ADS1220WriteRegister(ADS1220_0_REGISTER, 0x01, &cGain, dev);
+
+	return ADS1220_NO_ERROR;
+}
+
+int ADS1220SetPGABypass(int Bypass, struct comedi_device *dev)
+{
+	unsigned int cBypass = Bypass;
+	// write the register value containing the new code back to the ADS
+	ADS1220WriteRegister(ADS1220_0_REGISTER, 0x01, &cBypass, dev);
+
+	return ADS1220_NO_ERROR;
+}
+
+int ADS1220SetDataRate(int DataRate, struct comedi_device *dev)
+{
+	unsigned int cDataRate = DataRate;
+	// write the register value containing the new value back to the ADS
+	ADS1220WriteRegister(ADS1220_1_REGISTER, 0x01, &cDataRate, dev);
+
+	return ADS1220_NO_ERROR;
+}
+
 /* 
  * chip byte offsets for arrays for 10 or 12 bit devices 
  */
