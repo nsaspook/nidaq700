@@ -214,7 +214,7 @@ The output range is 0 to 4095 for 0.0 to 2.048 onboard devices (output resolutio
 #define ADS1220_MUX_1_G   	0x90
 #define ADS1220_MUX_2_G   	0xa0
 #define ADS1220_MUX_3_G   	0xb0
-#define ADS1220_MUX_EX_VREF 0xc0
+#define ADS1220_MUX_EX_VREF	0xc0
 #define ADS1220_MUX_AVDD   	0xd0
 #define ADS1220_MUX_DIV2   	0xe0
 
@@ -2816,15 +2816,16 @@ static int32_t daqgert_auto_attach(struct comedi_device *dev,
 			if (daqgert_conf == 4) { /* ads1220 mode */
 				/* 
 				 * setup ads1220 registers
-				 * 43h, 00h, 04h, 10h,and 00h
-				 * gain 1, conversion mode, reject 50/60Hz, current off
 				 */
-				pdata->one_t.len = 5;
-				pdata->tx_buff[0] = 43;
-				pdata->tx_buff[0] = 00;
-				pdata->tx_buff[0] = 04;
-				pdata->tx_buff[0] = 10;
-				pdata->tx_buff[0] = 00;
+				pdata->one_t.len = 8;
+				pdata->tx_buff[0] = ADS1220_CMD_WREG + 3;
+				pdata->tx_buff[1] = ADS1220_GAIN_1;
+				pdata->tx_buff[2] = ADS1220_CC;
+				pdata->tx_buff[3] = ADS1220_REJECT_BOTH;
+				pdata->tx_buff[4] = ADS1220_IDAC_OFF;
+				pdata->tx_buff[5] = ADS1220_CMD_WREG + 1;
+				pdata->tx_buff[6] = ADS1220_MUX_AVDD;
+				pdata->tx_buff[7] = ADS1220_DR_20;
 				spi_message_init_with_transfers(&m,
 								&pdata->one_t, 1);
 				spi_bus_lock(pdata->slave.spi->master);
@@ -3337,7 +3338,7 @@ static int32_t daqgert_spi_probe(struct comedi_device * dev,
 		spi_w8r8(spi_adc->spi, ADS1220_CMD_RESET);
 		usleep_range(300, 350);
 		spi_adc->pic18 = 1; /* ACP1220 mode */
-		spi_adc->chan = 2;
+		spi_adc->chan = 16;
 		spi_adc->range = 0; /* range 2.048 */
 		spi_adc->bits = 0;
 		dev_info(dev->class_dev,
