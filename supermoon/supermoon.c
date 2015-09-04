@@ -1153,7 +1153,8 @@ void ADS1220WriteRegister(int StartAddress, int NumRegs, unsigned * pData, struc
 	pdata->one_t.cs_change = false;
 	pdata->one_t.delay_usecs = 0;
 	spi_message_init_with_transfers(&m, &pdata->one_t, 1);
-	spi_setup(pdata->slave.spi);
+	spi->mode = SPI_MODE_ADS1220;
+	spi_setup(spi);
 	spi_bus_lock(pdata->slave.spi->master);
 	spi_sync_locked(pdata->slave.spi, &m); /* exchange SPI data */
 	spi_bus_unlock(pdata->slave.spi->master);
@@ -1364,6 +1365,7 @@ static void daqgert_ao_put_sample(struct comedi_device *dev,
 	pdata->tx_buff[1] = val_tmp & 0xff;
 	pdata->tx_buff[0] = (0x30 | ((chan & 0x01) << 7)
 		| (val_tmp >> 8));
+	spi_adc->spi->mode = SPI_MODE;
 	spi_setup(spi_data->spi);
 	spi_write_then_read(spi_data->spi, pdata->tx_buff, 2,
 			pdata->rx_buff, 2);
@@ -1390,11 +1392,12 @@ static int32_t daqgert_ai_get_sample(struct comedi_device *dev,
 
 	mutex_lock(&devpriv->drvdata_lock);
 	chan = CR_CHAN(devpriv->ai_chan);
-	spi_setup(spi_data->spi);
 	/* Make SPI messages for the type of ADC are we talking to */
 	/* The PIC Slave needs 8 bit transfers only */
 	if (unlikely(spi_data->pic18)) { /*  PIC18 SPI slave device. NO MULTI_MODE ever */
 		if (likely(devpriv->ai_spi->device_type != ADS1220)) {
+			spi_data->spi->mode = SPI_MODE;
+			spi_setup(spi_data->spi);
 			udelay(devpriv->ai_cmd_delay_usecs); /* ADC conversion delay */
 			pdata->tx_buff[0] = CMD_ADC_GO + chan;
 			spi_write_then_read(spi_data->spi, pdata->tx_buff, 1,
@@ -1423,6 +1426,8 @@ static int32_t daqgert_ai_get_sample(struct comedi_device *dev,
 			pdata->tx_buff[3] = 0;
 			spi_message_init_with_transfers(&m,
 							&pdata->one_t, 1);
+			spi->mode = SPI_MODE_ADS1220;
+			spi_setup(spi);
 			spi_bus_lock(spi_data->spi->master);
 			spi_sync_locked(spi_data->spi, &m); /* exchange SPI data */
 			spi_bus_unlock(spi_data->spi->master);
@@ -1445,6 +1450,8 @@ static int32_t daqgert_ai_get_sample(struct comedi_device *dev,
 			spi_message_init_with_transfers(&m,
 							&pdata->one_t, 1);
 		}
+		spi->mode = SPI_MODE;
+		spi_setup(spi);
 		spi_bus_lock(spi_data->spi->master);
 		spi_sync_locked(spi_data->spi, &m); /* exchange SPI data */
 		spi_bus_unlock(spi_data->spi->master);
@@ -2836,6 +2843,8 @@ static int32_t daqgert_auto_attach(struct comedi_device *dev,
 				pdata->tx_buff[7] = ADS1220_DR_20;
 				spi_message_init_with_transfers(&m,
 								&pdata->one_t, 1);
+				spi->mode = SPI_MODE_ADS1220;
+				spi_setup(spi);
 				spi_bus_lock(pdata->slave.spi->master);
 				spi_sync_locked(pdata->slave.spi, &m); /* exchange SPI data */
 				spi_bus_unlock(pdata->slave.spi->master);
@@ -3289,6 +3298,8 @@ static int32_t daqgert_spi_probe(struct comedi_device * dev,
 		/* 
 		 * SPI data transfers, send a few dummies for config info 
 		 */
+		spi_adc->spi->mode = SPI_MODE;
+		spi_setup(spi_adc->spi);
 		spi_w8r8(spi_adc->spi, CMD_DUMMY_CFG);
 		spi_w8r8(spi_adc->spi, CMD_DUMMY_CFG);
 		ret = spi_w8r8(spi_adc->spi, CMD_DUMMY_CFG);
@@ -3346,8 +3357,8 @@ static int32_t daqgert_spi_probe(struct comedi_device * dev,
 		}
 		return spi_adc->chan;
 	} else {
-		spi_w8r8(spi_adc->spi, ADS1220_CMD_RESET);
-		usleep_range(300, 350);
+		spi_adc->spi->mode = SPI_MODE_ADS1220;
+		spi_setup(spi_adc->spi);
 		spi_w8r8(spi_adc->spi, ADS1220_CMD_RESET);
 		usleep_range(300, 350);
 		spi_adc->pic18 = 1; /* ACP1220 mode */
