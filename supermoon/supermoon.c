@@ -1153,6 +1153,7 @@ void ADS1220WriteRegister(int StartAddress, int NumRegs, unsigned * pData, struc
 	pdata->one_t.cs_change = false;
 	pdata->one_t.delay_usecs = 0;
 	spi_message_init_with_transfers(&m, &pdata->one_t, 1);
+	spi_setup(pdata->slave.spi);
 	spi_bus_lock(pdata->slave.spi->master);
 	spi_sync_locked(pdata->slave.spi, &m); /* exchange SPI data */
 	spi_bus_unlock(pdata->slave.spi->master);
@@ -1363,6 +1364,7 @@ static void daqgert_ao_put_sample(struct comedi_device *dev,
 	pdata->tx_buff[1] = val_tmp & 0xff;
 	pdata->tx_buff[0] = (0x30 | ((chan & 0x01) << 7)
 		| (val_tmp >> 8));
+	spi_setup(spi_data->spi);
 	spi_write_then_read(spi_data->spi, pdata->tx_buff, 2,
 			pdata->rx_buff, 2);
 	s->readback[chan] = val;
@@ -1388,6 +1390,7 @@ static int32_t daqgert_ai_get_sample(struct comedi_device *dev,
 
 	mutex_lock(&devpriv->drvdata_lock);
 	chan = CR_CHAN(devpriv->ai_chan);
+	spi_setup(spi_data->spi);
 	/* Make SPI messages for the type of ADC are we talking to */
 	/* The PIC Slave needs 8 bit transfers only */
 	if (unlikely(spi_data->pic18)) { /*  PIC18 SPI slave device. NO MULTI_MODE ever */
