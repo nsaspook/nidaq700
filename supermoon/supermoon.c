@@ -2818,12 +2818,12 @@ static int32_t daqgert_auto_attach(struct comedi_device *dev,
 				 * setup ads1220 registers
 				 */
 				pdata->one_t.len = 8;
-				pdata->tx_buff[0] = ADS1220_CMD_WREG + 3;
+				pdata->tx_buff[0] = ADS1220_CMD_WREG + 3; // 0..3 bytes
 				pdata->tx_buff[1] = ADS1220_GAIN_1;
 				pdata->tx_buff[2] = ADS1220_CC;
 				pdata->tx_buff[3] = ADS1220_REJECT_BOTH;
 				pdata->tx_buff[4] = ADS1220_IDAC_OFF;
-				pdata->tx_buff[5] = ADS1220_CMD_WREG + 1;
+				pdata->tx_buff[5] = ADS1220_CMD_WREG + 1; // 0..1 bytes
 				pdata->tx_buff[6] = ADS1220_MUX_AVDD;
 				pdata->tx_buff[7] = ADS1220_DR_20;
 				spi_message_init_with_transfers(&m,
