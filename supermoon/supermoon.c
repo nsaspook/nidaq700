@@ -2919,8 +2919,8 @@ static int32_t daqgert_auto_attach(struct comedi_device *dev,
 		if (devpriv->ai_spi->device_type == ADS1220) {
 			s->maxdata = (1 << 24) - 1;
 			s->range_table = &range_ads1220_ai;
-			s->n_chan = 2;
-			s->len_chanlist = 2;
+			s->n_chan = 16;
+			s->len_chanlist = 16;
 			if (devpriv->smp) {
 				s->subdev_flags = SDF_READABLE | SDF_DIFF
 					| SDF_CMD_READ;
