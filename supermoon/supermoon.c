@@ -353,7 +353,8 @@ static LIST_HEAD(device_list);
  * SPI link setup 
  */
 static const uint16_t SPI_MODE = SPI_MODE_3; /* mode 3 for ADC & DAC*/
-static const uint16_t SPI_MODE_ADS = SPI_MODE_1; /* mode 1 for TI ADC */
+static const uint16_t SPI_MODE_ADS1220 = SPI_MODE_1; /* mode 1 for TI ADC */
+static const uint16_t SPI_SPEED_ADS1220 = 30000; /* default clock speed */
 static const uint8_t SPI_BPW = 8; /* 8 bit SPI words */
 
 /* analog chip types (type - 12 bits) */
@@ -474,7 +475,6 @@ struct daqgert_board {
 	uint8_t ao_cs;
 	uint32_t ai_max_speed_hz;
 	uint32_t ai_max_speed_hz_ads1220;
-	uint32_t spi_mode_ads1220;
 	uint32_t ao_max_speed_hz;
 	int32_t ai_node;
 	int32_t ao_node;
@@ -496,7 +496,6 @@ static const struct daqgert_board daqgert_boards[] = {
 		.ao_cs = 1,
 		.ai_max_speed_hz = 1000000,
 		.ai_max_speed_hz_ads1220 = 30000,
-		.spi_mode_ads1220 = 1,
 		.ao_max_speed_hz = 8000000,
 		.ai_node = 3,
 		.ao_node = 2,
@@ -1151,6 +1150,8 @@ void ADS1220WriteRegister(int StartAddress, int NumRegs, unsigned * pData, struc
 	}
 
 	pdata->one_t.len = NumRegs + 2;
+	pdata->one_t.cs_change = false;
+	pdata->one_t.delay_usecs = 0;
 	spi_message_init_with_transfers(&m, &pdata->one_t, 1);
 	spi_bus_lock(pdata->slave.spi->master);
 	spi_sync_locked(pdata->slave.spi, &m); /* exchange SPI data */
@@ -1411,7 +1412,8 @@ static int32_t daqgert_ai_get_sample(struct comedi_device *dev,
 			val += pdata->rx_buff[0] << 8;
 		} else { /* read the ads1220 3 byte data result */
 			pdata->one_t.len = 4;
-			//			pdata->one_t.cs_change = true;
+			pdata->one_t.cs_change = false;
+			pdata->one_t.delay_usecs = 0;
 			pdata->tx_buff[0] = ADS1220_CMD_RDATA;
 			pdata->tx_buff[1] = 0;
 			pdata->tx_buff[2] = 0;
@@ -2805,7 +2807,6 @@ static int32_t daqgert_auto_attach(struct comedi_device *dev,
 			devpriv->ai_spi = &pdata->slave;
 			if (daqgert_conf == 4) { /* ads1220 mode */
 				pdata->slave.spi->max_speed_hz = thisboard->ai_max_speed_hz_ads1220;
-				pdata->slave.spi->mode = thisboard->spi_mode_ads1220;
 			} else {
 				pdata->slave.spi->max_speed_hz = thisboard->ai_max_speed_hz;
 			}
@@ -2837,10 +2838,6 @@ static int32_t daqgert_auto_attach(struct comedi_device *dev,
 				spi_bus_unlock(pdata->slave.spi->master);
 
 				spi_w8r8(pdata->slave.spi, ADS1220_CMD_SYNC); /* start conversions */
-				dev_info(dev->class_dev,
-					"ADS1220 setup: bpw %u, mode 0x%x\n",
-					pdata->slave.spi->bits_per_word,
-					pdata->slave.spi->mode);
 			}
 			clear_bit(CSnA, &spi_device_missing);
 		} else {
@@ -3123,6 +3120,7 @@ static struct comedi_driver daqgert_driver = {
 
 /* 
  * called for each listed spigert device in the bcm270*.c file 
+ * SO THIS RUNS FIRST, setup basic spi comm parameters here
  */
 static int32_t spigert_spi_probe(struct spi_device * spi)
 {
@@ -3161,6 +3159,12 @@ static int32_t spigert_spi_probe(struct spi_device * spi)
 		 * put entry into the Comedi device list 
 		 */
 		list_add_tail(&pdata->device_entry, &device_list);
+		if (daqgert_conf == 4) { /* ads1220 mode */
+			spi->mode = SPI_MODE_ADS1220;
+			spi->max_speed_hz = SPI_SPEED_ADS1220;
+		} else {
+			spi->mode = SPI_MODE;
+		}
 	}
 	if (spi->chip_select == CSnB) {
 		/* 
@@ -3169,9 +3173,9 @@ static int32_t spigert_spi_probe(struct spi_device * spi)
 		INIT_LIST_HEAD(&pdata->device_entry);
 		pdata->slave.spi = spi;
 		list_add_tail(&pdata->device_entry, &device_list);
+		spi->mode = SPI_MODE;
 	}
 	spi->bits_per_word = SPI_BPW;
-	spi->mode = SPI_MODE;
 	spi_setup(spi);
 	dev_info(&spi->dev,
 		"setup: cd %d: bpw %u, mode 0x%x\n",
@@ -3341,6 +3345,8 @@ static int32_t daqgert_spi_probe(struct comedi_device * dev,
 	} else {
 		spi_w8r8(spi_adc->spi, ADS1220_CMD_RESET);
 		usleep_range(300, 350);
+		spi_w8r8(spi_adc->spi, ADS1220_CMD_RESET);
+		usleep_range(300, 350);
 		spi_adc->pic18 = 1; /* ACP1220 mode */
 		spi_adc->chan = 15;
 		spi_adc->range = 0; /* range 2.048 */
@@ -3385,3 +3391,4 @@ MODULE_DESCRIPTION("RPi DIO/AI/AO Driver");
 MODULE_VERSION("4.1.3");
 MODULE_LICENSE("GPL");
 MODULE_ALIAS("spi:spigert");
+
