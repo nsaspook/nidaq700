@@ -1413,6 +1413,9 @@ static int32_t daqgert_ai_get_sample(struct comedi_device *dev,
 			pdata->one_t.len = 4;
 			//			pdata->one_t.cs_change = true;
 			pdata->tx_buff[0] = ADS1220_CMD_RDATA;
+			pdata->tx_buff[1] = 0;
+			pdata->tx_buff[2] = 0;
+			pdata->tx_buff[3] = 0;
 			spi_message_init_with_transfers(&m,
 							&pdata->one_t, 1);
 			spi_bus_lock(spi_data->spi->master);
