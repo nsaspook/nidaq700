@@ -2824,7 +2824,7 @@ static int32_t daqgert_auto_attach(struct comedi_device *dev,
 				pdata->tx_buff[3] = ADS1220_REJECT_BOTH;
 				pdata->tx_buff[4] = ADS1220_IDAC_OFF;
 				pdata->tx_buff[5] = ADS1220_CMD_WREG + 1; // 0..1 bytes
-				pdata->tx_buff[6] = ADS1220_MUX_AVDD;
+				pdata->tx_buff[6] = ADS1220_MUX_AVDD; /* shorted inputs for testing */
 				pdata->tx_buff[7] = ADS1220_DR_20;
 				spi_message_init_with_transfers(&m,
 								&pdata->one_t, 1);
@@ -3338,7 +3338,7 @@ static int32_t daqgert_spi_probe(struct comedi_device * dev,
 		spi_w8r8(spi_adc->spi, ADS1220_CMD_RESET);
 		usleep_range(300, 350);
 		spi_adc->pic18 = 1; /* ACP1220 mode */
-		spi_adc->chan = 16;
+		spi_adc->chan = 15;
 		spi_adc->range = 0; /* range 2.048 */
 		spi_adc->bits = 0;
 		dev_info(dev->class_dev,
