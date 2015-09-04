@@ -16,13 +16,13 @@
  *	3 Enable 5VDC power
  * 
  * DIP8 Pins for MCP3002 header
- * 25K22	RPi DIP8 header		IDC 10 pin connector header ON SLAVE
- * Pin 21   RB0	SPI Chip-Select	Pin 1		8	CS
- * Pin 22   RB1	SPI Clock	Pin 7		7	SCK
- * Pin 23   RB2	SPI Data In	Pin 5		6	SDI
- * Pin 24   RB3	SPI Data Out	Pin 6		5	SDO
- * Pin 8    Vss			Pin 4		10	GND
- * Pin 20   Vdd			Pin 8		9	Vdd 3.3/5.0VDC
+ * 25K22	RPi DIP8 header		IDC 10 pin connector header	ADS1220
+ * Pin 21   RB0	SPI Chip-Select	Pin 1		8	CS		2
+ * Pin 22   RB1	SPI Clock	Pin 7		7	SCK		1
+ * Pin 23   RB2	SPI Data In	Pin 5		6	SDI		16
+ * Pin 24   RB3	SPI Data Out	Pin 6		5	SDO		15
+ * Pin 8    Vss			Pin 4		10	GND		4
+ * Pin 20   Vdd			Pin 8		9	Vdd 3.3/5.0VDC	13
  * Pin 2    RA0	ANA0		Pin 2		1	nc
  * Pin 3    RA1	ANA1		Pin 3		2	nc
  * 
@@ -1411,6 +1411,7 @@ static int32_t daqgert_ai_get_sample(struct comedi_device *dev,
 			val += pdata->rx_buff[0] << 8;
 		} else { /* read the ads1220 3 byte data result */
 			pdata->one_t.len = 4;
+			//			pdata->one_t.cs_change = true;
 			pdata->tx_buff[0] = ADS1220_CMD_RDATA;
 			spi_message_init_with_transfers(&m,
 							&pdata->one_t, 1);
@@ -2824,7 +2825,7 @@ static int32_t daqgert_auto_attach(struct comedi_device *dev,
 				pdata->tx_buff[3] = ADS1220_REJECT_BOTH;
 				pdata->tx_buff[4] = ADS1220_IDAC_OFF;
 				pdata->tx_buff[5] = ADS1220_CMD_WREG + 1; // 0..1 bytes
-				pdata->tx_buff[6] = ADS1220_MUX_AVDD; /* shorted inputs for testing */
+				pdata->tx_buff[6] = ADS1220_MUX_0_1;
 				pdata->tx_buff[7] = ADS1220_DR_20;
 				spi_message_init_with_transfers(&m,
 								&pdata->one_t, 1);
@@ -3006,8 +3007,8 @@ static int32_t daqgert_auto_attach(struct comedi_device *dev,
 		if (devpriv->ai_spi->device_type == ADS1220) {
 			s->maxdata = (1 << 24) - 1;
 			s->range_table = &range_ads1220_ai;
-			s->n_chan = 16;
-			s->len_chanlist = 16;
+			s->n_chan = 15;
+			s->len_chanlist = 15;
 			if (devpriv->smp) {
 				s->subdev_flags = SDF_READABLE | SDF_DIFF
 					| SDF_CMD_READ;
@@ -3342,7 +3343,7 @@ static int32_t daqgert_spi_probe(struct comedi_device * dev,
 		spi_adc->range = 0; /* range 2.048 */
 		spi_adc->bits = 0;
 		dev_info(dev->class_dev,
-			"ADS1220 spi  adc chip board detected, "
+			"ADS1220 spi adc chip board detected, "
 			"%i channels, range code %i, device code %i, "
 			"bits code %i, PIC code %i, detect Code %i\n",
 			spi_adc->chan, spi_adc->range, spi_adc->device_type,
