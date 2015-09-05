@@ -367,7 +367,7 @@ static const uint32_t MCP4822 = 0;
 static const uint32_t PICSL10 = 2;
 static const uint32_t PICSL12 = 0;
 static const uint32_t SPI_BUFF_SIZE = 3072;
-static const uint32_t SPI_BUFF_SIZE_NOHUNK = 16;
+static const uint32_t SPI_BUFF_SIZE_NOHUNK = 64;
 static const uint32_t MAX_CHANLIST_LEN = 256;
 static const uint32_t CONV_SPEED = 5000; /* 10s of nsecs: the true rate is ~3000/5000 so we need a fixup,  two conversions per mix scan */
 static const uint32_t CONV_SPEED_FIX = 19; /* usecs: round it up to ~50usecs total with this */
@@ -495,7 +495,7 @@ static const struct daqgert_board daqgert_boards[] = {
 		.ai_cs = 0,
 		.ao_cs = 1,
 		.ai_max_speed_hz = 1000000,
-		.ai_max_speed_hz_ads1220 = 30000,
+		.ai_max_speed_hz_ads1220 = 1000000,
 		.ao_max_speed_hz = 8000000,
 		.ai_node = 3,
 		.ao_node = 2,
@@ -1365,7 +1365,7 @@ static void daqgert_ao_put_sample(struct comedi_device *dev,
 	pdata->tx_buff[1] = val_tmp & 0xff;
 	pdata->tx_buff[0] = (0x30 | ((chan & 0x01) << 7)
 		| (val_tmp >> 8));
-	spi_adc->spi->mode = SPI_MODE;
+	spi_data->spi->mode = SPI_MODE;
 	spi_setup(spi_data->spi);
 	spi_write_then_read(spi_data->spi, pdata->tx_buff, 2,
 			pdata->rx_buff, 2);
@@ -1417,6 +1417,11 @@ static int32_t daqgert_ai_get_sample(struct comedi_device *dev,
 					pdata->rx_buff, 1);
 			val += pdata->rx_buff[0] << 8;
 		} else { /* read the ads1220 3 byte data result */
+			spi->mode = SPI_MODE_ADS1220;
+			spi_setup(spi);
+			//			sync = ADS1220_CMD_SYNC;
+			//			spi_write(spi, &sync, 1);
+			//			usleep_range(1500, 1600);
 			pdata->one_t.len = 4;
 			pdata->one_t.cs_change = false;
 			pdata->one_t.delay_usecs = 0;
@@ -2745,7 +2750,7 @@ static int32_t daqgert_auto_attach(struct comedi_device *dev,
 {
 	const struct daqgert_board *thisboard = &daqgert_boards[gert_type];
 	struct comedi_subdevice *s;
-	int32_t ret, i;
+	int32_t ret, i, sync;
 	unsigned long spi_device_missing = 0;
 	int32_t num_ai_chan, num_ao_chan, num_dio_chan = NUM_DIO_CHAN;
 	struct daqgert_private *devpriv;
@@ -2832,24 +2837,51 @@ static int32_t daqgert_auto_attach(struct comedi_device *dev,
 				/* 
 				 * setup ads1220 registers
 				 */
-				pdata->one_t.len = 8;
+				pdata->one_t.len = 5;
 				pdata->tx_buff[0] = ADS1220_CMD_WREG + 3; // 0..3 bytes
-				pdata->tx_buff[1] = ADS1220_GAIN_1;
-				pdata->tx_buff[2] = ADS1220_CC;
+				pdata->tx_buff[1] = ADS1220_MUX_0_1 | ADS1220_GAIN_1 | ADS1220_PGA_BYPASS;
+				pdata->tx_buff[2] = ADS1220_DR_1000 | ADS1220_CC;
 				pdata->tx_buff[3] = ADS1220_REJECT_BOTH;
 				pdata->tx_buff[4] = ADS1220_IDAC_OFF;
-				pdata->tx_buff[5] = ADS1220_CMD_WREG + 1; // 0..1 bytes
-				pdata->tx_buff[6] = ADS1220_MUX_0_1;
-				pdata->tx_buff[7] = ADS1220_DR_20;
 				spi_message_init_with_transfers(&m,
 								&pdata->one_t, 1);
-				spi->mode = SPI_MODE_ADS1220;
-				spi_setup(spi);
+				pdata->slave.spi->mode = SPI_MODE_ADS1220;
+				spi_setup(pdata->slave.spi);
 				spi_bus_lock(pdata->slave.spi->master);
 				spi_sync_locked(pdata->slave.spi, &m); /* exchange SPI data */
 				spi_bus_unlock(pdata->slave.spi->master);
-
-				spi_w8r8(pdata->slave.spi, ADS1220_CMD_SYNC); /* start conversions */
+				usleep_range(100, 110);
+				pdata->one_t.len = 5;
+				pdata->tx_buff[0] = ADS1220_CMD_RREG + 3; // 0..3 bytes
+				pdata->tx_buff[1] = 0;
+				pdata->tx_buff[2] = 0;
+				pdata->tx_buff[3] = 0;
+				pdata->tx_buff[4] = 0;
+				pdata->rx_buff[1] = 0;
+				pdata->rx_buff[2] = 0;
+				spi_message_init_with_transfers(&m,
+								&pdata->one_t, 1);
+				pdata->slave.spi->mode = SPI_MODE_ADS1220;
+				spi_setup(pdata->slave.spi);
+				spi_bus_lock(pdata->slave.spi->master);
+				spi_sync_locked(pdata->slave.spi, &m); /* exchange SPI data */
+				spi_bus_unlock(pdata->slave.spi->master);
+				usleep_range(100, 110);
+				/*
+				 * Check to be sure we have a device
+				 */
+				if ((pdata->rx_buff[2] != (ADS1220_DR_1000 | ADS1220_CC)) ||
+				(pdata->rx_buff[1] != (ADS1220_MUX_0_1 | ADS1220_GAIN_1 | ADS1220_PGA_BYPASS))) {
+					dev_info(dev->class_dev,
+						"ADS1220 configuration error: %x %x %x %x\n",
+						pdata->rx_buff[1], pdata->rx_buff[2],
+						pdata->rx_buff[3], pdata->rx_buff[4]);
+				}
+				usleep_range(500, 600);
+				pdata->slave.spi->mode = SPI_MODE_ADS1220;
+				spi_setup(pdata->slave.spi);
+				sync = ADS1220_CMD_SYNC;
+				spi_write(pdata->slave.spi, &sync, 1);
 			}
 			clear_bit(CSnA, &spi_device_missing);
 		} else {
@@ -3019,8 +3051,8 @@ static int32_t daqgert_auto_attach(struct comedi_device *dev,
 		if (devpriv->ai_spi->device_type == ADS1220) {
 			s->maxdata = (1 << 24) - 1;
 			s->range_table = &range_ads1220_ai;
-			s->n_chan = 15;
-			s->len_chanlist = 15;
+			s->n_chan = 1;
+			s->len_chanlist = 1;
 			if (devpriv->smp) {
 				s->subdev_flags = SDF_READABLE | SDF_DIFF
 					| SDF_CMD_READ;
@@ -3260,7 +3292,7 @@ static int32_t daqgert_spi_probe(struct comedi_device * dev,
 				 struct spi_param_type * spi_adc,
 				 struct spi_param_type * spi_dac)
 {
-	int32_t ret = 0;
+	int32_t ret = 0, reset;
 	const struct daqgert_board *thisboard = dev->board_ptr;
 
 	if (!spi_adc->spi) {
@@ -3359,10 +3391,11 @@ static int32_t daqgert_spi_probe(struct comedi_device * dev,
 	} else {
 		spi_adc->spi->mode = SPI_MODE_ADS1220;
 		spi_setup(spi_adc->spi);
-		spi_w8r8(spi_adc->spi, ADS1220_CMD_RESET);
+		reset = ADS1220_CMD_RESET;
+		spi_write(spi_adc->spi, &reset, 1);
 		usleep_range(300, 350);
 		spi_adc->pic18 = 1; /* ACP1220 mode */
-		spi_adc->chan = 15;
+		spi_adc->chan = 1;
 		spi_adc->range = 0; /* range 2.048 */
 		spi_adc->bits = 0;
 		dev_info(dev->class_dev,
