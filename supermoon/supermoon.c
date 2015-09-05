@@ -6,7 +6,7 @@
  *	ADC is in single-shot conversion mode @20SPS, PGA disabled and gain from 1, 2 and 4 in differential
  *	signal detection mode, 50/60Hz rejection enabled. 500kHz SPI clock with direct RPi2 connection
  *	Analog +- 2.5VDC from Zener regulators for the bipolar input stage with external 2.5VDC Zener input
- *	protection.
+ *	signal protection.
  * 
  *	LEDs: + supply, - supply, DRDY__ LOW
  * 
