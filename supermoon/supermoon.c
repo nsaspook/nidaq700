@@ -3,8 +3,8 @@
  * 
  *	A special version for the TI ADS1220 SD ADC converter chip (and MCP3911 later) for low voltage sensing and
  *	solar panel panel light detection. +- 2.048, 1.024 and 0.512 voltage ranges @ 20 bits of usable resolution
- *	ADC is in continuous conversion mode @20SPS, PGA disabled and gain from 1, 2 and 4 in differential
- *	signal detection mode, 50/60Hz rejection enabled. 30kHz SPI clock
+ *	ADC is in single-shot conversion mode @20SPS, PGA disabled and gain from 1, 2 and 4 in differential
+ *	signal detection mode, 50/60Hz rejection enabled. 500kHz SPI clock with direct RPi2 connection
  *	Analog +- 2.5VDC from Zener regulators for the bipolar input stage with external 2.5VDC Zener input
  *	protection.
  * 
@@ -246,7 +246,7 @@ The output range is 0 to 4095 for 0.0 to 2.048 onboard devices (output resolutio
 #define ADS1220_DR_1000		0xc0
 
 // Define MODE of Operation
-#define ADS1220_MODE_NORMAL 0x00
+#define ADS1220_MODE_NORMAL	0x00
 #define ADS1220_MODE_DUTY	0x08
 #define ADS1220_MODE_TURBO 	0x10
 #define ADS1220_MODE_DCT	0x18
@@ -357,8 +357,8 @@ static const uint16_t SPI_MODE_ADS1220 = SPI_MODE_1; /* mode 1 for TI ADC */
 static const uint16_t SPI_SPEED_ADS1220 = 30000; /* default clock speed */
 static const uint8_t SPI_BPW = 8; /* 8 bit SPI words */
 static const uint8_t ads1220_r0 = ADS1220_MUX_0_1 | ADS1220_GAIN_1 | ADS1220_PGA_BYPASS;
-static const uint8_t ads1220_r1 = ADS1220_DR_90 | ADS1220_MODE_TURBO;
-static const uint8_t ads1220_r2 = ADS1220_REJECT_BOTH;
+static const uint8_t ads1220_r1 = ADS1220_DR_20 | ADS1220_MODE_TURBO;
+static const uint8_t ads1220_r2 = ADS1220_REJECT_OFF;
 static const uint8_t ads1220_r3 = ADS1220_IDAC_OFF | ADS1220_DRDY_MODE;
 
 /* analog chip types (type - 12 bits) */
@@ -499,7 +499,7 @@ static const struct daqgert_board daqgert_boards[] = {
 		.ai_cs = 0,
 		.ao_cs = 1,
 		.ai_max_speed_hz = 1000000,
-		.ai_max_speed_hz_ads1220 = 100000,
+		.ai_max_speed_hz_ads1220 = 500000,
 		.ao_max_speed_hz = 8000000,
 		.ai_node = 3,
 		.ao_node = 2,
@@ -1445,8 +1445,6 @@ static int32_t daqgert_ai_get_sample(struct comedi_device *dev,
 			val &= 0x0ffffff;
 			val ^= 0x0800000;
 
-			spi->mode = SPI_MODE_ADS1220;
-			spi_setup(spi);
 			sync = ADS1220_CMD_SYNC;
 			spi_write(spi, &sync, 1);
 		}
@@ -2756,7 +2754,7 @@ static int32_t daqgert_auto_attach(struct comedi_device *dev,
 {
 	const struct daqgert_board *thisboard = &daqgert_boards[gert_type];
 	struct comedi_subdevice *s;
-	int32_t ret, i, junk;
+	int32_t ret, i;
 	unsigned long spi_device_missing = 0;
 	int32_t num_ai_chan, num_ao_chan, num_dio_chan = NUM_DIO_CHAN;
 	struct daqgert_private *devpriv;
@@ -2840,61 +2838,53 @@ static int32_t daqgert_auto_attach(struct comedi_device *dev,
 			pdata->one_t.tx_buf = pdata->tx_buff;
 			pdata->one_t.rx_buf = pdata->rx_buff;
 			if (daqgert_conf == 4) { /* ads1220 mode */
-				for (junk = 0; junk < 1; junk++) {
-					/* 
-					 * setup ads1220 registers
-					 */
-					pdata->one_t.len = 5;
-					pdata->tx_buff[0] = ADS1220_CMD_WREG + 3; // 0..1 bytes
-					pdata->tx_buff[1] = ads1220_r0;
-					pdata->tx_buff[2] = ads1220_r1;
-					pdata->tx_buff[3] = ads1220_r2;
-					pdata->tx_buff[4] = ads1220_r3;
-					spi_message_init_with_transfers(&m,
-									&pdata->one_t, 1);
-					pdata->slave.spi->mode = SPI_MODE_ADS1220;
-					spi_setup(pdata->slave.spi);
-					spi_bus_lock(pdata->slave.spi->master);
-					spi_sync_locked(pdata->slave.spi, &m); /* exchange SPI data */
-					spi_bus_unlock(pdata->slave.spi->master);
-					usleep_range(40, 50);
-					pdata->one_t.len = 5;
-					pdata->tx_buff[0] = ADS1220_CMD_RREG + 3; // 0..3 bytes
-					pdata->tx_buff[1] = 0;
-					pdata->tx_buff[2] = 0;
-					pdata->tx_buff[3] = 0;
-					pdata->tx_buff[4] = 0;
-					pdata->rx_buff[1] = 0;
-					pdata->rx_buff[2] = 0;
-					spi_message_init_with_transfers(&m,
-									&pdata->one_t, 1);
-					pdata->slave.spi->mode = SPI_MODE_ADS1220;
-					spi_setup(pdata->slave.spi);
-					spi_bus_lock(pdata->slave.spi->master);
-					spi_sync_locked(pdata->slave.spi, &m); /* exchange SPI data */
-					spi_bus_unlock(pdata->slave.spi->master);
-					usleep_range(40, 50);
-					/*
-					 * Check to be sure we have a device
-					 */
-					if ((pdata->rx_buff[1] != ads1220_r0) ||
-					(pdata->rx_buff[2] != ads1220_r1)) {
-						dev_info(dev->class_dev,
-							"ADS1220 configuration error: %x %x %x %x\n",
-							pdata->rx_buff[1], pdata->rx_buff[2],
-							pdata->rx_buff[3], pdata->rx_buff[4]);
-					}
-					usleep_range(50, 60);
-					pdata->one_t.len = 1;
-					pdata->tx_buff[0] = ADS1220_CMD_SYNC;
-					spi_message_init_with_transfers(&m,
-									&pdata->one_t, 1);
-					pdata->slave.spi->mode = SPI_MODE_ADS1220;
-					spi_setup(pdata->slave.spi);
-					spi_bus_lock(pdata->slave.spi->master);
-					spi_sync_locked(pdata->slave.spi, &m); /* exchange SPI data */
-					spi_bus_unlock(pdata->slave.spi->master);
+				/* 
+				 * setup ads1220 registers
+				 */
+				pdata->one_t.len = 5;
+				pdata->tx_buff[0] = ADS1220_CMD_WREG + 3; // 0..1 bytes
+				pdata->tx_buff[1] = ads1220_r0;
+				pdata->tx_buff[2] = ads1220_r1;
+				pdata->tx_buff[3] = ads1220_r2;
+				pdata->tx_buff[4] = ads1220_r3;
+				spi_message_init_with_transfers(&m,
+								&pdata->one_t, 1);
+				pdata->slave.spi->mode = SPI_MODE_ADS1220;
+				spi_setup(pdata->slave.spi);
+				spi_bus_lock(pdata->slave.spi->master);
+				spi_sync_locked(pdata->slave.spi, &m); /* exchange SPI data */
+				spi_bus_unlock(pdata->slave.spi->master);
+				usleep_range(40, 50);
+				pdata->one_t.len = 5;
+				pdata->tx_buff[0] = ADS1220_CMD_RREG + 3; // 0..3 bytes
+				pdata->tx_buff[1] = 0;
+				pdata->tx_buff[2] = 0;
+				pdata->tx_buff[3] = 0;
+				pdata->tx_buff[4] = 0;
+				spi_message_init_with_transfers(&m,
+								&pdata->one_t, 1);
+				spi_bus_lock(pdata->slave.spi->master);
+				spi_sync_locked(pdata->slave.spi, &m); /* exchange SPI data */
+				spi_bus_unlock(pdata->slave.spi->master);
+				usleep_range(40, 50);
+				/*
+				 * Check to be sure we have a device
+				 */
+				if ((pdata->rx_buff[1] != ads1220_r0) ||
+				(pdata->rx_buff[2] != ads1220_r1)) {
+					dev_info(dev->class_dev,
+						"ADS1220 configuration error: %x %x %x %x\n",
+						pdata->rx_buff[1], pdata->rx_buff[2],
+						pdata->rx_buff[3], pdata->rx_buff[4]);
 				}
+				usleep_range(50, 60);
+				pdata->one_t.len = 1;
+				pdata->tx_buff[0] = ADS1220_CMD_SYNC;
+				spi_message_init_with_transfers(&m,
+								&pdata->one_t, 1);
+				spi_bus_lock(pdata->slave.spi->master);
+				spi_sync_locked(pdata->slave.spi, &m); /* exchange SPI data */
+				spi_bus_unlock(pdata->slave.spi->master);
 			}
 			clear_bit(CSnA, &spi_device_missing);
 		} else {
