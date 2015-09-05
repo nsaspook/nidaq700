@@ -356,6 +356,7 @@ static LIST_HEAD(device_list);
  * Default SPI link setup 
  */
 static const uint8_t SPI_MODE = SPI_MODE_3; /* mode 3 for ADC & DAC*/
+static const uint32_t SPI_SPEED = 1000000; /* default clock speed */
 static const uint8_t SPI_MODE_ADS1220 = SPI_MODE_1; /* mode 1 for TI ADC */
 static const uint32_t SPI_SPEED_ADS1220 = 30000; /* default clock speed */
 static const uint8_t SPI_BPW = 8; /* 8 bit SPI words */
@@ -1479,6 +1480,7 @@ static int32_t daqgert_ai_get_sample(struct comedi_device *dev,
 							&pdata->one_t, 1);
 		}
 		spi->mode = SPI_MODE;
+		spi->max_speed_hz = SPI_SPEED;
 		spi_setup(spi);
 		spi_bus_lock(spi->master);
 		spi_sync_locked(spi, &m); /* exchange SPI data */
@@ -3241,6 +3243,7 @@ static int32_t spigert_spi_probe(struct spi_device * spi)
 		pdata->slave.spi = spi;
 		list_add_tail(&pdata->device_entry, &device_list);
 		spi->mode = SPI_MODE;
+		spi->max_speed_hz = SPI_SPEED;
 	}
 	spi->bits_per_word = SPI_BPW;
 	spi_setup(spi);
@@ -3354,6 +3357,7 @@ static int32_t daqgert_spi_probe(struct comedi_device * dev,
 		 * SPI data transfers, send a few dummies for config info 
 		 */
 		spi_adc->spi->mode = SPI_MODE;
+		spi_adc->spi->max_speed_hz = SPI_SPEED;
 		spi_setup(spi_adc->spi);
 		spi_w8r8(spi_adc->spi, CMD_DUMMY_CFG);
 		spi_w8r8(spi_adc->spi, CMD_DUMMY_CFG);
@@ -3413,6 +3417,7 @@ static int32_t daqgert_spi_probe(struct comedi_device * dev,
 		return spi_adc->chan;
 	} else {
 		spi_adc->spi->mode = SPI_MODE_ADS1220;
+		spi_adc->spi->max_speed_hz = SPI_SPEED_ADS1220;
 		spi_setup(spi_adc->spi);
 		reset = ADS1220_CMD_RESET;
 		spi_write(spi_adc->spi, &reset, 1);
