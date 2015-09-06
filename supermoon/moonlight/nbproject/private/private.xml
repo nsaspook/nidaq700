@@ -9,7 +9,9 @@
         <group>
             <file>file:/fujitsu/nidaq700/supermoon/bmc/bmc/daq.c</file>
             <file>file:/fujitsu/nidaq700/supermoon/bmc/bmc.c</file>
+            <file>file:/fujitsu/nidaq700/supermoon/bmc/bmc_x86/bmcnet.h</file>
             <file>file:/fujitsu/nidaq700/supermoon/bmc/bmc/daq.h</file>
+            <file>file:/fujitsu/nidaq700/supermoon/bmc/bmc_x86/bmcnet.c</file>
             <file>file:/fujitsu/nidaq700/supermoon/bmc/bmc/bmc.h</file>
         </group>
     </open-files>
