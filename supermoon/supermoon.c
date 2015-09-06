@@ -364,6 +364,7 @@ static const uint8_t SPI_BPW = 8; /* 8 bit SPI words */
  * ads1220 daq configuration
  */
 static const uint8_t ads1220_r0 = ADS1220_MUX_0_1 | ADS1220_GAIN_1 | ADS1220_PGA_BYPASS;
+static const uint8_t ads1220_r0_for_mux = ADS1220_GAIN_1 | ADS1220_PGA_BYPASS;
 static const uint8_t ads1220_r1 = ADS1220_DR_20 | ADS1220_MODE_TURBO;
 static const uint8_t ads1220_r2 = ADS1220_REJECT_OFF;
 static const uint8_t ads1220_r3 = ADS1220_IDAC_OFF | ADS1220_DRDY_MODE;
@@ -1152,6 +1153,7 @@ static int32_t wiringPiSetupGpio(struct comedi_device *dev)
 
 void ADS1220WriteRegister(int StartAddress, int NumRegs, unsigned * pData, struct comedi_subdevice *s)
 {
+	const struct daqgert_board *thisboard = &daqgert_boards[gert_type];
 	int i;
 	struct spi_param_type *spi_data = s->private;
 	struct spi_device *spi = spi_data->spi;
@@ -1168,11 +1170,8 @@ void ADS1220WriteRegister(int StartAddress, int NumRegs, unsigned * pData, struc
 	pdata->one_t.cs_change = false;
 	pdata->one_t.delay_usecs = 0;
 	spi_message_init_with_transfers(&m, &pdata->one_t, 1);
-	/*
-	 *  use defaults here
-	 */
 	spi->mode = SPI_MODE_ADS1220;
-	spi->max_speed_hz = SPI_SPEED_ADS1220;
+	spi->max_speed_hz = thisboard->ai_max_speed_hz;
 	spi_setup(spi);
 	spi_bus_lock(pdata->slave.spi->master);
 	spi_sync_locked(pdata->slave.spi, &m); /* exchange SPI data */
@@ -2654,6 +2653,8 @@ static int32_t daqgert_ai_rinsn(struct comedi_device *dev,
 	int32_t n;
 	uint32_t aref = CR_AREF(insn->chanspec);
 	uint32_t range = CR_RANGE(insn->chanspec);
+	uint32_t chan = CR_CHAN(insn->chanspec);
+	uint32_t cMux;
 
 	if (unlikely(!devpriv))
 		return -EFAULT;
@@ -2663,8 +2664,34 @@ static int32_t daqgert_ai_rinsn(struct comedi_device *dev,
 		goto ai_read_exit;
 
 	devpriv->ai_hunk = false;
-	devpriv->ai_chan = CR_CHAN(insn->chanspec);
 	if (devpriv->ai_spi->device_type == ADS1220) {
+		/*
+		 * convert chan to input MUX switches if needed
+		 */
+		if (devpriv->ai_chan != chan) {
+			switch (chan) {
+			case 0:
+				cMux = ADS1220_MUX_0_1;
+				break;
+			case 1:
+				cMux = ADS1220_MUX_2_3;
+				break;
+			case 2:
+				cMux = ADS1220_MUX_2_G;
+				break;
+			case 3:
+				cMux = ADS1220_MUX_3_G;
+				break;
+			case 4:
+				cMux = ADS1220_MUX_DIV2;
+				break;
+			default:
+				cMux = ADS1220_MUX_0_1;
+			}
+			cMux |= ads1220_r0_for_mux;
+			ADS1220WriteRegister(ADS1220_0_REGISTER, 0x01, &cMux, s);
+		}
+		devpriv->ai_chan = chan;
 		/* set channel input modes */
 		if (aref == AREF_DIFF)
 			;
@@ -3076,8 +3103,8 @@ static int32_t daqgert_auto_attach(struct comedi_device *dev,
 		if (devpriv->ai_spi->device_type == ADS1220) {
 			s->maxdata = (1 << 24) - 1;
 			s->range_table = &range_ads1220_ai;
-			s->n_chan = 4;
-			s->len_chanlist = 1;
+			s->n_chan = 5;
+			s->len_chanlist = 4;
 			if (devpriv->smp) {
 				s->subdev_flags = SDF_READABLE | SDF_DIFF | SDF_GROUND
 					| SDF_CMD_READ;
@@ -3423,7 +3450,7 @@ static int32_t daqgert_spi_probe(struct comedi_device * dev,
 		spi_write(spi_adc->spi, &reset, 1);
 		usleep_range(300, 350);
 		spi_adc->pic18 = 1; /* ACP1220 mode */
-		spi_adc->chan = 4;
+		spi_adc->chan = 5;
 		spi_adc->range = 0; /* range 2.048 */
 		spi_adc->bits = 0;
 		dev_info(dev->class_dev,
