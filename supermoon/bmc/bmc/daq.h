@@ -22,9 +22,8 @@
 extern "C" {
 #endif
 
-#define PVV_C       0x0
-
-#define PVV_NULL    0x1
+#define PVV_C       0
+#define PVV_NULL    4
 
 #define LPCHANC        16
 
