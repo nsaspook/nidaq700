@@ -35,3 +35,7 @@ Module.symvers
 /mx_test_pic18_2/build/default/
 /mx_test_pic18_2/dist/default/
 /supermoon/build/
+/supermoon/moonlight/bmc_x86/dist/
+/supermoon/moonlight/bmc_x86/build/
+/supermoon/moonlight/build/
+/supermoon/moonlight/dist/
