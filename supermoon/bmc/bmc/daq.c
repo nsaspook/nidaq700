@@ -78,12 +78,12 @@ int adc_range(double min_range, double max_range)
 
 double get_adc_volts(int chan, int diff, int range)
 {
-	lsampl_t data[OVER_SAMPLE];	// adc burst data buffer
+	lsampl_t data[OVER_SAMPLE]; // adc burst data buffer
 	int retval;
 	comedi_range *ad_range;
 	comedi_insn daq_insn;
 
-	ADC_ERROR = FALSE;	// global fault flag
+	ADC_ERROR = FALSE; // global fault flag
 
 	if (diff == TRUE) {
 		aref_ai = AREF_DIFF;
@@ -177,16 +177,16 @@ int init_dio(void)
 int get_data_sample(void)
 {
 	int i;
-	static int pv_stable = 0, current_null_reset = FALSE, first_run = TRUE;
+	static int pv_stable = 0, first_run = TRUE;
 
 	if (HAVE_AI) {
-		bmc.pv_voltage = lp_filter(get_adc_volts(PVV_C, TRUE, RANGE_1_5), PVV_C, TRUE); // read PV voltage on DIFF channels
-
 		if (bmc.pv_voltage < 0.0) bmc.pv_voltage = 0.0;
 
 		if (first_run) {
-			first_run = FALSE;
-			get_adc_volts(PVV_NULL, TRUE, RANGE_1_5);
+			if (pv_stable++ >5) first_run = FALSE;
+			bmc.pv_voltage_null=get_adc_volts(PVV_NULL, TRUE, RANGE_1_5);
+		} else {
+			bmc.pv_voltage = lp_filter(get_adc_volts(PVV_C, TRUE, RANGE_1_5), PVV_C, TRUE); // read PV voltage on DIFF channels
 		}
 	} else {
 		return -1;
