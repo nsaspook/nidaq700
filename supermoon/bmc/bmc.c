@@ -1,4 +1,6 @@
 /*
+ * MoonLight logger for ADS1220
+ * 
  * Demo code for remote Daq using Comedi and sockets
  *
  * This file may be freely modified, distributed, and combined with
@@ -94,9 +96,10 @@ int main(int argc, char *argv[])
 		get_data_sample();
 		if (++update >= 59) {
 			if (MDB) {
+				time(&rawtime);
 				printf("         \r\n");
-				printf(" PV Voltage %2.7fV, Raw data %x, PV Null %2.7fV, Raw Null %x",
-				bmc.pv_voltage, bmc.raw[PVV_C], bmc.pv_voltage_null, bmc.raw[PVV_NULL]);
+				printf(" PV Voltage %2.7fV, Raw data %x, PV Null %2.7fV, Raw Null %x, Raw time %ld",
+				bmc.pv_voltage, bmc.raw[PVV_C], bmc.pv_voltage_null, bmc.raw[PVV_NULL], rawtime);
 			}
 		}
 		usleep(100000);
