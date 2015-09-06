@@ -95,9 +95,8 @@ int main(int argc, char *argv[])
 		if (++update >= 59) {
 			if (MDB) {
 				printf("         \r\n");
-				printf(" PV Voltage %2.7fV, Raw data %x, Null %x",
-				bmc.pv_voltage,
-				bmc.raw[PVV_C], bmc.raw[PVV_NULL]);
+				printf(" PV Voltage %2.7fV, Raw data %x, PV Null %2.7fV, Raw Null %x",
+				bmc.pv_voltage, bmc.raw[PVV_C], bmc.pv_voltage_null, bmc.raw[PVV_NULL]);
 			}
 		}
 		usleep(100000);
