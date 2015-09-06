@@ -42,10 +42,10 @@ extern "C" {
     } volatile dotype;
 
     typedef struct bmcdata {
-        double pv_voltage, cm_voltage, cm_current,cm_null,cm_amps;
+        double pv_voltage, pv_voltage_null, cm_voltage, cm_current, cm_null, cm_amps;
         struct didata datain;
         struct dodata dataout;
-        lsampl_t    raw[AI_CHAN];    // number if AI channels with binary values
+        lsampl_t raw[AI_CHAN]; // number if AI channels with binary values
         int32_t utc;
     }
     volatile bmctype;
