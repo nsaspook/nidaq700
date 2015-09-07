@@ -77,7 +77,7 @@ Updated: Sept 2015 12:07:20 +0000
 
 The DAQ-GERT appears in Comedi as a  digital I/O subdevice (0) with
 17 or 21 or 30 channels, 
-a analog input subdevice (1) with a Mux for
+a analog input subdevice (1) with a Mux for bipolar input voltages
 2 differential-ended channels: (0) inputs 0-1, (1) inputs 2-3
 2 single-ended channels: (2) (3) for inputs 2 or 3 
 a internal short of inputs for a offset reading: (4) with the ADC1220 adc, OR
