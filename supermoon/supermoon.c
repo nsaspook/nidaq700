@@ -77,7 +77,10 @@ Updated: Sept 2015 12:07:20 +0000
 
 The DAQ-GERT appears in Comedi as a  digital I/O subdevice (0) with
 17 or 21 or 30 channels, 
-a analog input subdevice (1) with 2 differential-ended channels with ADC1220 adc, OR
+a analog input subdevice (1) with a Mux for
+2 differential-ended channels: (0) inputs 0-1, (1) inputs 2-3
+2 single-ended channels: (2) (3) for inputs 2 or 3 
+a internal short of inputs for a offset reading: (4) with the ADC1220 adc, OR
 a analog input subdevice (1) with 2 single-ended channels with onboard adc, OR
 a analog input subdevice (1) with single-ended channels set by the SPI slave device
 and a analog output subdevice(2) with 2 channels with onboard dac
@@ -138,8 +141,9 @@ by the module option variable daqgert_conf in the /etc/modprobe.d directory
  * 
  * Module parameters are found in the /sys/modules/daq_gert/parameters directory
  * 
-The input  range is 0 to 1023/4095 for 0.0 to 3.3(Vdd) onboard devices or 2.048 volts/Vdd for PIC slaves 
-The output range is 0 to 4095 for 0.0 to 2.048 onboard devices (output resolution depends on the device)
+ * The input  range is 0 to 1023/4095 for 0.0 to 3.3(Vdd) onboard devices, 2.048 volts/Vdd for PIC slaves 
+ * or +-0.512, +-1.024, +-2.048 for the ADS1220 device with usable range in double %2.6fV format for output
+ * The output range is 0 to 4095 for 0.0 to 2.048 onboard devices (output resolution depends on the device)
  * In the async command mode transfers can be handled in HUNK mode by creating a SPI message
  * of many conversion sequences into one message, this allows for close to native driver wire-speed 
  * An optimized DMA driver is in the works
@@ -3379,6 +3383,10 @@ static int32_t daqgert_spi_probe(struct comedi_device * dev,
 		spi_dac->device_type = MCP4802;
 	}
 
+	dev_info(dev->class_dev,
+		 "%s adc board, daqgert_conf option value %i\n",
+		 thisboard->name, daqgert_conf);
+
 	if (spi_adc->device_type != ADS1220) {
 		/* 
 		 * SPI data transfers, send a few dummies for config info 
@@ -3390,9 +3398,7 @@ static int32_t daqgert_spi_probe(struct comedi_device * dev,
 		spi_w8r8(spi_adc->spi, CMD_DUMMY_CFG);
 		ret = spi_w8r8(spi_adc->spi, CMD_DUMMY_CFG);
 		dev_info(dev->class_dev,
-			"%s adc board pre detect code %i, "
-			"daqgert_conf option value %i\n",
-			thisboard->name, ret, daqgert_conf);
+			"pre detect code %i\n", ret);
 		if ((ret != 76) && (ret != 110)) { /* PIC slave adc codes */
 			/*
 			 * check for channel 0 SE 
@@ -3403,18 +3409,18 @@ static int32_t daqgert_spi_probe(struct comedi_device * dev,
 				spi_adc->chan = thisboard->n_aichan;
 				spi_adc->range = 0; /* range 2.048 */
 				dev_info(dev->class_dev,
-					"%s adc chip board detected, %i channels, "
+					"chip detected, %i channels, "
 					"range code %i, device code %i, "
 					"PIC code %i, detect code %i\n",
-					thisboard->name, spi_adc->chan,
+					spi_adc->chan,
 					spi_adc->range, spi_adc->device_type,
 					spi_adc->pic18, ret);
 				return spi_adc->chan;
 			}
 			spi_adc->pic18 = 0; /* SPI probes found nothing */
 			dev_info(dev->class_dev,
-				"no %s adc found, gpio pins only. detect code %i\n",
-				thisboard->name, ret);
+				"no adc found, gpio pins only. detect code %i\n",
+				ret);
 			spi_adc->chan = 0;
 			return spi_adc->chan;
 		}
@@ -3436,9 +3442,9 @@ static int32_t daqgert_spi_probe(struct comedi_device * dev,
 				spi_adc->bits, spi_adc->pic18, ret);
 		} else {
 			spi_adc->pic18 = 0; /* SPI probes found nothing */
-			dev_info(dev->class_dev, "no %s PIC found, gpio pins only. "
+			dev_info(dev->class_dev, "no PIC found, gpio pins only. "
 				"Detect code %i\n",
-				thisboard->name, ret);
+				ret);
 			spi_adc->chan = 0;
 		}
 		return spi_adc->chan;
