@@ -98,7 +98,7 @@ int main(int argc, char *argv[])
 			if (MDB) {
 				time(&rawtime);
 				printf("         \r\n");
-				printf(" PV Voltage %2.7fV, Raw data %x, PV Null %2.7fV, Raw Null %x, Raw time %ld",
+				printf(" PV Voltage %2.6fV, Raw data %x, PV Null %2.6fV, Raw Null %x, Raw time %ld",
 				bmc.pv_voltage, bmc.raw[PVV_C], bmc.pv_voltage_null, bmc.raw[PVV_NULL], rawtime);
 			}
 		}
