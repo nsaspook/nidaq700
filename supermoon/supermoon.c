@@ -480,7 +480,9 @@ struct daqgert_board {
 	const char *name;
 	int32_t board_type;
 	int32_t n_aichan;
+	uint8_t n_aichan_bits;
 	int32_t n_aochan;
+	uint8_t n_aochan_bits;
 	uint32_t ai_ns_min;
 	uint32_t ai_ns_min_calc;
 	uint32_t ai_rate_min;
@@ -497,6 +499,8 @@ struct daqgert_board {
 	uint8_t spi_mode;
 	uint8_t spi_mode_ads1220;
 	uint8_t spi_bpw;
+	uint8_t n_aichan_ads1220;
+	uint8_t n_aichan_bits_ads1220;
 };
 
 static const struct daqgert_board daqgert_boards[] = {
@@ -504,7 +508,9 @@ static const struct daqgert_board daqgert_boards[] = {
 		.name = "Gertboard",
 		.board_type = 0,
 		.n_aichan = 2,
+		.n_aichan_bits = 12,
 		.n_aochan = 2,
+		.n_aochan_bits = 12,
 		.ai_ns_min = 50000, /* values plus software overhead */
 		.ai_ns_min_calc = 35000,
 		.ai_rate_min = 20000,
@@ -521,6 +527,8 @@ static const struct daqgert_board daqgert_boards[] = {
 		.spi_mode = 3,
 		.spi_mode_ads1220 = 1,
 		.spi_bpw = 8,
+		.n_aichan_ads1220 = 5,
+		.n_aichan_bits_ads1220 = 24,
 	},
 	{
 		.name = "Fredboard",
@@ -1155,7 +1163,7 @@ static int32_t wiringPiSetupGpio(struct comedi_device *dev)
 	return 0;
 }
 
-void ADS1220WriteRegister(int StartAddress, int NumRegs, unsigned * pData, struct comedi_subdevice *s)
+static void ADS1220WriteRegister(int StartAddress, int NumRegs, unsigned * pData, struct comedi_subdevice *s)
 {
 	const struct daqgert_board *thisboard = &daqgert_boards[gert_type];
 	int i;
@@ -1182,42 +1190,6 @@ void ADS1220WriteRegister(int StartAddress, int NumRegs, unsigned * pData, struc
 	spi_bus_unlock(pdata->slave.spi->master);
 
 	return;
-}
-
-int ADS1220SetChannel(int Mux, struct comedi_subdevice *s)
-{
-	unsigned int cMux = Mux;
-	// write the register value containing the new value back to the ADS
-	ADS1220WriteRegister(ADS1220_0_REGISTER, 0x01, &cMux, s);
-
-	return ADS1220_NO_ERROR;
-}
-
-int ADS1220SetGain(int Gain, struct comedi_subdevice *s)
-{
-	unsigned int cGain = Gain;
-	// write the register value containing the new code back to the ADS
-	ADS1220WriteRegister(ADS1220_0_REGISTER, 0x01, &cGain, s);
-
-	return ADS1220_NO_ERROR;
-}
-
-int ADS1220SetPGABypass(int Bypass, struct comedi_subdevice *s)
-{
-	unsigned int cBypass = Bypass;
-	// write the register value containing the new code back to the ADS
-	ADS1220WriteRegister(ADS1220_0_REGISTER, 0x01, &cBypass, s);
-
-	return ADS1220_NO_ERROR;
-}
-
-int ADS1220SetDataRate(int DataRate, struct comedi_subdevice *s)
-{
-	unsigned int cDataRate = DataRate;
-	// write the register value containing the new value back to the ADS
-	ADS1220WriteRegister(ADS1220_1_REGISTER, 0x01, &cDataRate, s);
-
-	return ADS1220_NO_ERROR;
 }
 
 /* 
@@ -1340,14 +1312,64 @@ static void daqgert_ai_start_pacer(struct comedi_device *dev,
 			+ msecs_to_jiffies(10));
 }
 
+static void daqgert_ai_set_chan_range_ads1220(struct comedi_device *dev,
+					      struct comedi_subdevice *s,
+					      uint32_t chanspec)
+{
+	struct daqgert_private *devpriv = dev->private;
+	uint32_t aref = CR_AREF(chanspec);
+	uint32_t range = CR_RANGE(chanspec);
+	uint32_t chan = CR_CHAN(chanspec);
+	uint32_t cMux;
+
+	/*
+	 * convert chan to input MUX switches if needed
+	 */
+	if (devpriv->ai_chan != chan) {
+		switch (chan) {
+		case 0:
+			cMux = ADS1220_MUX_0_1;
+			break;
+		case 1:
+			cMux = ADS1220_MUX_2_3;
+			break;
+		case 2:
+			cMux = ADS1220_MUX_2_G;
+			break;
+		case 3:
+			cMux = ADS1220_MUX_3_G;
+			break;
+		case 4:
+			cMux = ADS1220_MUX_DIV2;
+			break;
+		default:
+			cMux = ADS1220_MUX_0_1;
+		}
+		cMux |= ads1220_r0_for_mux;
+		ADS1220WriteRegister(ADS1220_0_REGISTER, 0x01, &cMux, s);
+	}
+	/* set channel input modes */
+	if (aref == AREF_DIFF)
+		;
+
+	if (range >= 1)
+		;
+
+	devpriv->ai_chan = CR_CHAN(chanspec);
+}
+
 /*
- * Only one AI range so only the channel is set
+ * Only one AI range so only the channel is set unless ads1220
  */
 static void daqgert_ai_set_chan_range(struct comedi_device *dev,
 				      uint32_t chanspec,
 				      char wait)
 {
 	struct daqgert_private *devpriv = dev->private;
+
+	if (devpriv->ai_spi->device_type == ADS1220)
+		daqgert_ai_set_chan_range_ads1220(dev, &dev->subdevices[1], chanspec);
+
 	devpriv->ai_chan = CR_CHAN(chanspec);
 
 	if (wait)
@@ -2655,10 +2677,6 @@ static int32_t daqgert_ai_rinsn(struct comedi_device *dev,
 	struct daqgert_private *devpriv = dev->private;
 	int32_t ret = -EBUSY;
 	int32_t n;
-	uint32_t aref = CR_AREF(insn->chanspec);
-	uint32_t range = CR_RANGE(insn->chanspec);
-	uint32_t chan = CR_CHAN(insn->chanspec);
-	uint32_t cMux;
 
 	if (unlikely(!devpriv))
 		return -EFAULT;
@@ -2668,42 +2686,11 @@ static int32_t daqgert_ai_rinsn(struct comedi_device *dev,
 		goto ai_read_exit;
 
 	devpriv->ai_hunk = false;
-	if (devpriv->ai_spi->device_type == ADS1220) {
-		/*
-		 * convert chan to input MUX switches if needed
-		 */
-		if (devpriv->ai_chan != chan) {
-			switch (chan) {
-			case 0:
-				cMux = ADS1220_MUX_0_1;
-				break;
-			case 1:
-				cMux = ADS1220_MUX_2_3;
-				break;
-			case 2:
-				cMux = ADS1220_MUX_2_G;
-				break;
-			case 3:
-				cMux = ADS1220_MUX_3_G;
-				break;
-			case 4:
-				cMux = ADS1220_MUX_DIV2;
-				break;
-			default:
-				cMux = ADS1220_MUX_0_1;
-			}
-			cMux |= ads1220_r0_for_mux;
-			ADS1220WriteRegister(ADS1220_0_REGISTER, 0x01, &cMux, s);
-		}
-		devpriv->ai_chan = chan;
-		/* set channel input modes */
-		if (aref == AREF_DIFF)
-			;
 
-		if (range >= 1)
-			;
-		/* set the input mode and range */
-	}
+	if (devpriv->ai_spi->device_type == ADS1220)
+		daqgert_ai_set_chan_range_ads1220(dev, s, insn->chanspec);
+
+	devpriv->ai_chan = CR_CHAN(insn->chanspec);
 
 	/* convert n samples */
 	for (n = 0; n < insn->n; n++) {
@@ -3048,8 +3035,8 @@ static int32_t daqgert_auto_attach(struct comedi_device *dev,
 	 * assume we have DON"T have a Gertboard 
 	 */
 	dev_info(dev->class_dev,
-		"%s spi slave device detection started\n",
-		thisboard->name);
+		"%s spi slave device detection started, daqgert_conf option value %i\n",
+		thisboard->name, daqgert_conf);
 	devpriv->num_subdev = 1;
 	if (daqgert_spi_probe(dev, devpriv->ai_spi, devpriv->ao_spi))
 		devpriv->num_subdev += 2;
@@ -3087,7 +3074,7 @@ static int32_t daqgert_auto_attach(struct comedi_device *dev,
 		/* we support single-ended (ground)  */
 		s->n_chan = num_ai_chan;
 		s->len_chanlist = num_ai_chan;
-		s->maxdata = (1 << (12 - devpriv->ai_spi->device_type)) - 1;
+		s->maxdata = (1 << (thisboard->n_aichan_bits - devpriv->ai_spi->device_type)) - 1;
 		if (devpriv->ai_spi->range)
 			s->range_table = &daqgert_ai_range2_048;
 		else
@@ -3105,10 +3092,11 @@ static int32_t daqgert_auto_attach(struct comedi_device *dev,
 				| SDF_COMMON;
 		}
 		if (devpriv->ai_spi->device_type == ADS1220) {
-			s->maxdata = (1 << 24) - 1;
+			/* we support single-ended (ground) & diff bipolar  */
+			s->maxdata = (1 << thisboard->n_aichan_bits_ads1220) - 1;
 			s->range_table = &range_ads1220_ai;
-			s->n_chan = 5;
-			s->len_chanlist = 4;
+			s->n_chan = thisboard->n_aichan_ads1220;
+			s->len_chanlist = 1;
 			if (devpriv->smp) {
 				s->subdev_flags = SDF_READABLE | SDF_DIFF | SDF_GROUND
 					| SDF_CMD_READ;
@@ -3131,7 +3119,7 @@ static int32_t daqgert_auto_attach(struct comedi_device *dev,
 		s->n_chan = num_ao_chan;
 		s->len_chanlist = num_ao_chan;
 		/* analog resolution depends on the DAC chip 8,10,12 bits */
-		s->maxdata = (1 << 12) - 1;
+		s->maxdata = (1 << thisboard->n_aochan_bits) - 1;
 		s->range_table = &daqgert_ao_range;
 		s->insn_write = daqgert_ao_winsn;
 		s->insn_read = comedi_readback_insn_read;
@@ -3383,10 +3371,6 @@ static int32_t daqgert_spi_probe(struct comedi_device * dev,
 		spi_dac->device_type = MCP4802;
 	}
 
-	dev_info(dev->class_dev,
-		 "%s adc board, daqgert_conf option value %i\n",
-		 thisboard->name, daqgert_conf);
-
 	if (spi_adc->device_type != ADS1220) {
 		/* 
 		 * SPI data transfers, send a few dummies for config info 
@@ -3456,9 +3440,9 @@ static int32_t daqgert_spi_probe(struct comedi_device * dev,
 		spi_write(spi_adc->spi, &reset, 1);
 		usleep_range(300, 350);
 		spi_adc->pic18 = 1; /* ACP1220 mode */
-		spi_adc->chan = 5;
-		spi_adc->range = 0; /* range 2.048 */
-		spi_adc->bits = 0;
+		spi_adc->chan = thisboard->n_aichan_ads1220;
+		spi_adc->range = 0; /* N/A range 2.048 default */
+		spi_adc->bits = thisboard->n_aichan_bits_ads1220;
 		dev_info(dev->class_dev,
 			"ADS1220 spi adc chip board detected, "
 			"%i channels, range code %i, device code %i, "
