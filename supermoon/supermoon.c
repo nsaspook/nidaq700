@@ -1324,6 +1324,7 @@ static void daqgert_ai_set_chan_range_ads1220(struct comedi_device *dev,
 
 	/*
 	 * convert chanspec to input MUX switches/gains if needed
+	 * we could just feed the raw bits to the Mux if needed
 	 */
 	switch (chan) {
 	case 0:
@@ -1355,7 +1356,7 @@ static void daqgert_ai_set_chan_range_ads1220(struct comedi_device *dev,
 		;
 
 	devpriv->ai_chan = CR_CHAN(chanspec);
-	devpriv->ai_range = CR_RANGE(range);
+	devpriv->ai_range = CR_RANGE(chanspec);
 }
 
 /*
@@ -1371,6 +1372,7 @@ static void daqgert_ai_set_chan_range(struct comedi_device *dev,
 		daqgert_ai_set_chan_range_ads1220(dev, &dev->subdevices[1], chanspec);
 
 	devpriv->ai_chan = CR_CHAN(chanspec);
+	devpriv->ai_range = CR_RANGE(chanspec);
 
 	if (wait)
 		udelay(1);
