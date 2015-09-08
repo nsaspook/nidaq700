@@ -184,10 +184,10 @@ int get_data_sample(void)
 
 		if (first_run) {
 			if (pv_stable++ > PVV_NULL_TIME) first_run = FALSE;
-			bmc.pv_voltage_null = lp_filter(get_adc_volts(PVV_NULL, TRUE, RANGE_1_5), PVV_NULL, FALSE);
+			bmc.pv_voltage_null = lp_filter(get_adc_volts(PVV_NULL, TRUE, RANGE_2_048), PVV_NULL, FALSE);
 			;
 		} else {
-			bmc.pv_voltage = lp_filter(get_adc_volts(PVV_C, TRUE, RANGE_1_5), PVV_C, TRUE); // read PV voltage on DIFF channels
+			bmc.pv_voltage = lp_filter(get_adc_volts(PVV_C, TRUE, RANGE_2_048), PVV_C, TRUE); // read PV voltage on DIFF channels
 		}
 	} else {
 		return -1;
@@ -225,7 +225,7 @@ double lp_filter(double new, int bn, int slow) // low pass filter, slow rate of 
 	if ((bn >= LPCHANC) || (bn < 0)) // check for proper array position
 		return new;
 	if (slow) {
-		lp_speed = 0.033;
+		lp_speed = 0.050;
 	} else {
 		lp_speed = 0.125;
 	}

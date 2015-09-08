@@ -28,7 +28,9 @@ extern "C" {
 
 #define LPCHANC        16
 
-#define RANGE_1_5   2
+#define RANGE_2_048   0
+#define RANGE_1_024   1
+#define RANGE_0_512   2
 
 #include <comedilib.h>
 #include "bmc.h"
