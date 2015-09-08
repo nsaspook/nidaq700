@@ -368,7 +368,7 @@ static const uint8_t SPI_BPW = 8; /* 8 bit SPI words */
  * ads1220 daq configuration
  */
 static const uint8_t ads1220_r0 = ADS1220_MUX_0_1 | ADS1220_GAIN_1 | ADS1220_PGA_BYPASS;
-static const uint8_t ads1220_r0_for_mux = ADS1220_GAIN_1 | ADS1220_PGA_BYPASS;
+static const uint8_t ads1220_r0_for_mux = ADS1220_PGA_BYPASS;
 static const uint8_t ads1220_r1 = ADS1220_DR_20 | ADS1220_MODE_TURBO;
 static const uint8_t ads1220_r2 = ADS1220_REJECT_OFF;
 static const uint8_t ads1220_r3 = ADS1220_IDAC_OFF | ADS1220_DRDY_MODE;
@@ -566,10 +566,10 @@ static const struct comedi_lrange daqgert_ao_range = {1,
 
 static const struct comedi_lrange range_ads1220_ai = {
 	3,
-	{
-		BIP_RANGE(0.512),
+	{ /* gains 1,2,4 */
+		BIP_RANGE(2.048),
 		BIP_RANGE(1.024),
-		BIP_RANGE(2.048)
+		BIP_RANGE(0.512)
 	}
 };
 
@@ -577,7 +577,7 @@ static const struct comedi_lrange range_ads1220_ai = {
  * SPI attached devices used by Comedi for I/O 
  */
 struct spi_param_type {
-	uint32_t range : 1;
+	uint32_t range : 2;
 	uint32_t bits : 2;
 	uint32_t link : 1;
 	uint32_t pic18 : 2;
@@ -620,7 +620,7 @@ struct daqgert_private {
 	unsigned long state_bits;
 	uint32_t ai_rate_max, ao_rate_max, ao_timer, ao_counter;
 	uint32_t ai_conv_delay_usecs, ai_conv_delay_10nsecs, ai_cmd_delay_usecs;
-	int32_t ai_chan, ao_chan, ai_count, ao_count, hunk_count;
+	int32_t ai_chan, ao_chan, ai_count, ao_count, ai_range, hunk_count;
 	struct mutex drvdata_lock, cmd_lock;
 	uint32_t val;
 	uint16_t use_hunking : 1;
@@ -1320,31 +1320,33 @@ static void daqgert_ai_set_chan_range_ads1220(struct comedi_device *dev,
 	uint32_t aref = CR_AREF(chanspec);
 	uint32_t range = CR_RANGE(chanspec);
 	uint32_t chan = CR_CHAN(chanspec);
-	uint32_t cMux;
+	uint32_t cMux = 0;
 
 	/*
-	 * convert chan to input MUX switches if needed
+	 * convert chanspec to input MUX switches/gains if needed
 	 */
-	if (devpriv->ai_chan != chan) {
-		switch (chan) {
-		case 0:
-			cMux = ADS1220_MUX_0_1;
-			break;
-		case 1:
-			cMux = ADS1220_MUX_2_3;
-			break;
-		case 2:
-			cMux = ADS1220_MUX_2_G;
-			break;
-		case 3:
-			cMux = ADS1220_MUX_3_G;
-			break;
-		case 4:
-			cMux = ADS1220_MUX_DIV2;
-			break;
-		default:
-			cMux = ADS1220_MUX_0_1;
-		}
+	switch (chan) {
+	case 0:
+		cMux = ADS1220_MUX_0_1;
+		break;
+	case 1:
+		cMux = ADS1220_MUX_2_3;
+		break;
+	case 2:
+		cMux = ADS1220_MUX_2_G;
+		break;
+	case 3:
+		cMux = ADS1220_MUX_3_G;
+		break;
+	case 4:
+		cMux = ADS1220_MUX_DIV2;
+		break;
+	default:
+		cMux = ADS1220_MUX_0_1;
+	}
+
+	if ((devpriv->ai_chan != chan) || (devpriv->ai_range != range)) {
+		cMux |= (range << 1); /* setup the gain bits for range */
 		cMux |= ads1220_r0_for_mux;
 		ADS1220WriteRegister(ADS1220_0_REGISTER, 0x01, &cMux, s);
 	}
@@ -1352,10 +1354,8 @@ static void daqgert_ai_set_chan_range_ads1220(struct comedi_device *dev,
 	if (aref == AREF_DIFF)
 		;
 
-	if (range >= 1)
-		;
-
 	devpriv->ai_chan = CR_CHAN(chanspec);
+	devpriv->ai_range = CR_RANGE(range);
 }
 
 /*
@@ -3099,13 +3099,14 @@ static int32_t daqgert_auto_attach(struct comedi_device *dev,
 			s->len_chanlist = 1;
 			if (devpriv->smp) {
 				s->subdev_flags = SDF_READABLE | SDF_DIFF | SDF_GROUND
-					| SDF_CMD_READ;
+					| SDF_CMD_READ | SDF_COMMON;
 				s->do_cmdtest = daqgert_ai_cmdtest;
 				s->do_cmd = daqgert_ai_cmd;
 				s->poll = daqgert_ai_poll;
 				s->cancel = daqgert_ai_cancel;
 			} else {
-				s->subdev_flags = SDF_READABLE | SDF_DIFF | SDF_GROUND;
+				s->subdev_flags = SDF_READABLE | SDF_DIFF | SDF_GROUND
+					| SDF_COMMON;
 			}
 		}
 		dev->read_subdev = s;
