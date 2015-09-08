@@ -56,9 +56,16 @@ int main(int argc, char *argv[])
 	void quit();
 	Arg wargs[10];
 	int n, update = 0, update_num = 0;
-	char net_message[256];
+	char net_message[256], solar_data[256];
 	time_t rawtime;
 	struct tm * timeinfo;
+	FILE *fp;
+
+	/*
+	 * start a new log file
+	 *
+	fp = fopen("moonlight.txt", "w+");
+	fclose(fp);
 
 	// Xwindows stuff for later
 	toplevel = XtInitialize(argv[0], "simple", NULL, 0,
@@ -92,14 +99,21 @@ int main(int argc, char *argv[])
 	if (init_dio() < 0) HAVE_DIO = FALSE;
 	printf("\r\n Remote DAQ Client running        \r\n");
 
+	get_data_sample(); /* clear the sample buffers */
 	while (HAVE_AI && HAVE_DIO) {
 		get_data_sample();
 		if (++update >= 59) {
 			if (MDB) {
 				time(&rawtime);
-				printf("         \r\n");
-				printf(" PV Voltage %2.6fV, Raw data %x, PV Null %2.6fV, Raw Null %x, Raw time %ld",
-				bmc.pv_voltage, bmc.raw[PVV_C], bmc.pv_voltage_null, bmc.raw[PVV_NULL], rawtime);
+				sprintf(solar_data, "         \r\n PV Voltage %2.6fV, Raw data %x, PV Null %2.6fV, Raw Null %x, Raw time %ld",
+					bmc.pv_voltage, bmc.raw[PVV_C], bmc.pv_voltage_null, bmc.raw[PVV_NULL], rawtime);
+				printf("%s", solar_data);
+				/*
+				 * update the log file
+				 */
+				fp = fopen("moonlight.txt", "a");
+				fprintf(fp, "%s", solar_data);
+				fclose(fp);
 			}
 		}
 		usleep(100000);
