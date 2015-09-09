@@ -83,13 +83,19 @@
 #include "src/ff.h"
 #include "blinker.h"
 
+#define	ADSCALE		4095	// for unsigned conversion 12 sig bits
+#define	ADREF		2.048	// internal voltage ref on 45K80
+#define	ADOFFSET	0.0015	// correct for zero shift
+#define ADGAIN		0.983	// correct for voltage offset from calibration value 2.000 volts
+
 /*
  * SDCARD variables and buffer storage
  */
 VOLUME_INFO_TYPE MMC_volume_Info = {0}, *vinf = 0;
 uint8_t csd[18] = {0}, cid[18] = {0}, ocr[4] = {0};
 volatile SDCARD_TYPE SDC0 = {MAGIC, 0, FALSE, FALSE}; // active program SD buffer
-int cmd_response = 0, cmd_response_char = 0, cmd_response_port = 0, cmd_data[3] = {0}, SD_NOTRDY = STA_NOINIT;
+int cmd_response = 0, cmd_response_char = 0, cmd_response_port = 0, SD_NOTRDY = STA_NOINIT;
+int cmd_data[3] = {0};
 volatile struct V_data V;
 volatile int32_t spi_flag;
 
@@ -142,7 +148,7 @@ int main(void)
 	char comm_buffer[MAXSTRLEN];
 	int update_rate = 4;
 	int eresult = 0, records = 0, file_errors = 0;
-
+	double Vval, Vcal0;
 
 	// Init remote device data
 	S1.obits.out_byte = 0xff;
@@ -241,10 +247,12 @@ int main(void)
 		a = 0;
 
 		if (((records % 100)) == 0 && !eresult) {
+			Vval = S1_p->adc_data[0];
+			Vcal0 = ((Vval / ADSCALE * ADREF) + ADOFFSET)*ADGAIN;
 			if (S1_p->char_ready) {
-				snprintf(comm_buffer, 64, "\r\n  R data %x , %i, %x , %i , %i , %i , %i                                           ", S1_p->rec_data, records, S1_p->ibits.in_byte, S1_p->adc_data[0], S1_p->adc_data[1], S1_p->adc_data[2], S1_p->adc_data[3]);
+				snprintf(comm_buffer, 64, "\r\n  R data %x , %i, %x , %i , %i , %i , %i , %2.4f volts                                         ", S1_p->rec_data, records, S1_p->ibits.in_byte, S1_p->adc_data[0], S1_p->adc_data[1], S1_p->adc_data[2], S1_p->adc_data[3], Vcal0);
 			} else {
-				snprintf(comm_buffer, 64, "\r\n  B data %x , %i , %i , %i , %i , %i                                               ", S1_p->ibits.in_byte, records, S1_p->adc_data[0], S1_p->adc_data[1], S1_p->adc_data[2], S1_p->adc_data[3]);
+				snprintf(comm_buffer, 64, "\r\n  B data %x , %i , %i , %i , %i , %i  , %2.4f volts                                             ", S1_p->ibits.in_byte, records, S1_p->adc_data[0], S1_p->adc_data[1], S1_p->adc_data[2], S1_p->adc_data[3], Vcal0);
 			}
 			S1_p->rec_tmp = SpiStringWrite(comm_buffer);
 			if (spi_flag) {
