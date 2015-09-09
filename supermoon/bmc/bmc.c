@@ -95,8 +95,8 @@ int main(int argc, char *argv[])
 
 
 
-	if (init_daq() < 0) HAVE_AI = FALSE;
-	if (init_dio() < 0) HAVE_DIO = FALSE;
+//	if (init_daq() < 0) HAVE_AI = FALSE;
+//	if (init_dio() < 0) HAVE_DIO = FALSE;
 	printf("\r\n Remote DAQ Client running        \r\n");
 
 	get_data_sample(); /* clear the sample buffers */
