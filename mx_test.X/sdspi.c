@@ -587,7 +587,7 @@ int SpiADCRead(unsigned char channel)
 	DelaySPI(50, HIGH); // delay for adc conversion time and look for SRQ signal
 	cmd_data[0] = xmit_spi_bus(CMD_ADC_DATA, 1);
 	cmd_data[1] = xmit_spi_bus(CMD_DUMMY_CFG, 1);
-	return(short int) (cmd_data[0] | (cmd_data[1] << 8));
+	return(short int) (cmd_data[0] | (cmd_data[1] << 8)); /* use the short to make this a signed type */
 }
 
 unsigned char SpiPortWrite(unsigned char data)

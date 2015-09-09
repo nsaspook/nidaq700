@@ -32,12 +32,13 @@ int SpiADCRead(unsigned char);
 unsigned char SpiStringWrite(char*);
 unsigned char SpiSerialGetChar(void);
 
-extern unsigned char csd[18], cid[18],ocr[4];
+extern unsigned char csd[18], cid[18], ocr[4];
 extern VOLUME_INFO_TYPE MMC_volume_Info, *vinf;
 extern volatile SDCARD_TYPE SDC0;
 
 extern void wdttime(unsigned long int);
-extern int cmd_response, cmd_response_char, cmd_response_port, cmd_data[3], SD_NOTRDY;
+extern int cmd_response, cmd_response_char, cmd_response_port, SD_NOTRDY;
+extern int cmd_data[3];
 extern volatile struct V_data V;
 extern union Obits2 LEDS;
 extern volatile int32_t spi_flag;
