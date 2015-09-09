@@ -113,8 +113,8 @@ int main(int argc, char *argv[])
 				 * update the log file
 				 */
 				fp = fopen("moonlight.txt", "a");
-				sprintf(solar_data, "         \r\n %2.6fV, %2.6fV, Raw Null %x, %ld",
-					bmc.pv_voltage, bmc.pv_voltage_null, firsttime - rawtime);
+				sprintf(solar_data, "         \r\n %2.6fV, %2.6fV, %ld",
+					bmc.pv_voltage, bmc.pv_voltage_null, rawtime -firsttime);
 				fprintf(fp, "%s", solar_data);
 				fclose(fp);
 			}
