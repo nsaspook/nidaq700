@@ -63,7 +63,7 @@ int main(int argc, char *argv[])
 
 	/*
 	 * start a new log file
-	 *
+	 */
 	fp = fopen("moonlight.txt", "w+");
 	fclose(fp);
 
@@ -93,10 +93,8 @@ int main(int argc, char *argv[])
 	XtAddCallback(command, XtNcallback, quit, NULL);
 	XtRealizeWidget(toplevel);
 
-
-
-//	if (init_daq() < 0) HAVE_AI = FALSE;
-//	if (init_dio() < 0) HAVE_DIO = FALSE;
+	if (init_daq() < 0) HAVE_AI = FALSE;
+	if (init_dio() < 0) HAVE_DIO = FALSE;
 	printf("\r\n Remote DAQ Client running        \r\n");
 
 	get_data_sample(); /* clear the sample buffers */
