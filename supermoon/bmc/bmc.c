@@ -57,7 +57,7 @@ int main(int argc, char *argv[])
 	Arg wargs[10];
 	int n, update = 0, update_num = 0;
 	char net_message[256], solar_data[256];
-	time_t rawtime;
+	time_t rawtime, firsttime;
 	struct tm * timeinfo;
 	FILE *fp;
 
@@ -100,18 +100,23 @@ int main(int argc, char *argv[])
 	printf("\r\n Remote DAQ Client running        \r\n");
 
 	get_data_sample(); /* clear the sample buffers */
+	time(&firsttime);
 	while (HAVE_AI && HAVE_DIO) {
 		get_data_sample();
 		if (++update >= 59) {
 			if (MDB) {
 				time(&rawtime);
-				sprintf(solar_data, "         \r\n PV Voltage %2.6fV, Raw data %x, PV Null %2.6fV, Raw Null %x, Raw time %ld",
+				/*
+				 * update the console
+				 */
+				printf("         \r\n PV Voltage %2.6fV, Raw data %x, PV Null %2.6fV, Raw Null %x, Raw time %ld",
 					bmc.pv_voltage, bmc.raw[PVV_C], bmc.pv_voltage_null, bmc.raw[PVV_NULL], rawtime);
-				printf("%s", solar_data);
 				/*
 				 * update the log file
 				 */
 				fp = fopen("moonlight.txt", "a");
+				sprintf(solar_data, "         \r\n %2.6fV, %2.6fV, Raw Null %x, %ld",
+					bmc.pv_voltage, bmc.pv_voltage_null, firsttime - rawtime);
 				fprintf(fp, "%s", solar_data);
 				fclose(fp);
 			}
