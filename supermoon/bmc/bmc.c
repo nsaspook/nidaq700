@@ -28,6 +28,7 @@
 #define MDB1	FALSE
 #define ADOFFSET	-0.0000025
 #define ADGAIN		1.00127
+#define ADRES		4998.0 // OHM
 
 struct bmcdata bmc;
 unsigned char HAVE_DIO = TRUE, HAVE_AI = TRUE;
@@ -62,6 +63,7 @@ int main(int argc, char *argv[])
 	time_t rawtime, firsttime;
 	struct tm * timeinfo;
 	FILE *fp;
+	double PVcal, PVi, PVp;
 
 	/*
 	 * start a new log file
@@ -101,6 +103,11 @@ int main(int argc, char *argv[])
 
 	get_data_sample(); /* clear the sample buffers */
 	time(&firsttime);
+	fp = fopen("moonlight.txt", "a");
+	sprintf(solar_data, "         \r\n %2.6f, %1.9f, %2.6f, %ld",
+		PVcal, PVp, bmc.pv_voltage_null, firsttime);
+	fprintf(fp, "%s", solar_data);
+	fclose(fp);
 	while (HAVE_AI && HAVE_DIO) {
 		get_data_sample();
 		if (++update >= 59) {
@@ -109,14 +116,17 @@ int main(int argc, char *argv[])
 				/*
 				 * update the console
 				 */
-				printf("         \r\n PV Voltage %2.6fV, Raw data %x, PV Null %2.6fV, Raw Null %x, Raw time %ld",
-					(bmc.pv_voltage+ADOFFSET)*ADGAIN, bmc.raw[PVV_C], bmc.pv_voltage_null, bmc.raw[PVV_NULL], rawtime);
+				PVcal = (bmc.pv_voltage + ADOFFSET) * ADGAIN;
+				PVi = PVcal / ADRES;
+				PVp = PVcal*PVi;
+				printf("         \r\n PV Voltage %2.6fV, PV Power %0.9fW, Raw data %x, PV Null %2.6fV, Raw Null %x, Raw time %ld",
+				PVcal, PVp, bmc.raw[PVV_C], bmc.pv_voltage_null, bmc.raw[PVV_NULL], rawtime);
 				/*
 				 * update the log file
 				 */
 				fp = fopen("moonlight.txt", "a");
-				sprintf(solar_data, "         \r\n %2.6fV, %2.6fV, %ld",
-					(bmc.pv_voltage+ADOFFSET)*ADGAIN, bmc.pv_voltage_null, rawtime -firsttime);
+				sprintf(solar_data, "         \r\n %2.6f, %1.9f, %2.6f, %ld",
+					PVcal, PVp, bmc.pv_voltage_null, rawtime - firsttime);
 				fprintf(fp, "%s", solar_data);
 				fclose(fp);
 			}
