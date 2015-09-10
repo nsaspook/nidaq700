@@ -26,6 +26,8 @@
 
 #define MDB	TRUE
 #define MDB1	FALSE
+#define ADOFFSET	-0.0000025
+#define ADGAIN		1.00127
 
 struct bmcdata bmc;
 unsigned char HAVE_DIO = TRUE, HAVE_AI = TRUE;
@@ -108,13 +110,13 @@ int main(int argc, char *argv[])
 				 * update the console
 				 */
 				printf("         \r\n PV Voltage %2.6fV, Raw data %x, PV Null %2.6fV, Raw Null %x, Raw time %ld",
-					bmc.pv_voltage, bmc.raw[PVV_C], bmc.pv_voltage_null, bmc.raw[PVV_NULL], rawtime);
+					(bmc.pv_voltage+ADOFFSET)*ADGAIN, bmc.raw[PVV_C], bmc.pv_voltage_null, bmc.raw[PVV_NULL], rawtime);
 				/*
 				 * update the log file
 				 */
 				fp = fopen("moonlight.txt", "a");
 				sprintf(solar_data, "         \r\n %2.6fV, %2.6fV, %ld",
-					bmc.pv_voltage, bmc.pv_voltage_null, rawtime -firsttime);
+					(bmc.pv_voltage+ADOFFSET)*ADGAIN, bmc.pv_voltage_null, rawtime -firsttime);
 				fprintf(fp, "%s", solar_data);
 				fclose(fp);
 			}
