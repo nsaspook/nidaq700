@@ -131,7 +131,7 @@ int main(int argc, char *argv[])
 				fclose(fp);
 			}
 		}
-		usleep(100000);
+		usleep(50500);
 		if (++update >= 60) {
 			update = 0;
 			if (MDB1) {
