@@ -27,7 +27,6 @@
 #define MDB	TRUE
 #define MDB1	FALSE
 #define ADOFFSET	-0.0000025
-#define ADGAIN		1.00127
 #define ADRES		4998.0 // OHM
 
 struct bmcdata bmc;
@@ -38,6 +37,7 @@ String fallback_resources[] = {"*Label.Label:    BMC", NULL};
 // bmcnet server information
 char hostip[32] = "10.1.1.41";
 int hostport = 9760;
+double	gain_adj=ADGAIN1;
 
 void quit(w, client, call)
 Widget w;
@@ -116,7 +116,7 @@ int main(int argc, char *argv[])
 				/*
 				 * update the console
 				 */
-				PVcal = (bmc.pv_voltage + ADOFFSET) * ADGAIN;
+				PVcal = (bmc.pv_voltage + ADOFFSET) * gain_adj;
 				PVi = PVcal / ADRES;
 				PVp = PVcal*PVi;
 				printf("         \r\n PV Voltage %2.6fV, PV Power %0.9fW, Raw data %x, PV Null %2.6fV, Raw Null %x, Raw time %ld",
@@ -131,7 +131,7 @@ int main(int argc, char *argv[])
 				fclose(fp);
 			}
 		}
-		usleep(50500);
+		usleep(100000);
 		if (++update >= 60) {
 			update = 0;
 			if (MDB1) {

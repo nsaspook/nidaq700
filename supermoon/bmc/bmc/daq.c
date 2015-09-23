@@ -182,8 +182,10 @@ int get_data_sample(void)
 	if (HAVE_AI) {
 		if (bmc.pv_voltage < 0.500) {
 			set_range = RANGE_0_512;
+			gain_adj=ADGAIN2;
 		} else {
 			set_range = RANGE_2_048;
+			gain_adj=ADGAIN1;
 		}
 		if (bmc.pv_voltage < 0.0) bmc.pv_voltage = 0.0;
 

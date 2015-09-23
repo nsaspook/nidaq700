@@ -31,6 +31,8 @@ extern "C" {
 #define RANGE_2_048   0
 #define RANGE_1_024   1
 #define RANGE_0_512   2
+#define ADGAIN1		1.133
+#define ADGAIN2		1.150   
 
 #include <comedilib.h>
 #include "bmc.h"
@@ -63,7 +65,7 @@ extern "C" {
     int get_dio_bit(int);
     int put_dio_bit(int, int);
     int get_data_sample(void);
-    double lp_filter(double, int, int);
+    double lp_filter(double, int, int), gain_adj;
 #ifdef	__cplusplus
 }
 #endif
