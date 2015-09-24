@@ -180,7 +180,7 @@ int get_data_sample(void)
 	static int pv_stable = 0, first_run = TRUE, set_range;
 
 	if (HAVE_AI) {
-		if (bmc.pv_voltage < 0.500) {
+		if (bmc.pv_voltage < 0.5) {
 			set_range = RANGE_0_512;
 			gain_adj=ADGAIN2;
 		} else {

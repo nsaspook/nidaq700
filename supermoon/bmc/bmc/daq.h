@@ -31,8 +31,8 @@ extern "C" {
 #define RANGE_2_048   0
 #define RANGE_1_024   1
 #define RANGE_0_512   2
-#define ADGAIN1		1.133
-#define ADGAIN2		1.150   
+#define ADGAIN1		1.0002
+#define ADGAIN2		1.0003   
 
 #include <comedilib.h>
 #include "bmc.h"
