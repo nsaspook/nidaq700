@@ -2701,6 +2701,35 @@ ai_read_exit:
 	return ret ? ret : insn->n;
 }
 
+/*
+ * does nothing yet
+ */
+static int32_t daqgert_ai_insn_config(struct comedi_device *dev,
+			       struct comedi_subdevice *s,
+			       struct comedi_insn *insn, unsigned int *data)
+{
+	struct daqgert_private *devpriv = dev->private;
+	int result = -EINVAL;
+
+	if (insn->n < 1)
+		return result;
+
+	result = insn->n;
+
+	/* data[0] : channels was set in relevant bits.
+	   data[1] : delay
+	 */
+
+
+	/*  Enable ADC interrupt */
+
+
+	if (data[1] > 0) devpriv->ai_count=devpriv->ai_count;
+
+	return result;
+}
+
+
 /* 
  * write to the DAC via SPI and read the last value back DON't LOCK 
  */
@@ -3095,6 +3124,7 @@ static int32_t daqgert_auto_attach(struct comedi_device *dev,
 			s->range_table = &range_ads1220_ai;
 			s->n_chan = thisboard->n_aichan_ads1220;
 			s->len_chanlist = 1;
+			s->insn_config = daqgert_ai_insn_config;
 			if (devpriv->smp) {
 				s->subdev_flags = SDF_READABLE | SDF_DIFF | SDF_GROUND
 					| SDF_CMD_READ | SDF_COMMON;
@@ -3479,7 +3509,7 @@ module_exit(daqgert_exit);
 
 MODULE_AUTHOR("Fred Brooks <spam@sma2.rain.com>");
 MODULE_DESCRIPTION("RPi DIO/AI/AO Driver");
-MODULE_VERSION("4.1.6");
+MODULE_VERSION("4.1.8");
 MODULE_LICENSE("GPL");
 MODULE_ALIAS("spi:spigert");
 
