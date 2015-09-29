@@ -1,0 +1,1 @@
+SLFWidget.GeoLocate({"status":"OK","continent":"NA","country":"US","countryName":"United States","state":"OR","stateName":"Oregon","city":"Gresham","zip":"97080"})

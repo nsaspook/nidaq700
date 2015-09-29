@@ -1,0 +1,86 @@
+/* Copyright 2012-2014 iCopyright, Inc. All rights reserved. */
+@import url("toolbar.css?v=20150923-1931");
+@import url("copyright.css?v=20150923-1931");
+
+.icx-toolbar {
+  max-height: 115px;
+  position: relative;
+  text-align: left;
+}
+
+.icx-toolbar-inner {
+  width: 90px;
+  margin: 0;
+  display: inline-block;
+  word-wrap: normal !important;
+}
+
+.icx-logo a .icx-logo-text {
+  font-size: 11px;
+  line-height: 105%;
+  padding-left: 35px;
+  padding-top: 4px;
+  width: 60px;
+}
+
+.icx-logo {
+  float: left;
+  width: 30px;
+  height: 26px;
+  cursor: pointer;
+}
+
+.icx-logo a {
+  float: left;
+  width: 30px;
+  display: block;
+  text-decoration: none !important;
+  font-weight: normal !important;
+}
+
+.icx-tool-wrapper {
+  position: absolute;
+  margin: 0;
+  padding: 10px 0;
+  background-color: white;
+  border: 1px solid #888888;
+  min-width: 182px;
+  z-index: 1000;
+}
+
+
+.icx-tool-end {
+  clear: both;
+  height: 1px;
+  padding-top: 2px;
+}
+
+.icx-tool {
+  margin: 2px 3px 3px 8px;
+  height: 32px;
+  display: block;
+  list-style: none;
+}
+
+.icx-tool a {
+  color: #669933;
+  cursor: pointer !important;
+  padding: 10px 6px 0 42px !important;
+  font-size: 12px !important;
+}
+
+#icx-reprints {
+  background: url(//d2uzdrx7k4koxz.cloudfront.net/rights/images/toolbar/one_button_print_free.jpg) top left no-repeat;
+}
+
+#icx-republish-online {
+  background: url(//d2uzdrx7k4koxz.cloudfront.net/rights/images/toolbar/one_button_post_excerpt.jpg) top left no-repeat;
+}
+
+#icx-republish-offline {
+  background: url(//d2uzdrx7k4koxz.cloudfront.net/rights/images/toolbar/one_button_instant_printpub.jpg) top left no-repeat;
+}
+
+#icx-syndication {
+  background: url(//d2uzdrx7k4koxz.cloudfront.net/rights/images/toolbar/one_button_get_syndication.jpg) top left no-repeat;
+}

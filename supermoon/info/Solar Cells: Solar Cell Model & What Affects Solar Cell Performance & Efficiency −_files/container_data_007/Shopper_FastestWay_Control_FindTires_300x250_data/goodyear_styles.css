@@ -1,0 +1,181 @@
+body {
+	margin: 0px;
+}
+
+#container {
+	top: 0px;
+	left: 0px;
+	width: 300px;
+	height: 250px;
+	display: block;
+	position: relative;
+	cursor: pointer;
+	border: 1px solid black;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+	overflow: hidden;
+}
+
+#banner {
+	top: 0px;
+	left: 0px;
+	width: 300px;
+	height: 250px;
+	display: block;
+	overflow: hidden;
+}
+
+#background {
+    position: absolute;
+    top: -1px;
+	left: -1px;
+    width: 300px;
+    height: 250px;
+    opacity: 0;
+    background : url('img_background.gif') repeat;
+    z-index: 28;
+}
+
+#logoTop {
+    position: absolute;
+    top: 9px;
+	left: -1px;
+    width: 300px;
+    height: 24px;
+    opacity: 0;
+    background : url('img_sprites.gif') no-repeat 0px 0px;
+    z-index: 30;
+}
+
+#imgTireShadow {
+    position: absolute;
+    top: 202px;
+	left: -1px;
+    width: 140px;
+    height: 48px;
+    opacity: 0;
+    background : url('img_sprites.gif') no-repeat 0px -337px;
+    z-index: 31;
+}
+
+#imgTireReflection {
+    position: absolute;
+    top:415px;
+	left: 15px;
+    width: 124px;
+    height: 171px;
+	opacity: .2;
+    background : url('img_tire.png') no-repeat;
+    z-index: 32;
+}
+
+#imgTire {
+    position: absolute;
+    top: -171px;
+	left: 15px;
+    width: 124px;
+    height: 171px;
+    background : url('img_tire.png') no-repeat;
+    z-index: 33;
+}
+
+#txt1 {
+    position: absolute;
+    top: 88px;
+    left: 300px;
+	width: 149px;
+    height: 28px;
+	opacity:0;
+    background: url('img_sprites.gif') no-repeat 0px -34px;
+    z-index: 37;
+}
+
+#txt2 {
+    position: absolute;
+    top: 118px;
+    left: 300px;
+	width: 149px;
+    height: 38px;
+	opacity:0;
+    background: url('img_sprites.gif') no-repeat 0px -65px;
+    z-index: 37;
+}
+
+#txt3 {
+    position: absolute;
+    top: 154px;
+    left: 300px;
+	width: 149px;
+    height: 21px;
+	opacity:0;
+    background: url('img_sprites.gif') no-repeat 0px -107px;
+    z-index: 37;
+}
+
+#txt4 {
+    position: absolute;
+    top: 95px;
+    left: 300px;
+	width: 149px;
+    height: 21px;
+	opacity:0;
+    background: url('img_sprites.gif') no-repeat 0px -144px;
+    z-index: 37;
+}
+
+#txt5 {
+    position: absolute;
+    top: 116px;
+    left: 300px;
+	width: 149px;
+    height: 25px;
+	opacity:0;
+    background: url('img_sprites.gif') no-repeat 0px -170px;
+    z-index: 37;
+}
+
+#txt6 {
+    position: absolute;
+    top: 141px;
+    left: 300px;
+	width: 149px;
+    height: 19px;
+	opacity:0;
+    background: url('img_sprites.gif') no-repeat 0px -200px;
+    z-index: 37;
+}
+
+
+#ctaBtn {
+	position: absolute;
+	width: 134px;
+	height: 27px;
+	top: 205px;
+	left: 153px;
+    opacity: 1;
+	background: url('img_sprites.gif') no-repeat 0px -300px;
+    z-index: 38;
+}
+
+#ctaBtnOver {
+    position: absolute;
+    top: 205px;
+	left: 145px;
+    width: 42px;
+    height: 27px;
+	opacity: 0;
+    background : url('graphic_shimmer.png') no-repeat;
+    z-index: 39;
+}
+
+#invisibleOver {
+    position: absolute;
+    top: 0px;
+	left: 0px;
+    width: 300px;
+    height: 250px;
+	opacity: 1;
+    background : url('graphic_transparentShim.png') no-repeat;
+    z-index: 100;
+}

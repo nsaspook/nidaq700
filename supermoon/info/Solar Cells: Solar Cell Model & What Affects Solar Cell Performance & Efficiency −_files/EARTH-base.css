@@ -1,0 +1,49 @@
+.icx-logo, .icx-interactive-notice {
+    background: url(//d2uzdrx7k4koxz.cloudfront.net/rights/images/toolbar/ilogo_link_EARTH.png) bottom left no-repeat;
+}
+
+.icx-logo:hover, .icx-interactive-notice:hover {
+    background: url(//d2uzdrx7k4koxz.cloudfront.net/rights/images/toolbar/ilogo_link_EARTH.png) top left no-repeat;
+}
+
+.icx-tool a, .icx-interactive-notice a, .icx-interactive-notice .icx-calltoaction a, .icx-interactive-notice .icx-note {
+    color: #e37222;
+}
+
+.icx-tool a:hover, .icx-interactive-notice a:hover, .icx-interactive-notice .icx-calltoaction a:hover {
+    color: #ffb612;
+}
+
+#icx-print {
+    background: url(//d2uzdrx7k4koxz.cloudfront.net/rights/images/toolbar/Print_EARTH.png) bottom left no-repeat;
+}
+
+#icx-print:hover {
+    background: url(//d2uzdrx7k4koxz.cloudfront.net/rights/images/toolbar/Print_EARTH.png) top left no-repeat;
+}
+
+#icx-email {
+    background: url(//d2uzdrx7k4koxz.cloudfront.net/rights/images/toolbar/Email_EARTH.png) bottom left no-repeat;
+}
+
+#icx-email:hover {
+    background: url(//d2uzdrx7k4koxz.cloudfront.net/rights/images/toolbar/Email_EARTH.png) top left no-repeat;
+}
+
+#icx-post {
+    background: url(//d2uzdrx7k4koxz.cloudfront.net/rights/images/toolbar/Post_EARTH.png) bottom left no-repeat;
+}
+
+#icx-post:hover {
+    background: url(//d2uzdrx7k4koxz.cloudfront.net/rights/images/toolbar/Post_EARTH.png) top left no-repeat;
+}
+
+#icx-republish {
+    background: url(//d2uzdrx7k4koxz.cloudfront.net/rights/images/toolbar/Republish_EARTH.png) bottom left no-repeat;
+}
+
+#icx-republish:hover {
+    background: url(//d2uzdrx7k4koxz.cloudfront.net/rights/images/toolbar/Republish_EARTH.png) top left no-repeat;
+}
+
+/*end of styling interactive horizontal toolbar*/

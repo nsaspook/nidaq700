@@ -1,0 +1,11 @@
+.icx-logo a {
+    color: #e37222;
+}
+
+.icx-tool a {
+    color: #669933;
+}
+
+.icx-tool a:hover {
+    color: #000000;
+}

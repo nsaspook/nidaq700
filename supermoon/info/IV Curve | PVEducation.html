@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]> <html class="ie6 ie" lang="en" dir="ltr"> <![endif]-->
+<!--[if IE 7]>    <html class="ie7 ie" lang="en" dir="ltr"> <![endif]-->
+<!--[if IE 8]>    <html class="ie8 ie" lang="en" dir="ltr"> <![endif]-->
+<!--[if gt IE 8]> <!-->
+<html class="js" dir="ltr" lang="en"><!--<![endif]--><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta charset="utf-8">
+<link rel="next" href="http://www.pveducation.org/pvcdrom/solar-cell-operation/short-circuit-current">
+<link rel="shortcut icon" href="http://www.pveducation.org/sites/default/files/favicon_0.ico" type="image/vnd.microsoft.icon">
+<link rel="up" href="http://www.pveducation.org/pvcdrom/solar-cell-operation">
+<link rel="shortlink" href="http://www.pveducation.org/node/115">
+<meta name="Generator" content="Drupal 7 (http://drupal.org)">
+<link rel="canonical" href="http://www.pveducation.org/pvcdrom/solar-cell-operation/iv-curve">
+<link rel="prev" href="http://www.pveducation.org/pvcdrom/solar-cell-operation/photovoltaic-effect">
+  <!-- Set the viewport width to device width for mobile -->
+  <meta name="viewport" content="width=device-width">
+  <title>IV Curve | PVEducation</title>
+  <style type="text/css" media="all">
+@import url("http://www.pveducation.org/modules/system/system.base.css?nvccgr");
+@import url("http://www.pveducation.org/modules/system/system.menus.css?nvccgr");
+@import url("http://www.pveducation.org/modules/system/system.messages.css?nvccgr");
+@import url("http://www.pveducation.org/modules/system/system.theme.css?nvccgr");
+</style>
+<style type="text/css" media="all">
+@import url("http://www.pveducation.org/sites/all/modules/jquery_update/replace/ui/themes/base/minified/jquery.ui.core.min.css?nvccgr");
+@import url("http://www.pveducation.org/sites/all/themes/framework/jquery.ui.theme.css?nvccgr");
+@import url("http://www.pveducation.org/sites/all/modules/jquery_update/replace/ui/themes/base/minified/jquery.ui.slider.min.css?nvccgr");
+@import url("http://www.pveducation.org/sites/all/modules/jquery_update/replace/ui/themes/base/minified/jquery.ui.tabs.min.css?nvccgr");
+@import url("http://www.pveducation.org/sites/all/modules/jquery_update/replace/ui/themes/base/minified/jquery.ui.button.min.css?nvccgr");
+@import url("http://www.pveducation.org/sites/all/modules/jquery_update/replace/ui/themes/base/minified/jquery.ui.spinner.min.css?nvccgr");
+</style>
+<style type="text/css" media="all">
+@import url("http://www.pveducation.org/sites/all/modules/footnotes/footnotes.css?nvccgr");
+@import url("http://www.pveducation.org/sites/all/modules/book/book.css?nvccgr");
+@import url("http://www.pveducation.org/modules/comment/comment.css?nvccgr");
+@import url("http://www.pveducation.org/modules/field/theme/field.css?nvccgr");
+@import url("http://www.pveducation.org/sites/all/modules/mollom/mollom.css?nvccgr");
+@import url("http://www.pveducation.org/modules/node/node.css?nvccgr");
+@import url("http://www.pveducation.org/sites/all/modules/modules_7_new/quiz/quiz.css?nvccgr");
+@import url("http://www.pveducation.org/modules/search/search.css?nvccgr");
+@import url("http://www.pveducation.org/modules/user/user.css?nvccgr");
+@import url("http://www.pveducation.org/sites/all/modules/modules_7_new/views/css/views.css?nvccgr");
+@import url("http://www.pveducation.org/sites/all/modules/ckeditor/css/ckeditor.css?nvccgr");
+</style>
+<style type="text/css" media="all">
+@import url("http://www.pveducation.org/sites/all/modules/ctools/css/ctools.css?nvccgr");
+@import url("http://www.pveducation.org/sites/all/modules/dhtml_menu/dhtml_menu.css?nvccgr");
+@import url("http://www.pveducation.org/sites/all/modules/lexicon/css/lexicon.css?nvccgr");
+@import url("http://www.pveducation.org/sites/all/modules/node_embed/plugins/node_embed/node_embed.css?nvccgr");
+@import url("http://www.pveducation.org/sites/all/modules/panels/css/panels.css?nvccgr");
+@import url("http://www.pveducation.org/sites/all/modules/modules_7_new/biblio/biblio.css?nvccgr");
+@import url("http://www.pveducation.org/sites/all/modules/modules_7_new/feedback/feedback.css?nvccgr");
+</style>
+<style type="text/css" media="all">
+@import url("http://www.pveducation.org/sites/all/themes/framework/style.css?nvccgr");
+</style>
+  <script src="IV%20Curve%20%7C%20PVEducation_files/ga.js" async="" type="text/javascript"></script><script type="text/javascript" src="IV%20Curve%20%7C%20PVEducation_files/jquery.js"></script>
+<script type="text/javascript">
+<!--//--><![CDATA[//><!--
+window.jQuery || document.write("<script src='/sites/all/modules/jquery_update/replace/jquery/1.7/jquery.min.js'>\x3C/script>")
+//--><!]]>
+</script>
+<script type="text/javascript" src="IV%20Curve%20%7C%20PVEducation_files/jquery_003.js"></script>
+<script type="text/javascript" src="IV%20Curve%20%7C%20PVEducation_files/drupal.js"></script>
+<script type="text/javascript" src="IV%20Curve%20%7C%20PVEducation_files/jquery-ui.js"></script>
+<script type="text/javascript">
+<!--//--><![CDATA[//><!--
+window.jQuery.ui || document.write("<script src='/sites/all/modules/jquery_update/replace/ui/ui/minified/jquery-ui.min.js'>\x3C/script>")
+//--><!]]>
+</script>
+<script type="text/javascript" src="IV%20Curve%20%7C%20PVEducation_files/jquery_002.js"></script>
+<script type="text/javascript" src="IV%20Curve%20%7C%20PVEducation_files/jquery_004.js"></script>
+<script type="text/javascript" src="IV%20Curve%20%7C%20PVEducation_files/ajax.js"></script>
+<script type="text/javascript" src="IV%20Curve%20%7C%20PVEducation_files/jquery_update.js"></script>
+<script type="text/javascript" src="IV%20Curve%20%7C%20PVEducation_files/admin_devel.js"></script>
+<script type="text/javascript" src="IV%20Curve%20%7C%20PVEducation_files/MathJax.js"></script>
+<script type="text/javascript" src="IV%20Curve%20%7C%20PVEducation_files/pvcdrom.js"></script>
+<script type="text/javascript" src="IV%20Curve%20%7C%20PVEducation_files/jeffgraph.js"></script>
+<script type="text/javascript" src="IV%20Curve%20%7C%20PVEducation_files/dhtml_menu.js"></script>
+<script type="text/javascript" src="IV%20Curve%20%7C%20PVEducation_files/googleanalytics.js"></script>
+<script type="text/javascript">
+<!--//--><![CDATA[//><!--
+var _gaq = _gaq || [];_gaq.push(["_setAccount", "UA-2884464-6"]);_gaq.push(["_trackPageview"]);(function() {var ga = document.createElement("script");ga.type = "text/javascript";ga.async = true;ga.src = ("https:" == document.location.protocol ? "https://ssl" : "http://www") + ".google-analytics.com/ga.js";var s = document.getElementsByTagName("script")[0];s.parentNode.insertBefore(ga, s);})();
+//--><!]]>
+</script>
+<script type="text/javascript" src="IV%20Curve%20%7C%20PVEducation_files/textarea.js"></script>
+<script type="text/javascript" src="IV%20Curve%20%7C%20PVEducation_files/mollom.js"></script>
+<script type="text/javascript" src="IV%20Curve%20%7C%20PVEducation_files/progress.js"></script>
+<script type="text/javascript" src="IV%20Curve%20%7C%20PVEducation_files/feedback.js"></script>
+<script type="text/javascript">
+<!--//--><![CDATA[//><!--
+jQuery.extend(Drupal.settings, {"basePath":"\/","pathPrefix":"","ajaxPageState":{"theme":"framework","theme_token":"3FMgXVE-US9dkMrHqps_LgMR1bPFgqwt9nJEnaGzT_g","jquery_version":"1.7","js":{"\/\/ajax.googleapis.com\/ajax\/libs\/jquery\/1.7.2\/jquery.min.js":1,"0":1,"misc\/jquery.once.js":1,"misc\/drupal.js":1,"\/\/ajax.googleapis.com\/ajax\/libs\/jqueryui\/1.10.2\/jquery-ui.min.js":1,"1":1,"sites\/all\/modules\/jquery_update\/replace\/ui\/external\/jquery.cookie.js":1,"sites\/all\/modules\/jquery_update\/replace\/misc\/jquery.form.min.js":1,"misc\/ajax.js":1,"sites\/all\/modules\/jquery_update\/js\/jquery_update.js":1,"sites\/all\/modules\/modules_7_new\/admin_menu\/admin_devel\/admin_devel.js":1,"http:\/\/cdn.mathjax.org\/mathjax\/2.3-latest\/MathJax.js?config=MML_HTMLorMML":1,"\/sites\/default\/files\/PVCDROM\/Admin\/pvcdrom.js":1,"\/sites\/default\/files\/PVCDROM\/Admin\/jeffgraph.js":1,"sites\/all\/modules\/dhtml_menu\/dhtml_menu.js":1,"sites\/all\/modules\/modules_7_new\/google_analytics\/googleanalytics.js":1,"2":1,"misc\/textarea.js":1,"sites\/all\/modules\/mollom\/mollom.js":1,"misc\/progress.js":1,"sites\/all\/modules\/modules_7_new\/feedback\/feedback.js":1},"css":{"modules\/system\/system.base.css":1,"modules\/system\/system.menus.css":1,"modules\/system\/system.messages.css":1,"modules\/system\/system.theme.css":1,"misc\/ui\/jquery.ui.core.css":1,"misc\/ui\/jquery.ui.theme.css":1,"misc\/ui\/jquery.ui.slider.css":1,"misc\/ui\/jquery.ui.tabs.css":1,"misc\/ui\/jquery.ui.button.css":1,"misc\/ui\/jquery.ui.spinner.css":1,"sites\/all\/modules\/footnotes\/footnotes.css":1,"sites\/all\/modules\/book\/book.css":1,"modules\/comment\/comment.css":1,"modules\/field\/theme\/field.css":1,"sites\/all\/modules\/mollom\/mollom.css":1,"modules\/node\/node.css":1,"sites\/all\/modules\/modules_7_new\/quiz\/quiz.css":1,"modules\/search\/search.css":1,"modules\/user\/user.css":1,"sites\/all\/modules\/modules_7_new\/views\/css\/views.css":1,"sites\/all\/modules\/ckeditor\/css\/ckeditor.css":1,"sites\/all\/modules\/ctools\/css\/ctools.css":1,"sites\/all\/modules\/dhtml_menu\/dhtml_menu.css":1,"sites\/all\/modules\/lexicon\/css\/lexicon.css":1,"sites\/all\/modules\/node_embed\/plugins\/node_embed\/node_embed.css":1,"sites\/all\/modules\/panels\/css\/panels.css":1,"sites\/all\/modules\/modules_7_new\/biblio\/biblio.css":1,"sites\/all\/modules\/modules_7_new\/feedback\/feedback.css":1,"sites\/all\/themes\/framework\/style.css":1}},"dhtmlMenu":{"nav":"none","animation":{"effects":{"height":0,"width":0,"opacity":0},"speed":"500"},"effects":{"siblings":"close-same-tree","children":"none","remember":"0"},"filter":{"type":"whitelist","list":{"menu-pvcdrom":"menu-pvcdrom","book-toc-14":0,"book-toc-25":0,"book-toc-534":0,"devel":0,"main-menu":0,"management":0,"navigation":0,"shortcut-set-1":0,"user-menu":0}}},"googleanalytics":{"trackOutbound":1,"trackMailto":1,"trackDownload":1,"trackDownloadExtensions":"7z|aac|arc|arj|asf|asx|avi|bin|csv|doc|exe|flv|gif|gz|gzip|hqx|jar|jpe?g|js|mp(2|3|4|e?g)|mov(ie)?|msi|msp|pdf|phps|png|ppt|qtm?|ra(m|r)?|sea|sit|tar|tgz|torrent|txt|wav|wma|wmv|wpd|xls|xml|z|zip"},"urlIsAjaxTrusted":{"\/pvcdrom\/solar-cell-operation\/iv-curve":true,"\/system\/ajax":true},"ajax":{"feedback-submit":{"wrapper":"feedback-form","callback":"feedback_form_ajax_callback","progress":{"type":"throbber","message":""},"event":"mousedown","keypress":true,"prevent":"click","url":"\/system\/ajax","submit":{"_triggering_element_name":"op","_triggering_element_value":"Send feedback"}}}});
+//--><!]]>
+</script>
+  
+  <!-- following line clashes with other jQuery and needs to be disabled -->
+  <!--  <script src="http://code.jquery.com/jquery-latest.js"></script> -->
+
+<script>
+jQuery(function() {
+    jQuery('li#dhtml_menu-578').click(function() {return false; });
+    jQuery('li#dhtml_menu-606').click(function() {return false; });
+    jQuery('li#dhtml_menu-1192').click(function() {return false; });
+    jQuery('li#dhtml_menu-1193').click(function() {return false; });
+    jQuery('li#dhtml_menu-1194').click(function() {return false; });
+    jQuery('li#dhtml_menu-1195').click(function() {return false; });
+    jQuery('li#dhtml_menu-1196').click(function() {return false; });
+    jQuery('li#dhtml_menu-1197').click(function() {return false; });
+    jQuery('li#dhtml_menu-1198').click(function() {return false; });
+    jQuery('li#dhtml_menu-1199').click(function() {return false; });
+    jQuery('li#dhtml_menu-1200').click(function() {return false; });
+    jQuery('li#dhtml_menu-1201').click(function() {return false; });
+    jQuery('li#dhtml_menu-1202').click(function() {return false; });
+    jQuery('li#dhtml_menu-1203').click(function() {return false; });
+    jQuery('li#dhtml_menu-1204').click(function() {return false; });
+    jQuery('li#dhtml_menu-1205').click(function() {return false; });
+    jQuery('li#dhtml_menu-1206').click(function() {return false; });
+    jQuery('li#dhtml_menu-1207').click(function() {return false; });
+    jQuery('li#dhtml_menu-1208').click(function() {return false; });
+    jQuery('li#dhtml_menu-1209').click(function() {return false; });
+    jQuery('li#dhtml_menu-1210').click(function() {return false; });
+    jQuery('li#dhtml_menu-1211').click(function() {return false; });
+    jQuery('li#dhtml_menu-1212').click(function() {return false; });
+    jQuery('li#dhtml_menu-1213').click(function() {return false; });
+    jQuery('li#dhtml_menu-1214').click(function() {return false; });
+    jQuery('li#dhtml_menu-1215').click(function() {return false; });
+    jQuery('li#dhtml_menu-1216').click(function() {return false; });
+    jQuery('li#dhtml_menu-1217').click(function() {return false; });
+    jQuery('li#dhtml_menu-1218').click(function() {return false; });
+    jQuery('li#dhtml_menu-1219').click(function() {return false; });
+    jQuery('li#dhtml_menu-1220').click(function() {return false; });
+    jQuery('li#dhtml_menu-1221').click(function() {return false; });
+    jQuery('li#dhtml_menu-1222').click(function() {return false; });
+    jQuery('li#dhtml_menu-1223').click(function() {return false; });
+    jQuery('li#dhtml_menu-1224').click(function() {return false; });
+    jQuery('li#dhtml_menu-1225').click(function() {return false; });
+});
+</script>
+
+
+  <!-- IE Fix for HTML5 Tags -->
+  <!--[if lt IE 9]>
+    <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+<style type="text/css">.MathJax_Hover_Frame {border-radius: .25em; -webkit-border-radius: .25em; -moz-border-radius: .25em; -khtml-border-radius: .25em; box-shadow: 0px 0px 15px #83A; -webkit-box-shadow: 0px 0px 15px #83A; -moz-box-shadow: 0px 0px 15px #83A; -khtml-box-shadow: 0px 0px 15px #83A; border: 1px solid #A6D ! important; display: inline-block; position: absolute}
+.MathJax_Hover_Arrow {position: absolute; width: 15px; height: 11px; cursor: pointer}
+</style><style type="text/css">#MathJax_About {position: fixed; left: 50%; width: auto; text-align: center; border: 3px outset; padding: 1em 2em; background-color: #DDDDDD; color: black; cursor: default; font-family: message-box; font-size: 120%; font-style: normal; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; z-index: 201; border-radius: 15px; -webkit-border-radius: 15px; -moz-border-radius: 15px; -khtml-border-radius: 15px; box-shadow: 0px 10px 20px #808080; -webkit-box-shadow: 0px 10px 20px #808080; -moz-box-shadow: 0px 10px 20px #808080; -khtml-box-shadow: 0px 10px 20px #808080; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+.MathJax_Menu {position: absolute; background-color: white; color: black; width: auto; padding: 5px 0px; border: 1px solid #CCCCCC; margin: 0; cursor: default; font: menu; text-align: left; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; z-index: 201; border-radius: 5px; -webkit-border-radius: 5px; -moz-border-radius: 5px; -khtml-border-radius: 5px; box-shadow: 0px 10px 20px #808080; -webkit-box-shadow: 0px 10px 20px #808080; -moz-box-shadow: 0px 10px 20px #808080; -khtml-box-shadow: 0px 10px 20px #808080; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+.MathJax_MenuItem {padding: 1px 2em; background: transparent}
+.MathJax_MenuArrow {position: absolute; right: .5em; color: #666666}
+.MathJax_MenuActive .MathJax_MenuArrow {color: white}
+.MathJax_MenuCheck {position: absolute; left: .7em}
+.MathJax_MenuRadioCheck {position: absolute; left: .7em}
+.MathJax_MenuLabel {padding: 1px 2em 3px 1.33em; font-style: italic}
+.MathJax_MenuRule {border-top: 1px solid #DDDDDD; margin: 4px 3px}
+.MathJax_MenuDisabled {color: GrayText}
+.MathJax_MenuActive {background-color: #606872; color: white}
+.MathJax_Menu_Close {position: absolute; width: 31px; height: 31px; top: -15px; left: -15px}
+</style><style type="text/css">#MathJax_Zoom {position: absolute; background-color: #F0F0F0; overflow: auto; display: block; z-index: 301; padding: .5em; border: 1px solid black; margin: 0; font-weight: normal; font-style: normal; text-align: left; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; box-shadow: 5px 5px 15px #AAAAAA; -webkit-box-shadow: 5px 5px 15px #AAAAAA; -moz-box-shadow: 5px 5px 15px #AAAAAA; -khtml-box-shadow: 5px 5px 15px #AAAAAA; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+#MathJax_ZoomOverlay {position: absolute; left: 0; top: 0; z-index: 300; display: inline-block; width: 100%; height: 100%; border: 0; padding: 0; margin: 0; background-color: white; opacity: 0; filter: alpha(opacity=0)}
+#MathJax_ZoomFrame {position: relative; display: inline-block; height: 0; width: 0}
+#MathJax_ZoomEventTrap {position: absolute; left: 0; top: 0; z-index: 302; display: inline-block; border: 0; padding: 0; margin: 0; background-color: white; opacity: 0; filter: alpha(opacity=0)}
+</style><style type="text/css">.MathJax_Preview {color: #888}
+#MathJax_Message {position: fixed; left: 1px; bottom: 2px; background-color: #E6E6E6; border: 1px solid #959595; margin: 0px; padding: 2px 8px; z-index: 102; color: black; font-size: 80%; width: auto; white-space: nowrap}
+#MathJax_MSIE_Frame {position: absolute; top: 0; left: 0; width: 0px; z-index: 101; border: 0px; margin: 0px; padding: 0px}
+.MathJax_Error {color: #CC0000; font-style: italic}
+</style><style type="text/css">.MathJax_Display {text-align: center; margin: 1em 0em; position: relative; display: block; width: 100%}
+.MathJax .merror {background-color: #FFFF88; color: #CC0000; border: 1px solid #CC0000; padding: 1px 3px; font-style: normal; font-size: 90%}
+#MathJax_Tooltip {background-color: InfoBackground; color: InfoText; border: 1px solid black; box-shadow: 2px 2px 5px #AAAAAA; -webkit-box-shadow: 2px 2px 5px #AAAAAA; -moz-box-shadow: 2px 2px 5px #AAAAAA; -khtml-box-shadow: 2px 2px 5px #AAAAAA; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true'); padding: 3px 4px; z-index: 401; position: absolute; left: 0; top: 0; width: auto; height: auto; display: none}
+.MathJax {display: inline; font-style: normal; font-weight: normal; line-height: normal; font-size: 100%; font-size-adjust: none; text-indent: 0; text-align: left; text-transform: none; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; direction: ltr; border: 0; padding: 0; margin: 0}
+.MathJax img, .MathJax nobr, .MathJax a {border: 0; padding: 0; margin: 0; max-width: none; max-height: none; vertical-align: 0; line-height: normal; text-decoration: none}
+img.MathJax_strut {border: 0 !important; padding: 0 !important; margin: 0 !important; vertical-align: 0 !important}
+.MathJax span {display: inline; position: static; border: 0; padding: 0; margin: 0; vertical-align: 0; line-height: normal; text-decoration: none}
+.MathJax nobr {white-space: nowrap ! important}
+.MathJax img {display: inline ! important; float: none ! important}
+.MathJax * {transition: none; -webkit-transition: none; -moz-transition: none; -ms-transition: none; -o-transition: none}
+.MathJax_Processing {visibility: hidden; position: fixed; width: 0; height: 0; overflow: hidden}
+.MathJax_Processed {display: none!important}
+.MathJax_ExBox {display: block; overflow: hidden; width: 1px; height: 60ex}
+.MathJax .MathJax_EmBox {display: block; overflow: hidden; width: 1px; height: 60em}
+.MathJax .MathJax_HitBox {cursor: text; background: white; opacity: 0; filter: alpha(opacity=0)}
+.MathJax .MathJax_HitBox * {filter: none; opacity: 1; background: transparent}
+#MathJax_Tooltip * {filter: none; opacity: 1; background: transparent}
+@font-face {font-family: MathJax_Main; src: url('http://cdn.mathjax.org/mathjax/2.3-latest/fonts/HTML-CSS/TeX/woff/MathJax_Main-Regular.woff') format('woff'), url('http://cdn.mathjax.org/mathjax/2.3-latest/fonts/HTML-CSS/TeX/otf/MathJax_Main-Regular.otf') format('opentype')}
+@font-face {font-family: MathJax_Main; src: url('http://cdn.mathjax.org/mathjax/2.3-latest/fonts/HTML-CSS/TeX/woff/MathJax_Main-Bold.woff') format('woff'), url('http://cdn.mathjax.org/mathjax/2.3-latest/fonts/HTML-CSS/TeX/otf/MathJax_Main-Bold.otf') format('opentype'); font-weight: bold}
+@font-face {font-family: MathJax_Main; src: url('http://cdn.mathjax.org/mathjax/2.3-latest/fonts/HTML-CSS/TeX/woff/MathJax_Main-Italic.woff') format('woff'), url('http://cdn.mathjax.org/mathjax/2.3-latest/fonts/HTML-CSS/TeX/otf/MathJax_Main-Italic.otf') format('opentype'); font-style: italic}
+@font-face {font-family: MathJax_Math; src: url('http://cdn.mathjax.org/mathjax/2.3-latest/fonts/HTML-CSS/TeX/woff/MathJax_Math-Italic.woff') format('woff'), url('http://cdn.mathjax.org/mathjax/2.3-latest/fonts/HTML-CSS/TeX/otf/MathJax_Math-Italic.otf') format('opentype'); font-style: italic}
+@font-face {font-family: MathJax_Caligraphic; src: url('http://cdn.mathjax.org/mathjax/2.3-latest/fonts/HTML-CSS/TeX/woff/MathJax_Caligraphic-Regular.woff') format('woff'), url('http://cdn.mathjax.org/mathjax/2.3-latest/fonts/HTML-CSS/TeX/otf/MathJax_Caligraphic-Regular.otf') format('opentype')}
+@font-face {font-family: MathJax_Size1; src: url('http://cdn.mathjax.org/mathjax/2.3-latest/fonts/HTML-CSS/TeX/woff/MathJax_Size1-Regular.woff') format('woff'), url('http://cdn.mathjax.org/mathjax/2.3-latest/fonts/HTML-CSS/TeX/otf/MathJax_Size1-Regular.otf') format('opentype')}
+@font-face {font-family: MathJax_Size2; src: url('http://cdn.mathjax.org/mathjax/2.3-latest/fonts/HTML-CSS/TeX/woff/MathJax_Size2-Regular.woff') format('woff'), url('http://cdn.mathjax.org/mathjax/2.3-latest/fonts/HTML-CSS/TeX/otf/MathJax_Size2-Regular.otf') format('opentype')}
+@font-face {font-family: MathJax_Size3; src: url('http://cdn.mathjax.org/mathjax/2.3-latest/fonts/HTML-CSS/TeX/woff/MathJax_Size3-Regular.woff') format('woff'), url('http://cdn.mathjax.org/mathjax/2.3-latest/fonts/HTML-CSS/TeX/otf/MathJax_Size3-Regular.otf') format('opentype')}
+@font-face {font-family: MathJax_Size4; src: url('http://cdn.mathjax.org/mathjax/2.3-latest/fonts/HTML-CSS/TeX/woff/MathJax_Size4-Regular.woff') format('woff'), url('http://cdn.mathjax.org/mathjax/2.3-latest/fonts/HTML-CSS/TeX/otf/MathJax_Size4-Regular.otf') format('opentype')}
+</style></head>
+
+<body class="html not-front not-logged-in one-sidebar sidebar-first page-node page-node- page-node-115 node-type-page"><div style="visibility: hidden; overflow: hidden; position: absolute; top: 0px; height: 1px; width: auto; padding: 0px; border: 0px none; margin: 0px; text-align: left; text-indent: 0px; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal;"><div id="MathJax_Hidden"></div></div><div style="display: none;" id="MathJax_Message"></div>
+    <div id="container" class="clearfix">
+
+  <div id="skip-link">
+    <a href="#main-content" class="element-invisible element-focusable">Skip to main content</a>
+          <a href="#navigation" class="element-invisible element-focusable">Skip to navigation</a>
+      </div>
+
+  <header id="header" role="banner" class="clearfix">
+              <a href="http://www.pveducation.org/" title="Home" id="logo">
+        <img src="IV%20Curve%20%7C%20PVEducation_files/logo.png" alt="Home">
+      </a>
+        
+    
+          <nav id="navigation" role="navigation" class="clearfix">
+                                  <h2 class="element-invisible">Main menu</h2><ul id="main-menu" class="links clearfix"><li class="menu-218 first"><a href="http://www.pveducation.org/">Home</a></li>
+<li class="menu-561"><a href="http://www.pveducation.org/Courses" title="">Courses</a></li>
+<li class="menu-562"><a href="http://www.pveducation.org/pvcdrom/instructions" title="Using the animations and plugins">Instructions</a></li>
+<li class="menu-769"><a href="http://www.pveducation.org/contact" title="">Contact</a></li>
+<li class="menu-1253 last"><a href="http://www.pveducation.org/user" title="Login enables posting of comments.">Login</a></li>
+</ul>                                </nav> <!-- /#navigation -->
+        <nav class="breadcrumb"><h2 class="element-invisible">You are here</h2><a href="http://www.pveducation.org/">Home</a> » <a href="http://www.pveducation.org/Welcome">Welcome to PVCDROM</a> » <a href="http://www.pveducation.org/pvcdrom/solar-cell-operation">4. Solar Cell Operation</a></nav>  </header> <!-- /#header -->
+
+  <section id="main" role="main" class="clearfix">
+        <a id="main-content"></a>
+        
+             
+
+
+<!-- <h1 class="title" id="page-title">IV Curve</h1>                -->
+
+
+
+
+
+
+
+            
+        <div class="pvcdromheader"><h1 class="with-tabs">IV Curve</h1></div>    
+
+  
+  <div class="content">
+      <div class="topnav">   <div id="book-navigation-25" class="book-navigation">
+    
+        <div class="page-links clearfix">
+              <a href="http://www.pveducation.org/pvcdrom/solar-cell-operation/photovoltaic-effect" class="page-previous" title="Go to previous page">‹ The photovoltaic effect</a>
+      	  
+
+              <a href="http://www.pveducation.org/pvcdrom/solar-cell-operation/short-circuit-current" class="page-next" title="Go to next page">Short-Circuit Current ›</a>
+          </div>
+    
+  <script id="code_swipe">
+    $(function() {      
+      //Keep track of how many swipes
+      var count=0;
+
+      //Enable swiping...
+      $("#content-swipe").swipe( {
+        //Generic swipe handler for all directions
+        swipeLeft:function(event, direction, distance, duration, fingerCount) {
+          window.location.href="/pvcdrom/solar-cell-operation/short-circuit-current";  
+        },
+        swipeRight:function(event, direction, distance, duration, fingerCount) {
+          window.location.href="/pvcdrom/solar-cell-operation/photovoltaic-effect";  
+        },
+        //Default is 75px, set to 0 for demo so any distance triggers swipe
+        threshold:0
+      });
+    });
+  </script>
+  </div>
+      </div>
+    <div class="field field-name-body field-type-text-with-summary field-label-hidden"><div class="field-items"><div class="field-item even" property="content:encoded"><p>The
+ IV curve of a solar cell is the superposition of the IV curve of the 
+solar cell diode in the dark with the light-generated current.<a class="see-footnote" id="footnoteref1_jtkl0w8" title="Lindholm FA, Fossum JG, Burgess EL. Application of the superposition principle to solar-cell analysis. IEEE Transactions on Electron Devices. 1979  ;26:165–171." href="#footnote1_jtkl0w8">[1]</a>
+ The light has the effect of shifting the IV curve down into the fourth 
+quadrant where power can be extracted from the diode. Illuminating a 
+cell adds to the normal "dark" currents in the diode so that the diode 
+law becomes:</p>
+<p class="equation"><img src="IV%20Curve%20%7C%20PVEducation_files/eq051.png" height="52" width="246"></p>
+<p>where <i>I<sub>L</sub></i> = light generated current.</p>
+<p class="director">
+<object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=9,0,0,0" id="Sun_Calculator" align="middle" height="350" width="530"><param name="allowFullScreen" value="false"><param name="movie" value="/sites/default/files/PVCDROM/Solar-Cell-Operation/Animations/solar-cell-parameters.swf"><param name="quality" value="high"><param name="bgcolor" value="#ffffff"><embed allowfullscreen="false" bgcolor="#ffffff" name="Sun_Calculator" pluginspage="http://www.macromedia.com/go/getflashplayer" quality="high" src="IV%20Curve%20%7C%20PVEducation_files/solar-cell-parameters.swf" type="application/x-shockwave-flash" align="middle" height="350" width="530"></object></p>
+<p class="caption">The effect of light on the current-voltage characteristics of a p-junction.</p>
+<p>The equation for the IV curve in the first quadrant is:</p>
+<p>
+</p><div class="field field-name-body field-type-text-with-summary field-label-hidden">
+<div class="field-items">
+<div class="field-item even" property="content:encoded">
+<p class="equation"><span class="MathJax_Preview"></span><span style="" aria-readonly="true" role="textbox" id="MathJax-Element-1-Frame" class="MathJax"><nobr><span style="width: 14.958em; display: inline-block;" id="MathJax-Span-1" class="math"><span style="display: inline-block; position: relative; width: 11.585em; height: 0px; font-size: 129%;"><span style="position: absolute; clip: rect(1.502em, 1000em, 3.51em, -0.362em); top: -2.756em; left: 0em;"><span id="MathJax-Span-2" class="mrow"><span id="MathJax-Span-3" class="mi"><img style="width: 11px; height: 15px; margin-right: -0.062em;" src="IV%20Curve%20%7C%20PVEducation_files/0049.png"><span style="display: inline-block; overflow: hidden; height: 1px; width: 0.062em;"></span></span><span style="padding-left: 0.278em;" id="MathJax-Span-4" class="mo"><img style="width: 16px; height: 6px; vertical-align: 3px; margin-right: 0.054em;" src="IV%20Curve%20%7C%20PVEducation_files/003D.png"></span><span style="padding-left: 0.278em;" id="MathJax-Span-5" class="msub"><span style="display: inline-block; position: relative; width: 0.96em; height: 0px;"><span style="position: absolute; clip: rect(1.317em, 1000em, 2.239em, -0.362em); top: -2.11em; left: 0em;"><span id="MathJax-Span-6" class="mi"><img style="width: 11px; height: 15px; margin-right: -0.062em;" src="IV%20Curve%20%7C%20PVEducation_files/0049.png"><span style="display: inline-block; overflow: hidden; height: 1px; width: 0.062em;"></span></span>&nbsp;<span style="display: inline-block; width: 0px; height: 2.11em;"></span></span><span style="position: absolute; top: -1.96em; left: 0.411em;"><span style="font-size: 70.7%;" id="MathJax-Span-7" class="mi"><img style="width: 10px; height: 10px; margin-right: 0.033em;" src="IV%20Curve%20%7C%20PVEducation_files/004C.png"></span>&nbsp;<span style="display: inline-block; width: 0px; height: 2.11em;"></span></span></span></span><span style="padding-left: 0.222em;" id="MathJax-Span-8" class="mo"><img style="width: 16px; height: 2px; vertical-align: 5px; margin-right: 0.082em;" src="IV%20Curve%20%7C%20PVEducation_files/2212.png"></span><span style="padding-left: 0.222em;" id="MathJax-Span-9" class="msub"><span style="display: inline-block; position: relative; width: 0.874em; height: 0px;"><span style="position: absolute; clip: rect(1.317em, 1000em, 2.239em, -0.362em); top: -2.11em; left: 0em;"><span id="MathJax-Span-10" class="mi"><img style="width: 11px; height: 15px; margin-right: -0.062em;" src="IV%20Curve%20%7C%20PVEducation_files/0049.png"><span style="display: inline-block; overflow: hidden; height: 1px; width: 0.062em;"></span></span>&nbsp;<span style="display: inline-block; width: 0px; height: 2.11em;"></span></span><span style="position: absolute; top: -1.96em; left: 0.411em;"><span style="font-size: 70.7%;" id="MathJax-Span-11" class="mn"><img style="width: 8px; height: 11px; margin-right: 0.039em;" src="IV%20Curve%20%7C%20PVEducation_files/0030.png"></span>&nbsp;<span style="display: inline-block; width: 0px; height: 2.11em;"></span></span></span></span><span style="vertical-align: 0.006em;" id="MathJax-Span-12" class="mo"><span><img style="width: 10px; height: 40px; vertical-align: -15px; margin-right: 0.017em;" src="IV%20Curve%20%7C%20PVEducation_files/005B.png"></span></span><span id="MathJax-Span-13" class="mi"><img style="width: 9px; height: 10px; margin-right: 0.028em;" src="IV%20Curve%20%7C%20PVEducation_files/0065.png"><img style="width: 11px; height: 11px; vertical-align: -1px; margin-right: 0.012em;" src="IV%20Curve%20%7C%20PVEducation_files/0078.png"><img style="width: 12px; height: 15px; vertical-align: -5px; margin-right: 0.033em;" src="IV%20Curve%20%7C%20PVEducation_files/0070.png"></span><span style="vertical-align: 0.006em;" id="MathJax-Span-14" class="mo"><span><img style="width: 13px; height: 40px; vertical-align: -14px; margin-right: 0.035em;" src="IV%20Curve%20%7C%20PVEducation_files/0028.png"></span></span><span style="padding-left: 0.12em; padding-right: 0.12em;" id="MathJax-Span-15" class="mfrac"><span style="display: inline-block; position: relative; width: 1.326em; height: 0px;"><span style="position: absolute; clip: rect(1.51em, 1000em, 2.373em, -0.365em); top: -2.635em; left: 50%; margin-left: -0.409em;"><span id="MathJax-Span-16" class="mrow"><span style="font-size: 70.7%;" id="MathJax-Span-17" class="mi"><img style="width: 8px; height: 9px; vertical-align: -3px; margin-right: -0.014em;" src="IV%20Curve%20%7C%20PVEducation_files/0071.png"><span style="display: inline-block; overflow: hidden; height: 1px; width: 0.01em;"></span></span><span style="font-size: 70.7%;" id="MathJax-Span-18" class="mi"><img style="width: 12px; height: 11px; vertical-align: -1px; margin-right: -0.181em;" src="IV%20Curve%20%7C%20PVEducation_files/0056.png"><span style="display: inline-block; overflow: hidden; height: 1px; width: 0.128em;"></span></span></span>&nbsp;<span style="display: inline-block; width: 0px; height: 2.11em;"></span></span><span style="position: absolute; clip: rect(1.503em, 1000em, 2.247em, -0.373em); top: -1.741em; left: 50%; margin-left: -0.603em;"><span id="MathJax-Span-19" class="mrow"><span style="font-size: 70.7%;" id="MathJax-Span-20" class="mi"><img style="width: 9px; height: 7px; margin-right: 0.019em;" src="IV%20Curve%20%7C%20PVEducation_files/006E.png"></span><span style="font-size: 70.7%;" id="MathJax-Span-21" class="mi"><img style="width: 8px; height: 10px; margin-right: 0.018em;" src="IV%20Curve%20%7C%20PVEducation_files/006B.png"></span><span style="font-size: 70.7%;" id="MathJax-Span-22" class="mi"><img style="width: 11px; height: 10px; margin-right: -0.117em;" src="IV%20Curve%20%7C%20PVEducation_files/0054.png"><span style="display: inline-block; overflow: hidden; height: 1px; width: 0.083em;"></span></span></span>&nbsp;<span style="display: inline-block; width: 0px; height: 2.11em;"></span></span><span style="position: absolute; clip: rect(0.887em, 1000em, 1.206em, -0.388em); top: -1.297em; left: 0em;"><span style="border-left: 1.326em solid; display: inline-block; overflow: hidden; width: 0px; height: 0.06em; vertical-align: 0em;"></span>&nbsp;<span style="display: inline-block; width: 0px; height: 1.077em;"></span></span></span></span><span style="vertical-align: 0.006em;" id="MathJax-Span-23" class="mo"><span><img style="width: 9px; height: 40px; vertical-align: -14px; margin-right: 0.176em;" src="IV%20Curve%20%7C%20PVEducation_files/0029.png"></span></span><span style="padding-left: 0.222em;" id="MathJax-Span-24" class="mo"><img style="width: 16px; height: 2px; vertical-align: 5px; margin-right: 0.082em;" src="IV%20Curve%20%7C%20PVEducation_files/2212.png"></span><span style="padding-left: 0.222em;" id="MathJax-Span-25" class="mn"><img style="width: 9px; height: 16px; margin-right: 0.071em;" src="IV%20Curve%20%7C%20PVEducation_files/0031.png"></span><span style="vertical-align: 0.006em;" id="MathJax-Span-26" class="mo"><span><img style="width: 6px; height: 40px; vertical-align: -15px; margin-right: 0.219em;" src="IV%20Curve%20%7C%20PVEducation_files/005D.png"></span></span><span style="border-left: 0em solid; display: inline-block; overflow: hidden; width: 0px; height: 1.125em; vertical-align: 0em;"></span><span style="border-left: 0em solid; display: inline-block; overflow: hidden; width: 0px; height: 1.125em; vertical-align: 0em;"></span><span style="border-left: 0em solid; display: inline-block; overflow: hidden; width: 0px; height: 1.125em; vertical-align: 0em;"></span><span style="border-left: 0em solid; display: inline-block; overflow: hidden; width: 0px; height: 1.125em; vertical-align: 0em;"></span></span>&nbsp;<span style="display: inline-block; width: 0px; height: 2.756em;"></span></span></span><span style="border-left: 0em solid; display: inline-block; overflow: hidden; width: 0px; height: 2.369em; vertical-align: -0.862em;"></span></span></nobr></span><script id="MathJax-Element-1" type="math/mml"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>I</mi><mo>=</mo><msub><mi>I</mi><mi>L</mi></msub><mo>−</mo><msub><mi>I</mi><mn>0</mn></msub><mo>[</mo><mi>exp</mi><mo>(</mo><mfrac><mrow><mi>q</mi><mi>V</mi></mrow><mrow><mi>n</mi><mi>k</mi><mi>T</mi></mrow></mfrac><mo>)</mo><mo>-</mo><mn>1</mn><mo>]</mo></math></script></p>
+</div>
+</div>
+</div>
+<p></p>
+<p>The -1 term in the above equation can usually be neglected. The 
+exponential term is usually &gt;&gt; 1 except for voltages below 100 mV.
+ Further, at low voltages the light generated current I<sub>L </sub> dominates the I<sub>0</sub><sub> </sub> (...) term so the -1 term is not needed under illumination.</p>
+<p>
+</p><div class="field field-name-body field-type-text-with-summary field-label-hidden">
+<div class="field-items">
+<div class="field-item even" property="content:encoded">
+<p class="equation"><span class="MathJax_Preview"></span><span style="" aria-readonly="true" role="textbox" id="MathJax-Element-2-Frame" class="MathJax"><nobr><span style="width: 12.792em; display: inline-block;" id="MathJax-Span-27" class="math"><span style="display: inline-block; position: relative; width: 9.905em; height: 0px; font-size: 129%;"><span style="position: absolute; clip: rect(1.502em, 1000em, 3.51em, -0.362em); top: -2.756em; left: 0em;"><span id="MathJax-Span-28" class="mrow"><span id="MathJax-Span-29" class="mrow"><span id="MathJax-Span-30" class="mi"><img style="width: 11px; height: 15px; margin-right: -0.062em;" src="IV%20Curve%20%7C%20PVEducation_files/0049.png"><span style="display: inline-block; overflow: hidden; height: 1px; width: 0.062em;"></span></span><span style="padding-left: 0.278em;" id="MathJax-Span-31" class="mo"><img style="width: 16px; height: 6px; vertical-align: 3px; margin-right: 0.054em;" src="IV%20Curve%20%7C%20PVEducation_files/003D.png"></span><span style="padding-left: 0.278em;" id="MathJax-Span-32" class="msub"><span style="display: inline-block; position: relative; width: 0.96em; height: 0px;"><span style="position: absolute; clip: rect(1.317em, 1000em, 2.239em, -0.362em); top: -2.11em; left: 0em;"><span id="MathJax-Span-33" class="mi"><img style="width: 11px; height: 15px; margin-right: -0.062em;" src="IV%20Curve%20%7C%20PVEducation_files/0049.png"><span style="display: inline-block; overflow: hidden; height: 1px; width: 0.062em;"></span></span>&nbsp;<span style="display: inline-block; width: 0px; height: 2.11em;"></span></span><span style="position: absolute; top: -1.96em; left: 0.411em;"><span style="font-size: 70.7%;" id="MathJax-Span-34" class="mi"><img style="width: 10px; height: 10px; margin-right: 0.033em;" src="IV%20Curve%20%7C%20PVEducation_files/004C.png"></span>&nbsp;<span style="display: inline-block; width: 0px; height: 2.11em;"></span></span></span></span><span style="padding-left: 0.222em;" id="MathJax-Span-35" class="mo"><img style="width: 16px; height: 2px; vertical-align: 5px; margin-right: 0.082em;" src="IV%20Curve%20%7C%20PVEducation_files/2212.png"></span><span style="padding-left: 0.222em;" id="MathJax-Span-36" class="msub"><span style="display: inline-block; position: relative; width: 0.874em; height: 0px;"><span style="position: absolute; clip: rect(1.317em, 1000em, 2.239em, -0.362em); top: -2.11em; left: 0em;"><span id="MathJax-Span-37" class="mi"><img style="width: 11px; height: 15px; margin-right: -0.062em;" src="IV%20Curve%20%7C%20PVEducation_files/0049.png"><span style="display: inline-block; overflow: hidden; height: 1px; width: 0.062em;"></span></span>&nbsp;<span style="display: inline-block; width: 0px; height: 2.11em;"></span></span><span style="position: absolute; top: -1.96em; left: 0.411em;"><span style="font-size: 70.7%;" id="MathJax-Span-38" class="mn"><img style="width: 8px; height: 11px; margin-right: 0.039em;" src="IV%20Curve%20%7C%20PVEducation_files/0030.png"></span>&nbsp;<span style="display: inline-block; width: 0px; height: 2.11em;"></span></span></span></span><span id="MathJax-Span-39" class="mrow"><span style="vertical-align: 0.006em;" id="MathJax-Span-40" class="mo"><span><img style="width: 10px; height: 40px; vertical-align: -15px; margin-right: 0.017em;" src="IV%20Curve%20%7C%20PVEducation_files/005B.png"></span></span><span id="MathJax-Span-41" class="mrow"><span id="MathJax-Span-42" class="mi"><img style="width: 9px; height: 10px; margin-right: 0.028em;" src="IV%20Curve%20%7C%20PVEducation_files/0065.png"><img style="width: 11px; height: 11px; vertical-align: -1px; margin-right: 0.012em;" src="IV%20Curve%20%7C%20PVEducation_files/0078.png"><img style="width: 12px; height: 15px; vertical-align: -5px; margin-right: 0.033em;" src="IV%20Curve%20%7C%20PVEducation_files/0070.png"></span><span id="MathJax-Span-43" class="mrow"><span style="vertical-align: 0.006em;" id="MathJax-Span-44" class="mo"><span><img style="width: 13px; height: 40px; vertical-align: -14px; margin-right: 0.035em;" src="IV%20Curve%20%7C%20PVEducation_files/0028.png"></span></span><span id="MathJax-Span-45" class="mrow"><span style="padding-left: 0.12em; padding-right: 0.12em;" id="MathJax-Span-46" class="mfrac"><span style="display: inline-block; position: relative; width: 1.326em; height: 0px;"><span style="position: absolute; clip: rect(1.51em, 1000em, 2.373em, -0.365em); top: -2.635em; left: 50%; margin-left: -0.409em;"><span id="MathJax-Span-47" class="mrow"><span style="font-size: 70.7%;" id="MathJax-Span-48" class="mi"><img style="width: 8px; height: 9px; vertical-align: -3px; margin-right: -0.014em;" src="IV%20Curve%20%7C%20PVEducation_files/0071.png"><span style="display: inline-block; overflow: hidden; height: 1px; width: 0.01em;"></span></span><span style="font-size: 70.7%;" id="MathJax-Span-49" class="mi"><img style="width: 12px; height: 11px; vertical-align: -1px; margin-right: -0.181em;" src="IV%20Curve%20%7C%20PVEducation_files/0056.png"><span style="display: inline-block; overflow: hidden; height: 1px; width: 0.128em;"></span></span></span>&nbsp;<span style="display: inline-block; width: 0px; height: 2.11em;"></span></span><span style="position: absolute; clip: rect(1.503em, 1000em, 2.247em, -0.373em); top: -1.741em; left: 50%; margin-left: -0.603em;"><span id="MathJax-Span-50" class="mrow"><span style="font-size: 70.7%;" id="MathJax-Span-51" class="mi"><img style="width: 9px; height: 7px; margin-right: 0.019em;" src="IV%20Curve%20%7C%20PVEducation_files/006E.png"></span><span style="font-size: 70.7%;" id="MathJax-Span-52" class="mi"><img style="width: 8px; height: 10px; margin-right: 0.018em;" src="IV%20Curve%20%7C%20PVEducation_files/006B.png"></span><span style="font-size: 70.7%;" id="MathJax-Span-53" class="mi"><img style="width: 11px; height: 10px; margin-right: -0.117em;" src="IV%20Curve%20%7C%20PVEducation_files/0054.png"><span style="display: inline-block; overflow: hidden; height: 1px; width: 0.083em;"></span></span></span>&nbsp;<span style="display: inline-block; width: 0px; height: 2.11em;"></span></span><span style="position: absolute; clip: rect(0.887em, 1000em, 1.206em, -0.388em); top: -1.297em; left: 0em;"><span style="border-left: 1.326em solid; display: inline-block; overflow: hidden; width: 0px; height: 0.06em; vertical-align: 0em;"></span>&nbsp;<span style="display: inline-block; width: 0px; height: 1.077em;"></span></span></span></span></span><span style="vertical-align: 0.006em;" id="MathJax-Span-54" class="mo"><span><img style="width: 9px; height: 40px; vertical-align: -14px; margin-right: 0.176em;" src="IV%20Curve%20%7C%20PVEducation_files/0029.png"></span></span><span style="border-left: 0em solid; display: inline-block; overflow: hidden; width: 0px; height: 1.125em; vertical-align: 0em;"></span><span style="border-left: 0em solid; display: inline-block; overflow: hidden; width: 0px; height: 1.125em; vertical-align: 0em;"></span></span></span><span style="vertical-align: 0.006em;" id="MathJax-Span-55" class="mo"><span><img style="width: 6px; height: 40px; vertical-align: -15px; margin-right: 0.219em;" src="IV%20Curve%20%7C%20PVEducation_files/005D.png"></span></span><span style="border-left: 0em solid; display: inline-block; overflow: hidden; width: 0px; height: 1.125em; vertical-align: 0em;"></span><span style="border-left: 0em solid; display: inline-block; overflow: hidden; width: 0px; height: 1.125em; vertical-align: 0em;"></span></span></span></span>&nbsp;<span style="display: inline-block; width: 0px; height: 2.756em;"></span></span></span><span style="border-left: 0em solid; display: inline-block; overflow: hidden; width: 0px; height: 2.369em; vertical-align: -0.862em;"></span></span></nobr></span><script id="MathJax-Element-2" type="math/mml"><math> <mrow> <mi>I</mi><mo>=</mo><msub> <mi>I</mi> <mi>L</mi> </msub> <mo>−</mo><msub> <mi>I</mi> <mn>0</mn> </msub> <mrow><mo>[</mo> <mrow> <mi>exp</mi><mrow><mo>(</mo> <mrow> <mfrac> <mrow> <mi>q</mi><mi>V</mi> </mrow> <mrow> <mi>n</mi><mi>k</mi><mi>T</mi> </mrow> </mfrac> </mrow> <mo>)</mo></mrow> </mrow> <mo>]</mo></mrow> </mrow> </math></script></p>
+</div>
+</div>
+</div>
+<p></p>
+<form>
+<fieldset class="calculator" style="width: 600px;"><legend> Light Biased IV Curve Calculator</legend><p></p>
+<div class="inputColumn" style="width:60%;"><label class="inputParameters">Dark Saturation Current, <em>I<sub>0</sub></em> =<input name="I0" onchange="this.form.result.value=sc_current(this.form)" size="6" style="width:75px;" value="1e-10">A</label> <label class="inputParameters">Light Generated Current, <em>I<sub>L</sub></em> =<input name="IL" onchange="this.form.result.value=sc_current(this.form)" size="6" style="width:75px;" value="0.5">A</label> <label class="inputParameters">Ideality Factor, <em>n</em> =<input name="n" onchange="this.form.result.value=sc_current(this.form)" size="6" style="width:75px;" value="1"></label> <label class="inputParameters">Temperature, <em>T</em> =<input name="T" onchange="this.form.result.value=sc_current(this.form)" size="6" style="width:75px;" value="300">K</label> <label class="inputParameters">Voltage, <em>V</em> =<input name="V" onchange="this.form.result.value=sc_current(this.form)" size="6" style="width:75px;" value="0.5">V</label></div>
+<div class="outputColumn" style="width:40%;"><label class="outputParameters">Current, <em>A</em> =<input name="result" size="9" value="0.4753">A</label></div>
+<p></p></fieldset><br>
+</form>
+<p>Several important parameters which are used to characterise solar 
+cells are discussed in the following pages. The short-circuit current (I<sub>SC</sub>), the open-circuit voltage (V<sub>OC</sub>), the fill factor (FF) and the efficiency are all parameters determined from the IV curve.</p>
+<ul class="footnotes">
+<li class="footnote" id="footnote1_jtkl0w8"><a class="footnote-label" href="#footnoteref1_jtkl0w8">1.</a> <span class="biblio-authors"><a href="http://www.pveducation.org/biblio?f[author]=149" rel="nofollow">Lindholm FA</a>, <a href="http://www.pveducation.org/biblio?f[author]=95" rel="nofollow">Fossum JG</a>, <a href="http://www.pveducation.org/biblio?f[author]=150" rel="nofollow">Burgess EL</a></span>. <a href="http://www.pveducation.org/node/344"><span class="biblio-title">Application of the superposition principle to solar-cell analysis</span></a>. IEEE Transactions on Electron Devices. 1979  ;26:165–171.<span class="Z3988" title="ctx_ver=Z39.88-2004&amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Ajournal&amp;rft.atitle=Application+of+the+superposition+principle+to+solar-cell+analysis&amp;rft.title=IEEE+Transactions+on+Electron+Devices&amp;rft.issn=0018-9383&amp;rft.date=1979&amp;rft.volume=26&amp;rft.spage=165%E2%80%93171&amp;rft.aulast=Lindholm&amp;rft.auinit=F+A&amp;rft.au=Fossum%2C+J+G&amp;rft.au=Burgess%2C+E+L"></span></li>
+</ul>
+</div></div></div>      <div id="book-navigation-25" class="book-navigation">
+    
+        <div class="page-links clearfix">
+              <a href="http://www.pveducation.org/pvcdrom/solar-cell-operation/photovoltaic-effect" class="page-previous" title="Go to previous page">‹ The photovoltaic effect</a>
+      	  
+
+              <a href="http://www.pveducation.org/pvcdrom/solar-cell-operation/short-circuit-current" class="page-next" title="Go to next page">Short-Circuit Current ›</a>
+          </div>
+    
+  <script id="code_swipe">
+    $(function() {      
+      //Keep track of how many swipes
+      var count=0;
+
+      //Enable swiping...
+      $("#content-swipe").swipe( {
+        //Generic swipe handler for all directions
+        swipeLeft:function(event, direction, distance, duration, fingerCount) {
+          window.location.href="/pvcdrom/solar-cell-operation/short-circuit-current";  
+        },
+        swipeRight:function(event, direction, distance, duration, fingerCount) {
+          window.location.href="/pvcdrom/solar-cell-operation/photovoltaic-effect";  
+        },
+        //Default is 75px, set to 0 for demo so any distance triggers swipe
+        threshold:0
+      });
+    });
+  </script>
+  </div>
+  </div>
+
+      <footer>
+            <ul class="links inline"><li class="0 first last"><span><a href="http://www.pveducation.org/user/login?destination=comment/reply/115%23comment-form">Log in</a> or <a href="http://www.pveducation.org/user/register?destination=comment/reply/115%23comment-form">register</a> to post comments</span></li>
+</ul>    </footer>
+  
+  
+  </section> <!-- /#main -->
+
+      <aside id="sidebar-first" role="complementary" class="sidebar clearfix">
+      <div class="region region-sidebar-first">
+  <section id="block-block-1" class="block block-block">
+
+      
+  <div class="content">
+    <div>
+	<img alt="logoPVCDROM" class="figure" src="IV%20Curve%20%7C%20PVEducation_files/logoPVCDROM.png"><br>
+	<span style="color: rgb(207, 68, 71); font-size: small;"><strong>Christiana Honsberg<br>
+	and Stuart Bowden </strong></span></div>
+  </div>
+  
+</section> <!-- /.block -->
+<section id="block-menu-menu-pvcdrom" class="block block-menu">
+
+      
+  <div class="content">
+    <ul class="menu"><li class="first leaf dhtml-menu" id="dhtml_menu-592"><a href="http://www.pveducation.org/pvcdrom/instructions">Instructions</a></li>
+<li class="collapsed dhtml-menu collapsed start-collapsed" id="dhtml_menu-559"><a href="http://www.pveducation.org/pvcdrom/introduction" title="">1. Introduction</a><ul class="menu"><li class="first leaf dhtml-menu" id="dhtml_menu-575"><a href="http://www.pveducation.org/pvcdrom/introduction/solar-energy">Solar Energy</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-570"><a href="http://www.pveducation.org/pvcdrom/introduction/introduction">Introduction</a></li>
+<li class="last leaf dhtml-menu" id="dhtml_menu-569"><a href="http://www.pveducation.org/pvcdrom/introduction/greenhouse-effect">The Greenhouse Effect</a></li>
+</ul></li>
+<li class="collapsed dhtml-menu collapsed start-collapsed" id="dhtml_menu-577"><a href="http://www.pveducation.org/pvcdrom/properties-of-sunlight" title="">2. Properties of Sunlight</a><ul class="menu"><li class="first leaf dhtml-menu" id="dhtml_menu-578"><a href="http://www.pveducation.org/properties-of-sunlight/basics-of-light" title="">2.1. Basics of Light</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-580"><a href="http://www.pveducation.org/pvcdrom/properties-of-sunlight/properties-of-light">Properties of Light</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-584"><a href="http://www.pveducation.org/pvcdrom/properties-of-sunlight/energy-of-photon">Energy of Photon</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-597"><a href="http://www.pveducation.org/pvcdrom/properties-of-sunlight/photon-flux">Photon Flux</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-600"><a href="http://www.pveducation.org/pvcdrom/properties-of-sunlight/spectral-irradiance">Spectral Irradiance</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-603"><a href="http://www.pveducation.org/pvcdrom/properties-of-sunlight/radiant-power-density">Radiant Power Density</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-606"><a href="http://www.pveducation.org/pvcdrom/properties-of-sunlight/blackbody-radiation">2.2. Blackbody Radiation</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-1251"><a href="http://www.pveducation.org/pvcdrom/properties-of-sunlight/blackbody-radiation" title="Ideal radiation emission">Blackbody Radiation</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-1192"><a href="http://www.pveducation.org/node/237" title="">2.3. Solar Radiation</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-609"><a href="http://www.pveducation.org/pvcdrom/properties-of-sunlight/the-sun">The Sun</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-612"><a href="http://www.pveducation.org/pvcdrom/properties-of-sunlight/solar-radiation-in-space">Solar Radiation in Space</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-615"><a href="http://www.pveducation.org/pvcdrom/properties-of-sunlight/solar-radiation-outside-earths-atmosphere">Solar Radiation Outside the Earth's Atmosphere</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-1193"><a href="http://www.pveducation.org/node/238" title="">2.4. Terrestrial Solar Radiation</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-618"><a href="http://www.pveducation.org/pvcdrom/properties-of-sunlight/solar-radiation-at-earths-surface">Solar Radiation at the Earth's Surface</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-621"><a href="http://www.pveducation.org/pvcdrom/properties-of-sunlight/atmospheric-effects">Atmospheric Effects</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-624"><a href="http://www.pveducation.org/pvcdrom/properties-of-sunlight/air-mass">Air Mass</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-627"><a href="http://www.pveducation.org/pvcdrom/properties-of-sunlight/motion-of-sun">Motion of the Sun</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-630"><a href="http://www.pveducation.org/pvcdrom/properties-of-sunlight/solar-time">Solar Time</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-633"><a href="http://www.pveducation.org/pvcdrom/properties-of-sunlight/declination-angle">Declination Angle</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-636"><a href="http://www.pveducation.org/pvcdrom/properties-of-sunlight/elevation-angle">Elevation Angle</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-639"><a href="http://www.pveducation.org/pvcdrom/properties-of-sunlight/azimuth-angle">Azimuth Angle</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-642"><a href="http://www.pveducation.org/pvcdrom/properties-of-sunlight/suns-position">The Sun's Position</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-645"><a href="http://www.pveducation.org/pvcdrom/properties-of-sunlight/sun-position-calculator">Sun Position Calculator</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-648"><a href="http://www.pveducation.org/pvcdrom/properties-of-sunlight/sun-position-high-accuracy">Sun's Position to High Accuracy</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-651"><a href="http://www.pveducation.org/pvcdrom/properties-of-sunlight/solar-radiation-on-tilted-surface">Solar Radiation on a Tilted Surface</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-654"><a href="http://www.pveducation.org/pvcdrom/properties-of-sunlight/arbitrary-orientation-and-tilt">Arbitrary Orientation and Tilt</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-657"><a href="http://www.pveducation.org/pvcdrom/properties-of-sunlight/calculation-of-solar-insolation">Calculation of Solar Insolation</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-1194"><a href="http://www.pveducation.org/node/239" title="">2.5. Solar Radiation Data</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-660"><a href="http://www.pveducation.org/pvcdrom/properties-of-sunlight/measurement-of-solar-radiation">Measurement of Solar Radiation</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-664"><a href="http://www.pveducation.org/pvcdrom/properties-of-sunlight/analysis-of-solar-irradiance-data-sets">Analysis of Solar Irradiance Data Sets</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-667"><a href="http://www.pveducation.org/pvcdrom/properties-of-sunlight/typical-meteorological-year-data">Typical Meteorological Year Data (TMY)</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-670"><a href="http://www.pveducation.org/pvcdrom/properties-of-sunlight/making-use-of-TMY">Making Use of TMY Data</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-673"><a href="http://www.pveducation.org/pvcdrom/properties-of-sunlight/average-solar-radiation">Average Solar Radiation</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-676"><a href="http://www.pveducation.org/pvcdrom/properties-of-sunlight/isoflux-contour-plots">Isoflux Contour Plots</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-679"><a href="http://www.pveducation.org/pvcdrom/properties-of-sunlight/sunshine-hour-data">Sunshine Hour Data</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-682"><a href="http://www.pveducation.org/pvcdrom/properties-of-sunlight/cloud-cover-data">Cloud Cover Data</a></li>
+<li class="last leaf dhtml-menu" id="dhtml_menu-3333"><a href="http://www.pveducation.org/pvcdrom/properties-of-sunlight/quiz">Chapter 2 Quiz</a></li>
+</ul></li>
+<li class="collapsed dhtml-menu collapsed start-collapsed" id="dhtml_menu-685"><a href="http://www.pveducation.org/pvcdrom/pn-junction" title="">3. PN Junction</a><ul class="menu"><li class="first leaf dhtml-menu" id="dhtml_menu-694"><a href="http://www.pveducation.org/pvcdrom/pn-junction/introduction">Introduction</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-1195"><a href="http://www.pveducation.org/node/240" title="">3.1. Basics</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-698"><a href="http://www.pveducation.org/pvcdrom/pn-junction/semiconductor-materials">Semiconductor Materials</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-701"><a href="http://www.pveducation.org/pvcdrom/pn-junction/semiconductor-structure">Semiconductor Structure</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-704"><a href="http://www.pveducation.org/pvcdrom/pn-junction/conduction-in-semiconductors">Conduction in Semiconductors</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-710"><a href="http://www.pveducation.org/pvcdrom/pn-junction/band-gap">Band Gap</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-713"><a href="http://www.pveducation.org/pvcdrom/pn-junction/intrinsic-carrier-concentration">Intrinsic Carrier Concentration</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-778"><a href="http://www.pveducation.org/pvcdrom/pn-junction/doping" title="">Doping</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-716"><a href="http://www.pveducation.org/pvcdrom/pn-junction/equilibrium-carrier-concentration">Equilibrium Carrier Concentration</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-1196"><a href="http://www.pveducation.org/node/241" title="">3.2. Generation</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-719"><a href="http://www.pveducation.org/pvcdrom/pn-junction/absorption-of-light">Absorption of Light</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-722"><a href="http://www.pveducation.org/pvcdrom/pn-junction/absorption-coefficient">Absorption Coefficient</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-725"><a href="http://www.pveducation.org/pvcdrom/pn-junction/absorption-depth">Absorption Depth</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-728"><a href="http://www.pveducation.org/pvcdrom/pn-junction/generation-rate">Generation Rate</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-1197"><a href="http://www.pveducation.org/node/242" title="">3.3. Recombination</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-731"><a href="http://www.pveducation.org/pvcdrom/pn-junction/types-of-recombination">Types of Recombination</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-734"><a href="http://www.pveducation.org/pvcdrom/pn-junction/lifetime">Lifetime</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-737"><a href="http://www.pveducation.org/pvcdrom/pn-junction/diffusion-length">Diffusion Length</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-740"><a href="http://www.pveducation.org/pvcdrom/pn-junction/surface-recombination">Surface Recombination</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-1198"><a href="http://www.pveducation.org/node/243" title="">3.4. Carrier Transport</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-743"><a href="http://www.pveducation.org/pvcdrom/pn-junction/movement-of-carriers-in-semiconductors">Movement of Carriers in Semiconductors</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-746"><a href="http://www.pveducation.org/pvcdrom/pn-junction/diffusion">Diffusion</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-749"><a href="http://www.pveducation.org/pvcdrom/pn-junction/drift">Drift</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-1199"><a href="http://www.pveducation.org/node/244" title="">3.5. P-n Junctions</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-752"><a href="http://www.pveducation.org/pvcdrom/pn-junction/formation-pn-junction">Formation of a PN-Junction</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-755"><a href="http://www.pveducation.org/pvcdrom/pn-junction/pn-junction-diodes">P-N Junction Diodes</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-758"><a href="http://www.pveducation.org/pvcdrom/pn-junction/bias-of-pn-junction" title="">Bias of PN Junctions</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-761"><a href="http://www.pveducation.org/pvcdrom/pn-junction/diode-equation">Diode Equation</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-1200"><a href="http://www.pveducation.org/node/245" title="">3.6. Diode Equations for PV</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-1666"><a href="http://www.pveducation.org/pvcdrom/pn-junction/ideal-diode" title="Derivation of the Ideal Diode Equation">Ideal Diode Equation Derivation</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-764"><a href="http://www.pveducation.org/pvcdrom/pn-junction/basic-equations">Basic Equations</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-767"><a href="http://www.pveducation.org/pvcdrom/pn-junction/apply-to-pn-junction">Applying the Basic Equations to a PN Junction</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-782"><a href="http://www.pveducation.org/pvcdrom/pn-junction/solving-for-depletion-region">Solving for Depletion Region</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-785"><a href="http://www.pveducation.org/pvcdrom/pn-junction/solving-for-qnr">Solving for Quasi Neutral Regions</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-796"><a href="http://www.pveducation.org/pvcdrom/pn-junction/total-current">Finding Total Current</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-797"><a href="http://www.pveducation.org/pvcdrom/pn-junction/wide-base-diode">Eg1: Wide Base Diode</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-798"><a href="http://www.pveducation.org/pvcdrom/pn-junction/narrow-base-diode">Eg2: Narrow Base Diode</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-800"><a href="http://www.pveducation.org/pvcdrom/pn-junction/summary">Summary</a></li>
+<li class="last leaf dhtml-menu" id="dhtml_menu-3336"><a href="http://www.pveducation.org/pvcdrom/pn-junction/quiz">Chapter 3 Quiz</a></li>
+</ul></li>
+<li class="expanded active-trail dhtml-menu" id="dhtml_menu-803"><a href="http://www.pveducation.org/pvcdrom/solar-cell-operation" class="active-trail">4. Solar Cell Operation</a><ul class="menu"><li class="first leaf dhtml-menu" id="dhtml_menu-1202"><a href="http://www.pveducation.org/node/247" title="">4.1. Ideal Solar Cells</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-806"><a href="http://www.pveducation.org/pvcdrom/solar-cell-operation/solar-cell-structure">Solar Cell Structure</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-809"><a href="http://www.pveducation.org/pvcdrom/solar-cell-operation/light-generated-current" title="">Light Generated Current</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-812"><a href="http://www.pveducation.org/pvcdrom/solar-cell-operation/collection-probability">Collection Probability</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-815"><a href="http://www.pveducation.org/pvcdrom/solar-cell-operation/quantum-efficiency">Quantum Efficiency</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-1134"><a href="http://www.pveducation.org/pvcdrom/characterisation/spectral-response">Spectral Response</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-834"><a href="http://www.pveducation.org/pvcdrom/solar-cell-operation/photovoltaic-effect" title="">The Photovoltaic Effect</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-1203"><a href="http://www.pveducation.org/node/248" title="">4.2. Solar Cell Parameters</a></li>
+<li class="leaf active-trail dhtml-menu" id="dhtml_menu-835"><a href="http://www.pveducation.org/pvcdrom/solar-cell-operation/iv-curve" class="active-trail active">IV Curve</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-836"><a href="http://www.pveducation.org/pvcdrom/solar-cell-operation/short-circuit-current">Short-Circuit Current</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-837"><a href="http://www.pveducation.org/pvcdrom/solar-cell-operation/open-circuit-voltage">Open-Circuit Voltage</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-838"><a href="http://www.pveducation.org/pvcdrom/solar-cell-operation/fill-factor">Fill Factor</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-839"><a href="http://www.pveducation.org/pvcdrom/solar-cell-operation/efficiency">Efficiency</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-840"><a href="http://www.pveducation.org/pvcdrom/solar-cell-operation/detailed-balance">Detailed Balance</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-841"><a href="http://www.pveducation.org/pvcdrom/solar-cell-operation/tandem-cells" title="">Tandem Cells</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-1204"><a href="http://www.pveducation.org/node/249" title="">4.3. Resistive Effects</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-842"><a href="http://www.pveducation.org/pvcdrom/solar-cell-operation/charecteristic-resistance" title="">Characteristic Resistance</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-843"><a href="http://www.pveducation.org/pvcdrom/solar-cell-operation/effect-of-parasitic-resistances" title="">Effect of Parasitic Resistances</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-844"><a href="http://www.pveducation.org/pvcdrom/solar-cell-operation/series-resistance">Series Resistance</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-845"><a href="http://www.pveducation.org/pvcdrom/solar-cell-operation/shunt-resistance">Shunt Resistance</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-1205"><a href="http://www.pveducation.org/node/250" title="">4.4. Other Effects</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-846"><a href="http://www.pveducation.org/pvcdrom/solar-cell-operation/impact-of-both-resistances">Impact of Both Series and Shunt Resistance</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-847"><a href="http://www.pveducation.org/pvcdrom/solar-cell-operation/effect-of-temperature">Effect of Temperature</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-848"><a href="http://www.pveducation.org/pvcdrom/solar-cell-operation/effect-of-light-intensity">Effect of Light Intensity</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-849"><a href="http://www.pveducation.org/pvcdrom/solar-cell-operation/ideality-factor">Ideality Factor</a></li>
+<li class="last leaf dhtml-menu" id="dhtml_menu-3335"><a href="http://www.pveducation.org/pvcdrom/solar-cell-operation/quiz">Chapter 4 Quiz</a></li>
+</ul></li>
+<li class="collapsed dhtml-menu collapsed start-collapsed" id="dhtml_menu-1019"><a href="http://www.pveducation.org/pvcdrom/design" title="">5. Design of Silicon Cells</a><ul class="menu"><li class="first leaf dhtml-menu" id="dhtml_menu-1024"><a href="http://www.pveducation.org/pvcdrom/design/solar-cell-design-principles">Solar Cell Design Principles</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-1206"><a href="http://www.pveducation.org/node/251" title="">5.1. Optical Properties</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-1027"><a href="http://www.pveducation.org/pvcdrom/design/optical-losses">Optical Losses</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-1031"><a href="http://www.pveducation.org/pvcdrom/design/anti-reflection-coatings">Anti-Reflection Coatings</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-1034"><a href="http://www.pveducation.org/pvcdrom/design/arc-color" title="Anti-Reflection Coating Color">AR Coating Color</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-1452"><a href="http://www.pveducation.org/pvcdrom/design/dlarc" title="Double Layer Anti-Reflection Coatings">DLARC</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-1037"><a href="http://www.pveducation.org/pvcdrom/design/surface-texturing">Surface Texturing</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-1040"><a href="http://www.pveducation.org/pvcdrom/design/material-thickness">Material Thickness</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-1043"><a href="http://www.pveducation.org/pvcdrom/design/light-trapping">Light Trapping</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-1046"><a href="http://www.pveducation.org/pvcdrom/design/lambertian-rear-reclectors">Lambertian Rear Reflectors</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-1207"><a href="http://www.pveducation.org/node/252" title="">5.2. Reducing Recombination</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-1050"><a href="http://www.pveducation.org/pvcdrom/design/recombination-losses" title="">Recombination Losses</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-1053"><a href="http://www.pveducation.org/pvcdrom/design/current-losses-due-to-recombination">Current Losses Due to Recombination</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-1056"><a href="http://www.pveducation.org/pvcdrom/design/voltage-losses-due-to-recombination">Voltage Losses due to Recombination</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-1059"><a href="http://www.pveducation.org/pvcdrom/design/surface-recombination">Surface Recombination</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-1208"><a href="http://www.pveducation.org/node/253" title="">5.3. Top Contact Design</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-1063"><a href="http://www.pveducation.org/pvcdrom/design/series-resistance">Series Resistance</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-1066"><a href="http://www.pveducation.org/pvcdrom/design/base-resistance" title="">Base Resistance</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-1069"><a href="http://www.pveducation.org/pvcdrom/design/sheet-resistivity" title="">Sheet Resistivity</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-1072"><a href="http://www.pveducation.org/pvcdrom/design/emitter-resistance" title="">Emitter Resistance</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-1075"><a href="http://www.pveducation.org/pvcdrom/design/contact-resistance" title="">Contact Resistance</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-1078"><a href="http://www.pveducation.org/pvcdrom/design/finger-resistance" title="">Finger Resistance</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-1081"><a href="http://www.pveducation.org/pvcdrom/design/optimisation-of-finger-spacing">Optimization of Finger Spacing</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-1084"><a href="http://www.pveducation.org/pvcdrom/design/metal-grid-pattern">Metal Grid Pattern</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-1209"><a href="http://www.pveducation.org/node/254" title="">5.4. Solar Cell Structure</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-1088"><a href="http://www.pveducation.org/pvcdrom/design/solar-cell-parameters">Silicon Solar Cell Parameters</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-1091"><a href="http://www.pveducation.org/pvcdrom/design/efficiency-and-cost" title="">Efficiency and Solar Cell Cost</a></li>
+<li class="last leaf dhtml-menu" id="dhtml_menu-3334"><a href="http://www.pveducation.org/pvcdrom/design/quiz">Chapter 5 Quiz</a></li>
+</ul></li>
+<li class="collapsed dhtml-menu collapsed start-collapsed" id="dhtml_menu-869"><a href="http://www.pveducation.org/node/130" title="">6. Manufacturing Si Cells</a><ul class="menu"><li class="first leaf dhtml-menu" id="dhtml_menu-872"><a href="http://www.pveducation.org/pvcdrom/manufacturing/first-photovoltaic-devices">First Photovoltaic devices</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-875"><a href="http://www.pveducation.org/pvcdrom/manufacturing/early-silicon-solar-cells">Early Silicon Cells</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-1210"><a href="http://www.pveducation.org/node/255" title="">6.1. Silicon Wаfers &amp; Substrates</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-878"><a href="http://www.pveducation.org/pvcdrom/manufacturing/refining-silicon">Refining Silicon</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-883"><a href="http://www.pveducation.org/pvcdrom/manufacturing/types-of-silicon" title="">Types Of Silicon</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-884"><a href="http://www.pveducation.org/pvcdrom/manufacturing/single-crystalline-silicon" title="">Single Crystalline Silicon</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-886"><a href="http://www.pveducation.org/pvcdrom/manufacturing/czochralski-silicon" title="">Czochralski Silicon</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-1252"><a href="http://www.pveducation.org/pvcdrom/manufacturing/float-zone-silicon">Float Zone Silicon</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-891"><a href="http://www.pveducation.org/pvcdrom/manufacturing/multi-crystalline-silicon" title="">Multi Crystalline Silicon</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-1686"><a href="http://www.pveducation.org/node/496">Wafer Slicing</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-897"><a href="http://www.pveducation.org/pvcdrom/manufacturing/other-wafering-techniques" title="">Other Wafering Techniques</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-1211"><a href="http://www.pveducation.org/node/256" title="">6.2. Processing Technologies</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-900"><a href="http://www.pveducation.org/pvcdrom/manufacturing/solid-state-diffusion">Solid State Diffusion</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-1212"><a href="http://www.pveducation.org/node/257" title="">6.3. Cell Fabrication Technologies</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-903"><a href="http://www.pveducation.org/pvcdrom/manufacturing/screen-printed" title="">Screen Printed Solar Cells</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-906"><a href="http://www.pveducation.org/pvcdrom/manufacturing/buried-contract">Buried Contact Solar Cells</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-909"><a href="http://www.pveducation.org/pvcdrom/manufacturing/high-efficiency" title="">High Efficiency Solar Cells</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-912"><a href="http://www.pveducation.org/pvcdrom/manufacturing/rear-contact">Rear Contact Solar Cells</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-1213"><a href="http://www.pveducation.org/node/258" title="">6.4. Solar Cell Production Line</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-914"><a href="http://www.pveducation.org/pvcdrom/manufacturing/introduction">Introduction</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-917"><a href="http://www.pveducation.org/pvcdrom/manufacturing/source-material">Source Material</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-920"><a href="http://www.pveducation.org/pvcdrom/manufacturing/growing-ingots">Growing Ingots</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-923"><a href="http://www.pveducation.org/pvcdrom/manufacturing/sawing" title="">Sawing the Ingot into Bricks</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-1685"><a href="http://www.pveducation.org/pvcdrom/manufacturing/wafter-slicing">Wafer Slicing</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-928"><a href="http://www.pveducation.org/pvcdrom/manufacturing/texturing">Texturing</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-932"><a href="http://www.pveducation.org/pvcdrom/manufacturing/emitter-diffusion">Emitter Diffusion</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-935"><a href="http://www.pveducation.org/pvcdrom/manufacturing/edge-isolation">Edge Isolation</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-938"><a href="http://www.pveducation.org/pvcdrom/manufacturing/anti-reflection-coatings">Anti Reflection Coatings</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-946"><a href="http://www.pveducation.org/pvcdrom/manufacturing/screen-print-front">Screen Print Front</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-945"><a href="http://www.pveducation.org/pvcdrom/manufacturing/screen-print-rear-aluminium">Screen Print Rear Aluminium</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-947"><a href="http://www.pveducation.org/pvcdrom/manufacturing/screen-print-rear-silver">Screen Print Rear Silver</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-950"><a href="http://www.pveducation.org/pvcdrom/manufacturing/firing">Firing</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-952"><a href="http://www.pveducation.org/pvcdrom/manufacturing/testing">Testing</a></li>
+<li class="last leaf dhtml-menu" id="dhtml_menu-955"><a href="http://www.pveducation.org/pvcdrom/manufacturing/module" title="">Module</a></li>
+</ul></li>
+<li class="collapsed dhtml-menu collapsed start-collapsed" id="dhtml_menu-1668"><a href="http://www.pveducation.org/pvcdrom/modules">7. Modules and Arrays</a><ul class="menu"><li class="first leaf dhtml-menu" id="dhtml_menu-961"><a href="http://www.pveducation.org/pvcdrom/modules/introduction">Introduction</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-1214"><a href="http://www.pveducation.org/node/259" title="">7.1. Module Design</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-964"><a href="http://www.pveducation.org/pvcdrom/modules/modules-structure">Module Structure</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-967"><a href="http://www.pveducation.org/pvcdrom/modules/module-materials">Module Materials</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-970"><a href="http://www.pveducation.org/pvcdrom/modules/packing-density">Packing Density</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-1215"><a href="http://www.pveducation.org/node/260" title="">7.2. Interconnection Effects</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-1001"><a href="http://www.pveducation.org/pvcdrom/modules/module-circuit-design">Module Circuit Design</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-1002"><a href="http://www.pveducation.org/pvcdrom/modules/mismatch-effects">Mismatch Effects</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-1003"><a href="http://www.pveducation.org/pvcdrom/modules/mismatch-for-cells-connected-in-series">Mismatch for Cells Connected in Series</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-1004"><a href="http://www.pveducation.org/pvcdrom/modules/shading">Shading</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-1005"><a href="http://www.pveducation.org/pvcdrom/modules/hot-spot-heating">Hot Spot Heating</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-1006"><a href="http://www.pveducation.org/pvcdrom/modules/bypass-diodes">Bypass Diodes</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-1007"><a href="http://www.pveducation.org/pvcdrom/modules/mismatch-for-cells-connected-in-parallel">Mismatch for Cells Connected in Parallel</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-1008"><a href="http://www.pveducation.org/pvcdrom/modules/mismatch-effects-in-arrays">Mismatch Effects in Arrays</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-1216"><a href="http://www.pveducation.org/node/261" title="">7.3. Temperature Effects</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-1009"><a href="http://www.pveducation.org/pvcdrom/modules/pv-module-temperature">PV Module Temperature</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-1010"><a href="http://www.pveducation.org/pvcdrom/modules/heat-generation-in-pv-modules">Heat Generation in PV Modules</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-1011"><a href="http://www.pveducation.org/pvcdrom/modules/heat-loss-in-pv-modules">Heat Loss in PV Modules</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-1012"><a href="http://www.pveducation.org/pvcdrom/modules/nominal-operating-cell-temperature">Nominal Operating Cell Temperature</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-1013"><a href="http://www.pveducation.org/pvcdrom/modules/thermal-expansion-and-thermal-stresses">Thermal Expansion and Thermal Stresses</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-1217"><a href="http://www.pveducation.org/node/262" title="">7.4. Other Considerations</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-1014"><a href="http://www.pveducation.org/pvcdrom/modules/electrical-and-mechanical-insulation">Electrical and Mechanical Insulation</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-1218"><a href="http://www.pveducation.org/node/263" title="">7.5. Lifetime of PV Modules</a></li>
+<li class="last leaf dhtml-menu" id="dhtml_menu-1015"><a href="http://www.pveducation.org/pvcdrom/modules/degradation-and-failure-modes">Degradation and Failure Modes</a></li>
+</ul></li>
+<li class="collapsed dhtml-menu collapsed start-collapsed" id="dhtml_menu-1018"><a href="http://www.pveducation.org/pvcdrom/characterization" title="">8. Characterization</a><ul class="menu"><li class="first leaf dhtml-menu" id="dhtml_menu-1094"><a href="http://www.pveducation.org/pvcdrom/characterisation/introduction">Introduction</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-1219"><a href="http://www.pveducation.org/node/264" title="">8.1. Measurement of Cell Efficiency</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-1098"><a href="http://www.pveducation.org/pvcdrom/characterisation/measurement-of-solar-cell-efficiency">Measurement of Solar Cell Efficiency</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-1101"><a href="http://www.pveducation.org/pvcdrom/characterisation/illumination-sources">Illumination Sources</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-1104"><a href="http://www.pveducation.org/pvcdrom/characterisation/temperature-control" title="">Temperature Control</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-1110"><a href="http://www.pveducation.org/pvcdrom/characterisation/electronics">Electronics</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-1107"><a href="http://www.pveducation.org/pvcdrom/characterisation/probing" title="">Probing</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-1220"><a href="http://www.pveducation.org/node/265" title="">8.2. Other IV Measurements</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-1113"><a href="http://www.pveducation.org/pvcdrom/characterisation/dark-iv-testing">Dark IV Measurements</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-1117"><a href="http://www.pveducation.org/pvcdrom/characterisation/jsc-voc-and-suns-voc">Jsc-Voc and Suns-Voc</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-1221"><a href="http://www.pveducation.org/node/266" title="">8.3. IV Characterization</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-1121"><a href="http://www.pveducation.org/pvcdrom/characterisation/series-resistance-measurements">Measurement of Series Resistance</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-1124"><a href="http://www.pveducation.org/pvcdrom/characterisation/double-diode-model">Double Diode Model</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-1127"><a href="http://www.pveducation.org/pvcdrom/characterisation/measurement-of-ideality-factor">Measuring Ideality Factor</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-1222"><a href="http://www.pveducation.org/node/267" title="">8.4. Optical Characterization</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-1131"><a href="http://www.pveducation.org/pvcdrom/characterisation/reflectance" title="">Reflectance</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-833"><a href="http://www.pveducation.org/pvcdrom/solar-cell-operation/spectral-response">Spectral Response</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-1137"><a href="http://www.pveducation.org/pvcdrom/characterisation/laser-beam-induced-current">Laser Beam Induced Current</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-1223"><a href="http://www.pveducation.org/node/268" title="">8.5. Lifetime</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-1141"><a href="http://www.pveducation.org/pvcdrom/characterisation/carrier-lifetime" title="">Carrier Lifetime</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-1144"><a href="http://www.pveducation.org/pvcdrom/characterisation/bulk-lifetime">Bulk Lifetime</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-1147"><a href="http://www.pveducation.org/pvcdrom/characterisation/surface-recombination">Surface Recombination</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-1150"><a href="http://www.pveducation.org/pvcdrom/characterisation/transient-measurements">Transient Measurements</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-1153"><a href="http://www.pveducation.org/pvcdrom/characterisation/qss-lifetime-measurements">Quasi-Steady-State Lifetime Measurements</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-1156"><a href="http://www.pveducation.org/pvcdrom/characterisation/general-lifetime-measurements">General Lifetime Measurements</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-1159"><a href="http://www.pveducation.org/pvcdrom/characterisation/effect-of-trapping-on-lifetime-measurements">Effect of Trapping on Lifetime Measurements</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-1224"><a href="http://www.pveducation.org/node/269" title="">8.6. Luminescence</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-1166"><a href="http://www.pveducation.org/pvcdrom/characterisation/electroluminescence">Electroluminescence</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-1225"><a href="http://www.pveducation.org/node/270" title="">8.7. Simulation</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-1170"><a href="http://www.pveducation.org/pvcdrom/characterisation/introduction-to-simulation">Introduction to Simulation</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-1173"><a href="http://www.pveducation.org/pvcdrom/characterisation/pc1d">PC1D</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-1176"><a href="http://www.pveducation.org/pvcdrom/characterisation/tandemcalc" title="">Tandem Calculations</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-1179"><a href="http://www.pveducation.org/pvcdrom/characterisation/2d-modeling">2D Modeling</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-1183"><a href="http://www.pveducation.org/pvcdrom/characterisation/sem-and-ebic">SEM and EBIC</a></li>
+<li class="last leaf dhtml-menu" id="dhtml_menu-1186"><a href="http://www.pveducation.org/pvcdrom/characterisation/four-point-probe-resistivity-measurements">Four Point Probe Resistivity Measurements</a></li>
+</ul></li>
+<li class="collapsed dhtml-menu collapsed start-collapsed" id="dhtml_menu-1595"><a href="http://www.pveducation.org/pvcdrom/materials">9. Material Properties</a><ul class="menu"><li class="first leaf dhtml-menu" id="dhtml_menu-1463"><a href="http://www.pveducation.org/pvcdrom/materials/general-properties-of-silicon">General Properties of Silicon</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-1466"><a href="http://www.pveducation.org/pvcdrom/materials/optical-properties-of-silicon">Optical Properties of Silicon</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-1784"><a href="http://www.pveducation.org/pvcdrom/materials/Bi2S3" title="Bismuth trisulfide (Bi2S3)">Bi2S3</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-1794"><a href="http://www.pveducation.org/pvcdrom/materials/CdS" title="Cadmium sulfide (CdS)">CdS</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-1786"><a href="http://www.pveducation.org/pvcdrom/materials/CdSe" title="Cadmium selenide">CdSe</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-1680"><a href="http://www.pveducation.org/pvcdrom/materials/CuO" title="Copper Oxide">CuO</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-1788"><a href="http://www.pveducation.org/pvcdrom/materials/FeS2" title="Iron disulfide (FeS2) Pyrite">FeS2</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-1790"><a href="http://www.pveducation.org/pvcdrom/materials/Mg2Si">Mg2Si</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-1792"><a href="http://www.pveducation.org/pvcdrom/materials/SnS" title="Tin Silfide (Herzenbergite)">SnS</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-1683"><a href="http://www.pveducation.org/pvcdrom/materials/ZnSe">ZnSe</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-2461"><a href="http://www.pveducation.org/pvcdrom/materials/CuInSe2">CuInSe2</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-2689"><a href="http://www.pveducation.org/pvcdrom/materials/CuS">CuS</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-2463"><a href="http://www.pveducation.org/pvcdrom/materials/MnS">MnS</a></li>
+<li class="last leaf dhtml-menu" id="dhtml_menu-2691"><a href="http://www.pveducation.org/node/555">TiS2</a></li>
+</ul></li>
+<li class="collapsed dhtml-menu collapsed start-collapsed" id="dhtml_menu-1450"><a href="http://www.pveducation.org/pvcdrom/appendices" title="">11. Appendices</a><ul class="menu"><li class="first leaf dhtml-menu" id="dhtml_menu-1457"><a href="http://www.pveducation.org/pvcdrom/appendices/solar-cell-efficiency-results2">Solar Cell Efficiency Records</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-1460"><a href="http://www.pveducation.org/pvcdrom/appendices/standard-solar-spectra">Standard Solar Spectra</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-1469"><a href="http://www.pveducation.org/pvcdrom/appendices/periodic-table">Periodic Table</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-1472"><a href="http://www.pveducation.org/pvcdrom/appendices/units-and-conversions">Units and Conversions</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-1475"><a href="http://www.pveducation.org/pvcdrom/appendices/constants">Physical Constants</a></li>
+<li class="last leaf dhtml-menu" id="dhtml_menu-1478"><a href="http://www.pveducation.org/pvcdrom/appendices/equations/equations-for-photovoltaics">Equations for Photovoltaics</a></li>
+</ul></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-1752"><a href="http://www.pveducation.org/pvcdrom/korean" title="Link to the Korean Version of the PVCDROM">Korean Version</a></li>
+<li class="last collapsed dhtml-menu collapsed start-collapsed" id="dhtml_menu-2806"><a href="http://www.pveducation.org/pvcdrom/properties-of-sunlight" title="Lists of pages containing graphs, animations etc">List of:</a><ul class="menu"><li class="first leaf dhtml-menu" id="dhtml_menu-2809"><a href="http://www.pveducation.org/list-of-equations" title="List of equations formatted with MathML">Equations</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-2808"><a href="http://www.pveducation.org/list-of-flash" title="Pages containing animations done with flash">Flash Animations</a></li>
+<li class="leaf dhtml-menu" id="dhtml_menu-2807"><a href="http://www.pveducation.org/list-of-graphs" title="List of links to interactive graphs">Interactive Graphs</a></li>
+<li class="last leaf dhtml-menu" id="dhtml_menu-2810"><a href="http://www.pveducation.org/biblio" title="Bibliography and list of references">References</a></li>
+</ul></li>
+</ul>  </div>
+  
+</section> <!-- /.block -->
+<section id="block-search-form" class="block block-search">
+
+      
+  <div class="content">
+    <form action="/pvcdrom/solar-cell-operation/iv-curve" method="post" id="search-block-form" accept-charset="UTF-8"><div><div class="container-inline">
+      <h2 class="element-invisible">Search form</h2>
+    <div class="form-item form-type-textfield form-item-search-block-form">
+  <label class="element-invisible" for="edit-search-block-form--2">Search </label>
+ <input title="Enter the terms you wish to search for." id="edit-search-block-form--2" name="search_block_form" size="15" maxlength="128" class="form-text" type="search">
+</div>
+<div class="form-actions form-wrapper" id="edit-actions"><input id="edit-submit" name="op" value="Search" class="form-submit" type="submit"></div><input name="form_build_id" value="form-jBuHqCtiBtoaZp68Jbg5mOVxrhXZb5-ihxWZ5pyKW18" type="hidden">
+<input name="form_id" value="search_block_form" type="hidden">
+</div>
+</div></form>  </div>
+  
+</section> <!-- /.block -->
+<section id="block-fblikebutton-fblikebutton-static-block" class="block block-fblikebutton">
+
+      
+  <div class="content">
+    
+<iframe src="IV%20Curve%20%7C%20PVEducation_files/like.html" scrolling="no" style="border: none; overflow: hidden; width: 220px; height: 80px; " allowtransparency="true" frameborder="0"></iframe>
+  </div>
+  
+</section> <!-- /.block -->
+</div>
+ <!-- /.region -->
+    </aside>  <!-- /#sidebar-first -->
+  
+  
+  <footer id="footer" role="contentinfo" class="clearfix">
+        	
+
+	
+  </footer> <!-- /#footer -->
+
+</div> <!-- /#container -->
+  <div style="display: block;" class="feedback-processed" id="block-feedback-form">
+  <h2><span style="cursor: pointer;" class="feedback-link"><span id="feedback-form-toggle">[ + ]</span> Feedback</span></h2>
+  <div class="content"><form style="display: none;" class="feedback-form" action="/pvcdrom/solar-cell-operation/iv-curve" method="post" id="feedback-form" accept-charset="UTF-8"><div><div class="feedback-help">If you experience a bug or would like to see an addition on the current page, feel free to leave us a message.</div><div class="form-item form-type-textarea form-item-message">
+  <label for="edit-message">Message <span class="form-required" title="This field is required.">*</span></label>
+ <div class="form-textarea-wrapper resizable textarea-processed resizable-textarea"><textarea class="feedback-message form-textarea required" id="edit-message" name="message" cols="20" rows="5"></textarea><div class="grippie"></div></div>
+</div>
+<input name="form_build_id" value="form-37KGfgdqwuY8grE9hrrZWYvy5-jA7ViYwBYKYZI-0O0" type="hidden">
+<input name="form_id" value="feedback_form" type="hidden">
+<input class="mollom-content-id" name="mollom[contentId]" value="" type="hidden">
+<input class="mollom-captcha-id" name="mollom[captchaId]" value="" type="hidden">
+<div style="display: none;"><div class="form-item form-type-textfield form-item-mollom-homepage">
+ <input autocomplete="off" id="edit-mollom-homepage" name="mollom[homepage]" size="60" maxlength="128" class="form-text" type="text">
+</div>
+</div><div class="description mollom-privacy">By submitting this form, you accept the <a href="https://mollom.com/web-service-privacy-policy" class="mollom-target" rel="nofollow">Mollom privacy policy</a>.</div><div class="clearfix form-actions form-wrapper" id="edit-actions--2"><input id="feedback-submit" name="op" value="Send feedback" class="form-submit ajax-processed" type="submit"></div></div></form></div>
+</div>
+
+
+
+<div style="position: absolute; visibility: hidden; top: 0px; left: 0px; width: auto; padding: 0px; border: 0px none; margin: 0px; white-space: nowrap; text-align: left; text-indent: 0px; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; font-size: 40px; font-weight: normal; font-style: italic; font-size-adjust: none; font-family: &quot;MathJax_Math&quot;,monospace;" id="MathJax_Font_Test">MathJax Math Υ </div><div style="visibility: hidden; overflow: scroll; position: absolute; top: 0px; left: 0px; width: 200px; height: 200px; padding: 0px; border: 0px none; margin: 0px; display: none;"><div style="position: absolute; left: 0px; top: 0px; right: 0px; bottom: 0px; padding: 0px; border: 0px none; margin: 0px;"></div></div></body></html>

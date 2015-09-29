@@ -1,0 +1,30 @@
+/*
+Theme Name: Gonzo
+Theme URI: http://www.themeforest.net
+Description: Minimalist, Responsive Magazine
+Version: 1.9.0
+Author: Ollie McCarthy
+Author URI: http:///www.themeforest.net/user/OllieMcCarthy
+License URI: http://themeforest.net/licenses/regular_extended
+Tags: light, white, black,  two-columns, left-sidebar, flexible-width,  custom-colors, custom-menu,  featured-images, full-width-template, post-formats, rtl-language-support, theme-options, translation-ready
+*/
+
+@import url("css/style_reset.css") ; 
+
+@import url("css/flexslider.css");
+
+@import url("css/elastislide.css");
+
+@import url("css/style_main.css") ; 
+
+@import url("css/style_400.css");
+
+@import url("css/style_320.css");
+
+@import url("css/style_768.css");
+
+@import url("css/style_1024.css");
+
+@import url("css/tabber.css");
+
+@import url("css/wpp.css");

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8"><script type="text/javascript">
+    
+      (function() {
+        var relegateNavigation = '';
+        var handleClickTagMessage = function(e) {
+          try {
+            var eventData = JSON.parse(e.data);
+          } catch (err) {
+            return;
+          }
+          if (eventData.isInitClickTag) {
+            if (eventData.clickTags) {
+              for (var i = 0; i < eventData.clickTags.length; i++) {
+                var clkTag = eventData.clickTags[i];
+                window[clkTag.name] = clkTag.url;
+              }
+            } else if (eventData.clickTag) {
+              window.clickTag = eventData.clickTag;
+            }
+            relegateNavigation = eventData.relegateNavigation;
+          }
+        };
+
+        if (open.call) {
+          window.open = function(open) {
+            return function(url, name, features) {
+              if (relegateNavigation === 'parent') {
+                var message = {'clickTag': url, 'isPostClickTag': true};
+                parent.postMessage(JSON.stringify(message), '*');
+              } else {
+                var args = [url, name];
+                if (features) {
+                  args.push(features);
+                }
+                open.apply(window, args);
+              }
+            };
+          }(window.open);
+        }
+
+        if (window.addEventListener) {
+          window.addEventListener(
+              'message', handleClickTagMessage, false);
+        } else {
+          window.attachEvent('onmessage', handleClickTagMessage);
+        }
+      })();
+    
+  </script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<script src="Shopper_FastestWay_Control_FindTires_300x250_data/TweenMax.js"></script>
+<link rel="stylesheet" type="text/css" href="Shopper_FastestWay_Control_FindTires_300x250_data/goodyear_styles.css">
+<script type="text/javascript" src="Shopper_FastestWay_Control_FindTires_300x250_data/goodyear_script.js"></script>
+<script type="text/javascript">
+var clickTag = "http://www.goodyear.com/";
+
+function checkGreensockReady(){
+			if ( window.TimelineMax ){
+				//console.log('greensockready');
+				startAd();
+			}else{
+			setTimeout( checkGreensockReady, 50 );
+			}
+			}
+window.onload = checkGreensockReady;
+ 
+</script>
+<title>Shopper_Grab Set_ShopNow_300x250</title>
+</head>
+
+<body>
+        <div id="container">
+            <div id="ad" onclick="window.open(window.clickTag)">
+                <div id="banner" style="visibility: visible;">
+                    
+                    <div style="opacity: 1;" id="imgTireShadow"></div>
+                    <div style="transform: matrix(1, 0, 0, 1, 0, 222);" id="imgTire"></div>
+                    <div style="transform: matrix(1, 0, 0, 1, 0, -200);" id="imgTireReflection"></div>
+                    <div style="opacity: 1;" id="background"></div>
+                    <div style="opacity: 1;" id="logoTop"></div>
+                    
+                    <div style="opacity: 0; transform: matrix(1, 0, 0, 1, -155, 0);" id="txt1"></div>
+                    <div style="opacity: 0; transform: matrix(1, 0, 0, 1, -155, 0);" id="txt2"></div>
+                    <div style="opacity: 0; transform: matrix(1, 0, 0, 1, -155, 0);" id="txt3"></div>
+                    <div style="opacity: 1; transform: matrix(1, 0, 0, 1, -155, 0);" id="txt4"></div>
+                    <div style="opacity: 1; transform: matrix(1, 0, 0, 1, -155, 0);" id="txt5"></div>
+                    <div style="opacity: 1; transform: matrix(1, 0, 0, 1, -155, 0);" id="txt6"></div>
+                    
+                    <div style="opacity: 1;" id="ctaBtn"></div> 
+                    <div style="opacity: 0; transform: matrix(1, 0, 0, 1, 122, 0);" id="ctaBtnOver"></div>   
+                    <div style="opacity: 1;" id="invisibleOver"></div>                
+                                       
+              </div>
+            </div>
+        </div>
+    
+</body></html>
