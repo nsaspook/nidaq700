@@ -121,7 +121,7 @@ int main(int argc, char *argv[])
 				/*
 				 * update the console
 				 */
-				PVcal = (bmc.pv_voltage + ADOFFSET) * gain_adj;
+				PVcal = (bmc.pv_voltage - bmc.pv_voltage_null + ADOFFSET) * gain_adj;
 				PVi = PVcal / ADRES;
 				PVp = PVcal*PVi;
 				printf("         \r\n PV Voltage %2.6fV, PV Power %0.9fW, Raw data %x, PV Null %2.6fV, Raw Null %x, Raw time %ld",
