@@ -182,19 +182,26 @@ int get_data_sample(void)
 	if (HAVE_AI) {
 		if (bmc.pv_voltage < 0.5) {
 			set_range = RANGE_0_512;
-			gain_adj=ADGAIN2;
+			gain_adj = ADGAIN2;
 		} else {
 			set_range = RANGE_2_048;
-			gain_adj=ADGAIN1;
+			gain_adj = ADGAIN1;
 		}
 		if (bmc.pv_voltage < 0.0) bmc.pv_voltage = 0.0;
 
 		if (first_run) {
 			if (pv_stable++ > PVV_NULL_TIME) first_run = FALSE;
+			if (RAW_DATA) {
+				if (pv_stable > PVV_NULL_TIME_RAW) first_run = FALSE;
+			}
 			bmc.pv_voltage_null = lp_filter(get_adc_volts(PVV_NULL, TRUE, set_range), PVV_NULL, FALSE);
 			;
 		} else {
-			bmc.pv_voltage = lp_filter(get_adc_volts(PVV_C, TRUE, set_range), PVV_C, TRUE); // read PV voltage on DIFF channels
+			if (RAW_DATA_NOFIL) {
+				bmc.pv_voltage = get_adc_volts(PVV_C, TRUE, set_range); // read PV voltage on DIFF channels, no filter
+			} else {
+				bmc.pv_voltage = lp_filter(get_adc_volts(PVV_C, TRUE, set_range), PVV_C, TRUE); // read PV voltage on DIFF channels
+			}
 		}
 	} else {
 		return -1;
