@@ -26,6 +26,7 @@
 
 #define MDB	TRUE
 #define MDB1	FALSE
+
 #define ADOFFSET	-0.0000025
 #define ADRES		4998.0 // OHM
 
@@ -37,7 +38,7 @@ String fallback_resources[] = {"*Label.Label:    BMC", NULL};
 // bmcnet server information
 char hostip[32] = "10.1.1.41";
 int hostport = 9760;
-double	gain_adj=ADGAIN1;
+double gain_adj = ADGAIN1;
 
 void quit(w, client, call)
 Widget w;
@@ -58,7 +59,7 @@ int main(int argc, char *argv[])
 	Widget label;
 	void quit();
 	Arg wargs[10];
-	int n, update = 0, update_num = 0;
+	int n, update = 0, update_num = 0, raw_data = 0, update_rate = 59;
 	char net_message[256], solar_data[256];
 	time_t rawtime, firsttime;
 	struct tm * timeinfo;
@@ -107,10 +108,14 @@ int main(int argc, char *argv[])
 	sprintf(solar_data, "         \r\n %2.6f, %1.9f, %2.6f, %ld",
 		PVcal, PVp, bmc.pv_voltage_null, firsttime);
 	fprintf(fp, "%s", solar_data);
-	fclose(fp);
+	if (!RAW_DATA) {
+		fclose(fp);
+	} else {
+		update_rate = 0;
+	}
 	while (HAVE_AI && HAVE_DIO) {
 		get_data_sample();
-		if (++update >= 59) {
+		if (++update >= update_rate) {
 			if (MDB) {
 				time(&rawtime);
 				/*
@@ -124,15 +129,15 @@ int main(int argc, char *argv[])
 				/*
 				 * update the log file
 				 */
-				fp = fopen("moonlight.txt", "a");
+				if (!RAW_DATA) fp = fopen("moonlight.txt", "a");
 				sprintf(solar_data, "         \r\n %2.6f, %1.9f, %2.6f, %ld",
 					PVcal, PVp, bmc.pv_voltage_null, rawtime - firsttime);
 				fprintf(fp, "%s", solar_data);
-				fclose(fp);
+				if (!RAW_DATA) fclose(fp);
 			}
 		}
-		usleep(100000);
-		if (++update >= 60) {
+		usleep(50500);
+		if (++update >= update_rate + 1) {
 			update = 0;
 			if (MDB1) {
 				printf("\r\nUpdate number %d ", update_num++);
@@ -143,6 +148,10 @@ int main(int argc, char *argv[])
 			bmc_client(net_message);
 		}
 		//        XtMainLoop(); // X-windows stuff for later...
+		if (RAW_DATA && raw_data++ > 500) {
+			fclose(fp);
+			break;
+		}
 	}
 
 	printf("\r\n Remote DAQ Client exiting        \r\n");
