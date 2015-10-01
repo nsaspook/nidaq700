@@ -200,7 +200,7 @@ int get_data_sample(void)
 			if (RAW_DATA_NOFIL) {
 				bmc.pv_voltage = get_adc_volts(PVV_C, TRUE, set_range); // read PV voltage on DIFF channels, no filter
 			} else {
-				bmc.pv_voltage = lp_filter(get_adc_volts(PVV_C, TRUE, set_range), PVV_C, TRUE); // read PV voltage on DIFF channels
+				bmc.pv_voltage = lp_filter(get_adc_volts(PVV_C, TRUE, set_range), PVV_C, FALSE); // read PV voltage on DIFF channels
 			}
 		}
 	} else {
