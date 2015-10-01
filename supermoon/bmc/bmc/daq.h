@@ -25,6 +25,8 @@ extern "C" {
 #define PVV_C       0
 #define PVV_NULL    4
 #define PVV_NULL_TIME   200
+#define PVV_NULL_TIME_RAW   10
+
 
 #define LPCHANC        16
 
