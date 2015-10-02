@@ -19,7 +19,8 @@ extern "C" {
 #define C_SCALE 10.0
 #define STATION 1
 #define RAW_DATA TRUE
-#define RAW_DATA_NOFIL FALSE
+#define RAW_DATA_NOFIL TRUE
+#define SIGVIEW TRUE
 
     struct didata {
         unsigned char D0 : 1; // 
