@@ -17,6 +17,7 @@
 #include "bmc/daq.h"
 #include "bmc_x86/bmcnet.h"
 #include <time.h>
+#include <sys/time.h>
 #include <X11/StringDefs.h>
 #include <X11/Intrinsic.h>
 #include <X11/Xaw/Box.h> 
@@ -39,6 +40,7 @@ String fallback_resources[] = {"*Label.Label:    BMC", NULL};
 char hostip[32] = "10.1.1.41";
 int hostport = 9760;
 double gain_adj = ADGAIN1;
+struct timeval start, end;
 
 void quit(w, client, call)
 Widget w;
@@ -64,7 +66,7 @@ int main(int argc, char *argv[])
 	time_t rawtime, firsttime;
 	struct tm * timeinfo;
 	FILE *fp;
-	double PVcal, PVi, PVp;
+	double PVcal, PVi, PVp, sigtime = 0.0;
 
 	/*
 	 * start a new log file
@@ -110,13 +112,15 @@ int main(int argc, char *argv[])
 	fprintf(fp, "%s", solar_data);
 	if (!RAW_DATA) {
 		fclose(fp);
-	} else {
-		update_rate = 0;
 	}
+	gettimeofday(&start, NULL);
 	while (HAVE_AI && HAVE_DIO) {
 		get_data_sample();
-		if (++update >= update_rate) {
+		gettimeofday(&end, NULL);
+		if (++update >= update_rate || RAW_DATA) {
 			if (MDB) {
+				// sample time in fractions of a second
+				sigtime = ((double) ((end.tv_sec * 1000000 + end.tv_usec)-(start.tv_sec * 1000000 + start.tv_usec))) / 1000000.0;
 				time(&rawtime);
 				/*
 				 * update the console
@@ -124,20 +128,25 @@ int main(int argc, char *argv[])
 				PVcal = (bmc.pv_voltage - bmc.pv_voltage_null + ADOFFSET) * gain_adj;
 				PVi = PVcal / ADRES;
 				PVp = PVcal*PVi;
-				printf("         \r\n PV Voltage %2.6fV, PV Power %0.9fW, Raw data %x, PV Null %2.6fV, Raw Null %x, Raw time %ld",
-				PVcal, PVp, bmc.raw[PVV_C], bmc.pv_voltage_null, bmc.raw[PVV_NULL], rawtime);
+				printf(" \r\n PV Voltage %2.6fV, PV Power %0.9fW, Raw data %x, PV Null %2.6fV, Raw Null %x, Raw time %ld, %3.6f",
+				PVcal, PVp, bmc.raw[PVV_C], bmc.pv_voltage_null, bmc.raw[PVV_NULL], rawtime, sigtime);
 				/*
 				 * update the log file
 				 */
 				if (!RAW_DATA) fp = fopen("moonlight.txt", "a");
-				sprintf(solar_data, "         \r\n %2.6f, %1.9f, %2.6f, %ld",
-					PVcal, PVp, bmc.pv_voltage_null, rawtime - firsttime);
+				if (SIGVIEW) {
+					sprintf(solar_data, "%3.6f	%ld\r\n",
+						sigtime, (int) (PVcal * 1000000.0));
+				} else {
+					sprintf(solar_data, "         \r\n %2.6f, %1.9f, %2.6f, %ld",
+						PVcal, PVp, bmc.pv_voltage_null, rawtime - firsttime);
+				}
 				fprintf(fp, "%s", solar_data);
 				if (!RAW_DATA) fclose(fp);
 			}
 		}
-		usleep(50500);
-		if (++update >= update_rate + 1) {
+		usleep(50500); // ~5hz or 20 SPS
+		if (++update >= update_rate + 1 || RAW_DATA) {
 			update = 0;
 			if (MDB1) {
 				printf("\r\nUpdate number %d ", update_num++);
@@ -145,10 +154,10 @@ int main(int argc, char *argv[])
 				printf("%ld ", rawtime);
 			}
 			sprintf(net_message, "%i,%i,%i,%i,X", (int) (bmc.pv_voltage * V_SCALE), (int) (bmc.cm_amps * C_SCALE), update_num, STATION);
-			bmc_client(net_message);
+			if (!RAW_DATA) bmc_client(net_message);
 		}
 		//        XtMainLoop(); // X-windows stuff for later...
-		if (RAW_DATA && raw_data++ > 500) {
+		if (RAW_DATA && raw_data++ > 3000) {
 			fclose(fp);
 			break;
 		}
