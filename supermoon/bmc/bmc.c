@@ -157,7 +157,7 @@ int main(int argc, char *argv[])
 			if (!RAW_DATA) bmc_client(net_message);
 		}
 		//        XtMainLoop(); // X-windows stuff for later...
-		if (RAW_DATA && raw_data++ > 3000) {
+		if (RAW_DATA && raw_data++ > 30000) {
 			fclose(fp);
 			break;
 		}
