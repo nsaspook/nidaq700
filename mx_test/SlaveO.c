@@ -168,7 +168,8 @@
 #define R_ALL_ON	0xff
 #define NO		LOW
 #define YES		HIGH
-
+#define IN			HIGH
+#define OUT			LOW
 
 #define	SRQ		LATCbits.LATC2
 
@@ -281,6 +282,10 @@ struct spi_link_io_type { // internal SPI link state table
 volatile struct D_panel P;
 volatile struct spi_link_io_type S;
 #pragma udata 
+void work_handler(void);
+#define	PDELAY		28000	// 50hz refresh for I/O
+#define SPI_CMD_RW	0b11110000
+#define SPI_CMD_DUMMY	0b00000000
 
 /*
  * 
@@ -318,6 +323,7 @@ volatile struct spi_stat_type spi_stat = {0}, report_stat = {0};
 
 const rom int8_t *build_date = __DATE__, *build_time = __TIME__;
 volatile uint8_t data_in2, adc_buffer_ptr = 0, adc_channel = 0;
+volatile uint8_t WDT_TO = FALSE, EEP_ER = FALSE;
 volatile uint16_t adc_buffer[64] = {0}, adc_data_in = 0;
 int8_t comm_stat_buffer[128];
 
@@ -333,6 +339,14 @@ void InterruptVectorHigh(void)
 }
 #pragma code
 
+#pragma code work_interrupt = 0x18
+
+void work_int(void)
+{
+	_asm goto work_handler _endasm // low
+}
+#pragma code
+
 //----------------------------------------------------------------------------
 // High priority interrupt routine
 #pragma	tmpdata	ISRHtmpdata
@@ -342,6 +356,8 @@ void InterruptHandlerHigh(void)
 {
 	static uint8_t channel = 0, upper, command, port_tmp, char_txtmp, char_rxtmp, cmd_dummy = CMD_DUMMY, b_dummy;
 	static union Timers timer;
+	static union l_union l_tmp;
+	static union b_union b_tmp;
 
 	spi_stat.slave_int_count++;
 	if (INTCONbits.RBIF) { // PORT B int handler
@@ -358,6 +374,16 @@ void InterruptHandlerHigh(void)
 		spi_stat.comm_count++;
 		if ((spi_stat.comm_count > SLAVE_ACTIVE) && spi_stat.comm_ok) {
 			spi_comm.REMOTE_LINK = FALSE;
+		}
+		/*
+		 * Timeout to reset the SPI CMD request
+		 */
+		if (S.timeout) {
+			if (!--S.timeout) {
+				S.link = FALSE;
+				S.frame = FALSE;
+				S.seq = 0;
+			}
 		}
 	}
 
@@ -389,107 +415,181 @@ void InterruptHandlerHigh(void)
 			cmd_dummy |= UART_DUMMY_MASK; // We have real USART data waiting
 			spi_comm.CHAR_DATA = TRUE;
 		}
-
 		command = data_in2 & HI_NIBBLE;
 
-		if (command == CMD_PORT_GO) {
-			SSPBUF = PORTB; // read inputs into the buffer
-			port_tmp = (data_in2 & LO_NIBBLE); // read lower 4 bits
-			spi_stat.port_count++;
-			spi_stat.last_slave_int_count = spi_stat.slave_int_count;
+		S.link = TRUE;
+		S.timeout = 3;
+
+		/*
+		 * We are processing the Master CMD request
+		 */
+		if (S.frame) {
+			switch (S.seq) {
+			case 0:
+				l_tmp.l_byte[0] = data_in2;
+				break;
+			case 1:
+				l_tmp.l_byte[1] = data_in2;
+				P.lamp = l_tmp.lamp;
+			default:
+				data_in2 = SPI_CMD_DUMMY; // make sure the data does not match the CMD code
+				S.frame = FALSE;
+				break;
+			}
+			S.seq++;
 		}
 
-		if (command == CMD_PORT_DATA) {
+		/*
+		 * The master has sent a data RW command
+		 */
+		if (data_in2 == SPI_CMD_RW && !S.frame) {
+			S.frame = TRUE; // set the inprogress flag
+			S.seq = 0;
+			b_tmp.button = P.button;
+			SSPBUF = b_tmp.b_byte[1]; // load the buffer for the next master byte
+		}
+
+		if (!S.frame) {
+			if (command == CMD_PORT_GO) {
+				SSPBUF = PORTB; // read inputs into the buffer
+				port_tmp = (data_in2 & LO_NIBBLE); // read lower 4 bits
+				spi_stat.port_count++;
+				spi_stat.last_slave_int_count = spi_stat.slave_int_count;
+			}
+
+			if (command == CMD_PORT_DATA) {
 #ifndef	DLED_DEBUG
-			PORTD = ((data_in2 & 0b00000011) << 4) | port_tmp; // PORTD pins [0..5]
-			PORTA = ((data_in2 & 0b00001100) << 4); // PORTA pins [6..7]
+				PORTD = ((data_in2 & 0b00000011) << 4) | port_tmp; // PORTD pins [0..5]
+				PORTA = ((data_in2 & 0b00001100) << 4); // PORTA pins [6..7]
 #endif
-			spi_comm.REMOTE_LINK = TRUE;
-			/* reset link data timer if we are talking */
-			timer.lt = TIMEROFFSET; // Copy timer value into union
-			TMR0H = timer.bt[HIGH]; // Write high byte to Timer0
-			TMR0L = timer.bt[LOW]; // Write low byte to Timer0
-			INTCONbits.TMR0IF = LOW; //clear possible interrupt flag
-			SSPBUF = cmd_dummy; // send the input data
-		}
-
-		if (command == CMD_CHAR_GO) {
-			char_txtmp = (data_in2 & LO_NIBBLE); // read lower 4 bits
-			DLED1 = HIGH; // rx data read
-			SSPBUF = char_rxtmp; // send current receive data to master
-			spi_stat.char_count++;
-		}
-
-		if (command == CMD_CHAR_DATA) { // get upper 4 bits send bits and send the data
-			if (TXSTA2bits.TRMT) { // The USART send buffer is ready
-				TXREG2 = ((data_in2 & LO_NIBBLE) << 4) | char_txtmp; // send data to RS-232 #2 output
-			}
-			SSPBUF = cmd_dummy; // send rx status first, the next SPI transfer will contain it.
-			cmd_dummy = CMD_DUMMY; // clear rx bit
-			spi_comm.CHAR_DATA = FALSE;
-			spi_comm.REMOTE_LINK = TRUE;
-			/* reset link data timer if we are talking */
-			timer.lt = TIMEROFFSET; // Copy timer value into union
-			TMR0H = timer.bt[HIGH]; // Write high byte to Timer0
-			TMR0L = timer.bt[LOW]; // Write low byte to Timer0
-			INTCONbits.TMR0IF = LOW; //clear possible interrupt flag
-		}
-
-		if ((command == CMD_ADC_GO) || (command == CMD_ADC_GO_H)) { // Found a ADC GO command
-			if (data_in2 & ADC_SWAP_MASK) {
-				upper = TRUE;
-			} else {
-				upper = FALSE;
-			}
-			channel = data_in2 & LO_NIBBLE;
-#ifdef P45K80
-			if (channel == 4) channel = 0; // invalid to set to 0
-			if (channel > 9) channel = 0; // invalid to set to 0
-
-			if (!ADCON0bits.GO) { // select the channel first
-				ADCON0 = ((channel << 2) & 0b01111100) | (ADCON0 & 0b00000011);
-				spi_comm.ADC_DATA = FALSE;
-				ADCON0bits.GO = HIGH; // start a conversion
-			} else {
-				ADCON0bits.GO = LOW; // stop a conversion
-				SSPBUF = cmd_dummy; // Tell master  we are here
-				spi_comm.ADC_DATA = FALSE;
-			}
-#endif
-		}
-
-		if (command == CMD_ADC_DATA) {
-			if (!ADCON0bits.GO) {
-				if (upper) {
-					SSPBUF = (uint8_t) adc_buffer[channel]; // stuff with lower 8 bits
-				} else {
-					SSPBUF = (uint8_t) (adc_buffer[channel] >> 8); // stuff with upper 8 bits
-				}
+				spi_comm.REMOTE_LINK = TRUE;
 				/* reset link data timer if we are talking */
 				timer.lt = TIMEROFFSET; // Copy timer value into union
 				TMR0H = timer.bt[HIGH]; // Write high byte to Timer0
 				TMR0L = timer.bt[LOW]; // Write low byte to Timer0
 				INTCONbits.TMR0IF = LOW; //clear possible interrupt flag
-			} else {
-				SSPBUF = cmd_dummy;
+				SSPBUF = cmd_dummy; // send the input data
 			}
-		}
-		if (command == CMD_DUMMY_CFG) {
-			SSPBUF = cmd_dummy; // Tell master  we are here
-			spi_stat.comm_count = 0;
-			spi_stat.comm_ok = TRUE;
-		}
 
-		if (command == CMD_CHAR_RX) {
-			SSPBUF = char_rxtmp; // Send current RX buffer contents
-			cmd_dummy = CMD_DUMMY; // clear rx bit
+			if (command == CMD_CHAR_GO) {
+				char_txtmp = (data_in2 & LO_NIBBLE); // read lower 4 bits
+				DLED1 = HIGH; // rx data read
+				SSPBUF = char_rxtmp; // send current receive data to master
+				spi_stat.char_count++;
+			}
+
+			if (command == CMD_CHAR_DATA) { // get upper 4 bits send bits and send the data
+				if (TXSTA2bits.TRMT) { // The USART send buffer is ready
+					TXREG2 = ((data_in2 & LO_NIBBLE) << 4) | char_txtmp; // send data to RS-232 #2 output
+				}
+				SSPBUF = cmd_dummy; // send rx status first, the next SPI transfer will contain it.
+				cmd_dummy = CMD_DUMMY; // clear rx bit
+				spi_comm.CHAR_DATA = FALSE;
+				spi_comm.REMOTE_LINK = TRUE;
+				/* reset link data timer if we are talking */
+				timer.lt = TIMEROFFSET; // Copy timer value into union
+				TMR0H = timer.bt[HIGH]; // Write high byte to Timer0
+				TMR0L = timer.bt[LOW]; // Write low byte to Timer0
+				INTCONbits.TMR0IF = LOW; //clear possible interrupt flag
+			}
+
+			if ((command == CMD_ADC_GO) || (command == CMD_ADC_GO_H)) { // Found a ADC GO command
+				if (data_in2 & ADC_SWAP_MASK) {
+					upper = TRUE;
+				} else {
+					upper = FALSE;
+				}
+				channel = data_in2 & LO_NIBBLE;
+#ifdef P45K80
+				if (channel == 4) channel = 0; // invalid to set to 0
+				if (channel > 9) channel = 0; // invalid to set to 0
+
+				if (!ADCON0bits.GO) { // select the channel first
+					ADCON0 = ((channel << 2) & 0b01111100) | (ADCON0 & 0b00000011);
+					spi_comm.ADC_DATA = FALSE;
+					ADCON0bits.GO = HIGH; // start a conversion
+				} else {
+					ADCON0bits.GO = LOW; // stop a conversion
+					SSPBUF = cmd_dummy; // Tell master  we are here
+					spi_comm.ADC_DATA = FALSE;
+				}
+#endif
+			}
+
+			if (command == CMD_ADC_DATA) {
+				if (!ADCON0bits.GO) {
+					if (upper) {
+						SSPBUF = (uint8_t) adc_buffer[channel]; // stuff with lower 8 bits
+					} else {
+						SSPBUF = (uint8_t) (adc_buffer[channel] >> 8); // stuff with upper 8 bits
+					}
+					/* reset link data timer if we are talking */
+					timer.lt = TIMEROFFSET; // Copy timer value into union
+					TMR0H = timer.bt[HIGH]; // Write high byte to Timer0
+					TMR0L = timer.bt[LOW]; // Write low byte to Timer0
+					INTCONbits.TMR0IF = LOW; //clear possible interrupt flag
+				} else {
+					SSPBUF = cmd_dummy;
+				}
+			}
+			if (command == CMD_DUMMY_CFG) {
+				SSPBUF = cmd_dummy; // Tell master  we are here
+				spi_stat.comm_count = 0;
+				spi_stat.comm_ok = TRUE;
+			}
+
+			if (command == CMD_CHAR_RX) {
+				SSPBUF = char_rxtmp; // Send current RX buffer contents
+				cmd_dummy = CMD_DUMMY; // clear rx bit
+			}
+			/*
+			 * tell the master we are ready for new data  unless waiting for a ADC conversion to complete
+			 */
+			if (!ADCON0bits.GO) SRQ = LOW;
 		}
-		/*
-		 * tell the master we are ready for new data  unless waiting for a ADC conversion to complete
-		 */
-		if (!ADCON0bits.GO) SRQ = LOW;
 	}
+}
+#pragma	tmpdata
 
+// Low priority interrupt routine
+#pragma	tmpdata	ISRLtmpdata
+#pragma interruptlow work_handler   nosave=section (".tmpdata")
+
+/*
+ *  This is the low priority ISR routine, the high ISR routine will be called during this code section
+ */
+void work_handler(void)
+{
+	static union b_union b_tmp;
+	if (PIR1bits.TMR1IF) {
+		P.times++;
+		LATBbits.LATB2 = 1;
+		PIR1bits.TMR1IF = LOW; // clear TMR1 interrupt flag
+		WriteTimer1(PDELAY);
+		// Switches
+		P.button.button0 = PORTDbits.RD0;
+		P.button.button1 = PORTDbits.RD1;
+		P.button.button2 = PORTDbits.RD2;
+		P.button.button3 = PORTDbits.RD3;
+		P.button.button4 = PORTDbits.RD4;
+		P.button.button5 = PORTDbits.RD5;
+		P.button.button6 = PORTDbits.RD6;
+		P.button.button7 = PORTDbits.RD7;
+		if (!S.frame) {
+			b_tmp.button = P.button;
+			SSPBUF = b_tmp.b_byte[0]; // preload the first byte into the SPI buffer
+		}
+		// lamps
+		LATAbits.LATA0 = P.lamp.lamp0;
+		LATAbits.LATA1 = P.lamp.lamp1;
+		LATAbits.LATA2 = P.lamp.lamp2;
+		LATAbits.LATA3 = P.lamp.lamp3;
+		LATBbits.LATB0 = P.lamp.lamp4;
+		//		LATBbits.LATB1 = P.lamp.lamp5;
+		//		LATBbits.LATB2 = P.lamp.lamp6;
+		LATBbits.LATB3 = P.lamp.lamp7;
+		LATBbits.LATB2 = 0;
+	}
 }
 #pragma	tmpdata
 
@@ -500,6 +600,70 @@ void wdtdelay(unsigned long delay, unsigned char clearit)
 		Nop();
 		if (clearit) ClrWdt(); // reset the WDT timer
 	};
+}
+
+void config_pic_io(void)
+{
+	if (RCONbits.TO == (uint8_t) LOW) WDT_TO = TRUE;
+	if (EECON1bits.WRERR && (EECON1bits.EEPGD == (uint8_t) LOW)) EEP_ER = TRUE;
+	/*
+	 * default operation mode
+	 */
+
+	OSCCON = 0x70; // internal osc 16mhz, CONFIG OPTION 4XPLL for 64MHZ
+	OSCTUNE = 0b01000000; // 4x pll
+	SLRCON = 0x00; // all slew rates to max
+	ADCON0 = 0;
+	ADCON1 = 0;
+	TRISA = 0x00; // all outputs
+	TRISB = 0x00;
+	TRISC = 0x00;
+	TRISD = 0xff; // all inputs
+	TRISE = 0xff;
+	LATA = 0xff;
+	LATB = 0xff;
+	LATC = 0xff;
+
+	/* SPI pins setup */
+	TRISAbits.TRISA5 = IN; // SS
+	TRISCbits.TRISC3 = OUT; // SCK 
+	TRISCbits.TRISC4 = IN; // SDI
+	TRISCbits.TRISC5 = OUT; // SDO
+
+
+	/* setup the SPI interface */
+	OpenSPI(SLV_SSON, MODE_00, SMPMID); // Must be SMPMID in slave mode
+
+	/* System activity timer */
+	OpenTimer0(TIMER_INT_ON & T0_16BIT & T0_SOURCE_INT & T0_PS_1_256);
+	WriteTimer0(TIMEROFFSET); //      start timer0 at ~1 second ticks
+
+	/* event timer */
+	OpenTimer1(T1_SOURCE_FOSC_4 & T1_16BIT_RW & T1_PS_1_8 & T1_OSC1EN_OFF & T1_SYNC_EXT_OFF, 0);
+	IPR1bits.TMR1IP = 0; // set timer2 low pri interrupt
+	WriteTimer1(PDELAY);
+
+	/* clear SPI module possible flag */
+	PIR1bits.SSPIF = LOW;
+	S.link = FALSE;
+	S.frame = FALSE;
+	S.seq = 0;
+
+	/*
+	 * PORTB config
+	 */
+	INTCON2bits.RBPU = HIGH; // turn off weak pullups
+	INTCONbits.RBIE = LOW; // disable PORTB interrupts
+	IOCB = 0x00;
+
+	/* Enable interrupt priority */
+	RCONbits.IPEN = HIGH;
+	/* Enable all priority interrupts */
+	INTCONbits.GIEH = HIGH;
+	INTCONbits.GIEL = HIGH;
+
+	/* clear any SSP error bits */
+	SSPCON1bits.WCOL = SSPCON1bits.SSPOV = LOW;
 }
 
 void config_pic(void)
@@ -516,7 +680,7 @@ void config_pic(void)
 	SLRCON = 0x00; // all slew rates to max
 	TRISA = 0b00111111; // [0..5] input, [6..7] outputs for LEDS
 	LATA = 0b11000000;
-	TRISB = 0b00111111; // RB6..7 outputs
+	TRISB = 0b00111011; // RB6..7 outputs
 	INTCON2bits.RBPU = 0; // turn on weak pullups
 	INTCONbits.RBIE = 0; // disable PORTB interrupts
 	INTCONbits.INT0IE = 0; // disable interrupt
@@ -581,6 +745,11 @@ void config_pic(void)
 	OpenTimer0(TIMER_INT_ON & T0_16BIT & T0_SOURCE_INT & T0_PS_1_256);
 	WriteTimer0(TIMEROFFSET); //      start timer0 at 1 second ticks
 
+	/* event timer */
+	OpenTimer1(T1_SOURCE_FOSC_4 & T1_16BIT_RW & T1_PS_1_8 & T1_OSC1EN_OFF & T1_SYNC_EXT_OFF, 0);
+	IPR1bits.TMR1IP = 0; // set timer2 low pri interrupt
+	WriteTimer1(PDELAY);
+
 	/* clear SPI module possible flag and enable interrupts*/
 	PIR1bits.SSPIF = LOW;
 	PIE1bits.SSPIE = HIGH;
@@ -593,6 +762,7 @@ void config_pic(void)
 	dump = RCREG2;
 	/* Enable all high priority interrupts */
 	INTCONbits.GIEH = 1;
+	INTCONbits.GIEL = HIGH;
 #endif
 	/* clear any SSP error bits */
 	SSPCON1bits.WCOL = SSPCON1bits.SSPOV = LOW;
