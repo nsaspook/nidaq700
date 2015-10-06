@@ -210,6 +210,82 @@ typedef signed long int32_t;
 typedef signed long long int64_t;
 #endif
 
+/*
+ * cpanel testing
+ */
+
+typedef struct button_type { // Button to bit structure
+	uint16_t button0 : 1;
+	uint16_t button1 : 1;
+	uint16_t button2 : 1;
+	uint16_t button3 : 1;
+	uint16_t button4 : 1;
+	uint16_t button5 : 1;
+	uint16_t button6 : 1;
+	uint16_t button7 : 1;
+	uint16_t button8 : 1;
+	uint16_t button9 : 1;
+	uint16_t button10 : 1;
+	uint16_t button11 : 1;
+	uint16_t button12 : 1;
+	uint16_t button13 : 1;
+	uint16_t button14 : 1;
+	uint16_t button15 : 1;
+
+} button_type;
+
+typedef struct lamp_type { //Lamp to bit structure
+	uint16_t lamp0 : 1;
+	uint16_t lamp1 : 1;
+	uint16_t lamp2 : 1;
+	uint16_t lamp3 : 1;
+	uint16_t lamp4 : 1;
+	uint16_t lamp5 : 1;
+	uint16_t lamp6 : 1;
+	uint16_t lamp7 : 1;
+	uint16_t lamp8 : 1;
+	uint16_t lamp9 : 1;
+	uint16_t lamp10 : 1;
+	uint16_t lamp11 : 1;
+	uint16_t lamp12 : 1;
+	uint16_t lamp13 : 1;
+	uint16_t lamp14 : 1;
+	uint16_t lamp15 : 1;
+} lamp_type;
+
+typedef struct D_panel { // I/O structure
+	struct button_type button;
+	struct lamp_type lamp;
+	uint32_t times, stimers[16];
+	uint8_t checksum;
+} D_panel;
+
+union l_union { // SPI data exchange structure 
+	struct lamp_type lamp;
+	uint8_t l_byte[2];
+};
+
+union b_union { // SPI data exchange structure
+	struct button_type button;
+	uint8_t b_byte[2];
+};
+
+struct spi_link_io_type { // internal SPI link state table
+	uint8_t link : 1;
+	uint8_t frame : 1;
+	uint8_t timeout, seq, config;
+	int32_t int_count;
+};
+
+#pragma udata gpr7
+volatile struct D_panel P;
+volatile struct spi_link_io_type S;
+#pragma udata 
+
+/*
+ * 
+ */
+
 struct spi_link_type { // internal state table
 	uint8_t SPI_DATA : 1;
 	uint8_t ADC_DATA : 1;
