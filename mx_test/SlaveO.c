@@ -434,6 +434,7 @@ void InterruptHandlerHigh(void)
 			default:
 				data_in2 = SPI_CMD_DUMMY; // make sure the data does not match the CMD code
 				S.frame = FALSE;
+				LATBbits.LATB2 = 0;
 				break;
 			}
 			S.seq++;
@@ -443,6 +444,7 @@ void InterruptHandlerHigh(void)
 		 * The master has sent a data RW command
 		 */
 		if (data_in2 == SPI_CMD_RW && !S.frame) {
+			LATBbits.LATB2 = 1;
 			S.frame = TRUE; // set the inprogress flag
 			S.seq = 0;
 			b_tmp.button = P.button;
@@ -563,7 +565,7 @@ void work_handler(void)
 	static union b_union b_tmp;
 	if (PIR1bits.TMR1IF) {
 		P.times++;
-		LATBbits.LATB2 = 1;
+
 		PIR1bits.TMR1IF = LOW; // clear TMR1 interrupt flag
 		WriteTimer1(PDELAY);
 		// Switches
@@ -588,7 +590,7 @@ void work_handler(void)
 		//		LATBbits.LATB1 = P.lamp.lamp5;
 		//		LATBbits.LATB2 = P.lamp.lamp6;
 		LATBbits.LATB3 = P.lamp.lamp7;
-		LATBbits.LATB2 = 0;
+
 	}
 }
 #pragma	tmpdata
@@ -688,7 +690,7 @@ void config_pic(void)
 	INTCONbits.RBIF = LOW; // reset B flag
 	IOCB = 0x00;
 	TRISC = 0b10011000; // [0..2,5..6] outputs
-	TRISD = 0b10000000; // [0..5] outputs and rs232 RD7 input, RD6 output
+	TRISD = 0b10000001; // [0..5] outputs and rs232 RD7 input, RD6 output
 	LATD = 0xff; // all LEDS off/outputs high
 	TRISE = 0b00000111; // [0..2] inputs, N/A others for 40 pin chip
 

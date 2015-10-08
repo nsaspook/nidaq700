@@ -106,6 +106,9 @@ extern "C" {
 #define NUM_AI_CHAN     10
 #endif
 
+#define SPI_CMD_RW		0b11110000
+#define SPI_CMD_DUMMY	0b00000000
+
 #ifdef	__cplusplus
 }
 #endif

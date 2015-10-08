@@ -387,7 +387,7 @@ int MMC_disk_initialize()
 	}
 	SDC0.sdinit = TRUE;
 	SD_NOTRDY = RES_OK;
-	SpiChnSetBrg(SDCARD_CHAN, 0); // set SCK to high speed
+	SpiChnSetBrg(SDCARD_CHAN, 4); // set SCK to high speed
 	MMC_get_volume_info();
 	return RES_OK;
 }
@@ -576,6 +576,16 @@ unsigned char SpiStringWrite(char* data)
 		return ret_char;
 	}
 	return 0;
+}
+
+unsigned int SpiIOPoll(unsigned int lamp)
+{
+	unsigned char p_switch[3];
+
+	p_switch[0] = xmit_spi_bus(SPI_CMD_RW, 0);
+	p_switch[1] = xmit_spi_bus(lamp, 0);
+	p_switch[2] = xmit_spi_bus(lamp, 0);
+	return p_switch[1];
 }
 
 int SpiADCRead(unsigned char channel)

@@ -28,6 +28,7 @@ int SpiSerialReadReady(void);
 int SpiSerialReadOk(void);
 unsigned char SpiSerialWrite(unsigned char);
 unsigned char SpiPortWrite(unsigned char);
+unsigned int SpiIOPoll(unsigned int);
 int SpiADCRead(unsigned char);
 unsigned char SpiStringWrite(char*);
 unsigned char SpiSerialGetChar(void);

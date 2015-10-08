@@ -215,6 +215,12 @@ int main(void)
 		blink_led(GREEN_LED, LED_ON, TRUE);
 	}
 
+	while (1) {
+		eresult = SpiIOPoll(0x12);
+		sprintf(comm_buffer, " IO Poll %i \r\n", eresult);
+//		SpiStringWrite(comm_buffer);
+	}
+
 	/* Create destination file on the drive 1 */
 	eresult = f_open(&File[0], "0:logfile.txt", FA_CREATE_ALWAYS | FA_WRITE);
 
@@ -248,7 +254,7 @@ int main(void)
 
 		if (((records % 100)) == 0 && !eresult) {
 			Vval = S1_p->adc_data[0];
-			Vcal0 = ((Vval / ADSCALE * ADREF) + ADOFFSET)*ADGAIN;
+			Vcal0 = ((Vval / ADSCALE * ADREF) + ADOFFSET) * ADGAIN;
 			if (S1_p->char_ready) {
 				snprintf(comm_buffer, 64, "\r\n  R data %x , %i, %x , %i , %i , %i , %i , %2.4f volts                                         ", S1_p->rec_data, records, S1_p->ibits.in_byte, S1_p->adc_data[0], S1_p->adc_data[1], S1_p->adc_data[2], S1_p->adc_data[3], Vcal0);
 			} else {
@@ -338,7 +344,7 @@ int main(void)
 		} else {
 			file_errors++;
 			if ((file_errors % 100) == 0) {
-				SpiStringWrite("\r\n not logged ");
+				//				SpiStringWrite("\r\n not logged ");
 				blink_led(GREEN_LED, LED_OFF, FALSE);
 				blink_led(RED_LED, LED_ON, FALSE);
 			}
