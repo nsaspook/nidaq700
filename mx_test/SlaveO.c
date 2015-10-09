@@ -285,6 +285,7 @@ volatile struct spi_link_io_type S;
 void work_handler(void);
 #define	PDELAY		28000	// 50hz refresh for I/O
 #define SPI_CMD_RW	0b11110000
+#define SPI_CMD_R_ONLY	0b11110001
 #define SPI_CMD_DUMMY	0b00000000
 
 /*
@@ -427,28 +428,32 @@ void InterruptHandlerHigh(void)
 			switch (S.seq) {
 			case 0:
 				l_tmp.l_byte[0] = data_in2;
+				SSPBUF = b_tmp.b_byte[1]; // preload the first byte into the SPI buffer
 				break;
 			case 1:
 				l_tmp.l_byte[1] = data_in2;
 				P.lamp = l_tmp.lamp;
 			default:
 				data_in2 = SPI_CMD_DUMMY; // make sure the data does not match the CMD code
+				SSPBUF = b_tmp.b_byte[0]; // preload the first byte into the SPI buffer
 				S.frame = FALSE;
 				LATBbits.LATB2 = 0;
 				break;
 			}
 			S.seq++;
+			SRQ = LOW;
 		}
 
 		/*
 		 * The master has sent a data RW command
 		 */
-		if (data_in2 == SPI_CMD_RW && !S.frame) {
+		if (data_in2 == (SPI_CMD_RW || SPI_CMD_R_ONLY) && !S.frame) {
 			LATBbits.LATB2 = 1;
 			S.frame = TRUE; // set the inprogress flag
 			S.seq = 0;
 			b_tmp.button = P.button;
-			SSPBUF = b_tmp.b_byte[1]; // load the buffer for the next master byte
+			SSPBUF = b_tmp.b_byte[0]; // load the buffer for the next master byte
+			SRQ = LOW;
 		}
 
 		if (!S.frame) {
@@ -587,8 +592,8 @@ void work_handler(void)
 		LATAbits.LATA2 = P.lamp.lamp2;
 		LATAbits.LATA3 = P.lamp.lamp3;
 		LATBbits.LATB0 = P.lamp.lamp4;
-		//		LATBbits.LATB1 = P.lamp.lamp5;
-		//		LATBbits.LATB2 = P.lamp.lamp6;
+		//	LATBbits.LATB1 = P.lamp.lamp5;
+		//	LATBbits.LATB2 = P.lamp.lamp6;
 		LATBbits.LATB3 = P.lamp.lamp7;
 
 	}
