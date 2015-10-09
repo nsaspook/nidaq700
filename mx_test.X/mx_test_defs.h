@@ -15,27 +15,27 @@ extern "C" {
 
 #define SDSPEED         0               // SDCARD fast SPI speed 0=fastest
 #define	SDPOWER				// SD card 3.3vdc power enable
-#define SPI_CS  0
+#define SPI_CS			0
 
 #define	SDBUFFERSIZE	512l
 	/* #define SDBUFFER_EXTRA  8l */
 #define SDNAME_SIZE     6
-#define MAXSTRLEN   512
+#define MAXSTRLEN		512
 
 #define RED_LED         1
 #define GREEN_LED       0
-#define LOW		(unsigned char)0               // digital output state levels, sink
+#define LOW				(unsigned char)0               // digital output state levels, sink
 #define	HIGH            (unsigned char)1               // digital output state levels, source
-#define	ON		LOW       		//
-#define OFF		HIGH			//
-#define	LED_ON		HIGH       		//
-#define LED_OFF		LOW			//
+#define	ON				LOW       		//
+#define OFF				HIGH			//
+#define	LED_ON			HIGH       		//
+#define LED_OFF			LOW			//
 #define	S_ON            LOW       		// low select/on for chip/led
 #define S_OFF           HIGH			// high deselect/off chip/led
 #define	R_ON            LOW       		// control relay states, relay is on when output gate is low
 #define R_OFF           HIGH			// control relay states
-#define NO		LOW
-#define YES		HIGH
+#define NO				LOW
+#define YES				HIGH
 #if defined(__18CXX)
 #define NULL0           (unsigned char)0
 #endif
@@ -49,13 +49,13 @@ extern "C" {
 #define SHIFT16         16
 #define SHIFT24         24
 #define SHIFT30         30
-#define	ERR1		1
-#define	ERR2		2
-#define	XON		0x11
+#define	ERR1			1
+#define	ERR2			2
+#define	XON				0x11
 #define	XOFF            0x13
-#define	H		1
-#define	L		2
-#define	HL		3
+#define	H				1
+#define	L				2
+#define	HL				3
 	/* SDHC defines */
 #define SDT1            1
 #define SDT2            2               // SD card types
@@ -87,26 +87,27 @@ extern "C" {
 	//#define	SDC0EEP		510             // start address of SD mirror block data in EEPROM
 
 	/* PIC Slave commands */
-#define CMD_ADC_GO	0b10000000
+#define CMD_ADC_GO		0b10000000
 #define CMD_ADC_GO_H	0b10010000
-#define CMD_PORT_GO	0b10100000	// send data LO_NIBBLE to port buffer
-#define CMD_CHAR_GO	0b10110000	// send data LO_NIBBLE to TX buffer
+#define CMD_PORT_GO		0b10100000	// send data LO_NIBBLE to port buffer
+#define CMD_CHAR_GO		0b10110000	// send data LO_NIBBLE to TX buffer
 #define CMD_ADC_DATA	0b11000000
 #define CMD_PORT_DATA	0b11010000	// send data HI_NIBBLE to port buffer ->PORT and return input PORT data in received SPI data byte
 #define CMD_CHAR_DATA	0b11100000	// send data HI_NIBBLE to TX buffer and return RX buffer in received SPI data byte
-#define CMD_XXXX	0b11110000	//
-#define CMD_CHAR_RX	0b00010000	// Return current RX buffer and clean buffer full flag
+#define CMD_XXXX		0b11110000	//
+#define CMD_CHAR_RX		0b00010000	// Return current RX buffer and clean buffer full flag
 #define CMD_DUMMY_CFG	0b00000000	// stuff config data in SPI buffer
 #define UART_DUMMY_MASK	0b01000000
 #define CMD_DEAD        0b11111111      // This is usually a bad response
 
 #define P45K80  // Chip type for SPI slave
 #ifdef P45K80
-#define CMD_DUMMY	0b00111010	/* 10 channels 2.048 but only 9 are ADC, bit 6 set for rs232 data waiting */
+#define CMD_DUMMY		0b00111010	/* 10 channels 2.048 but only 9 are ADC, bit 6 set for rs232 data waiting */
 #define NUM_AI_CHAN     10
 #endif
 
 #define SPI_CMD_RW		0b11110000
+#define SPI_CMD_R_ONLY	0b11110001
 #define SPI_CMD_DUMMY	0b00000000
 
 #ifdef	__cplusplus

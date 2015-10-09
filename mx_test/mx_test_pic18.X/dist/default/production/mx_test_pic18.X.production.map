@@ -1,5 +1,5 @@
 MPLINK 4.40, Linker
-Linker Map File - Created Wed Oct  7 23:01:30 2015
+Linker Map File - Created Thu Oct  8 18:08:20 2015
 
                                  Section Info
                   Section       Type    Address   Location Size(Bytes)
@@ -48,31 +48,31 @@ Linker Map File - Created Wed Oct  7 23:01:30 2015
       .romdata_ringbufs.o    romdata   0x000010    program   0x000000
            work_interrupt       code   0x000018    program   0x000006
                    .cinit    romdata   0x00001e    program   0x00000e
-           .code_SlaveO.o       code   0x00002c    program   0x000876
-         .code_vfprintf.o       code   0x0008a2    program   0x000816
-         .code_ringbufs.o       code   0x0010b8    program   0x0001e4
-                     PROG       code   0x00129c    program   0x000146
-             .stringtable    romdata   0x0013e2    program   0x0000c4
-               _cinit_scn       code   0x0014a6    program   0x00009e
-                   STRING       code   0x001544    program   0x00009a
-           .code_u2open.o       code   0x0015de    program   0x000072
-          .code_sprintf.o       code   0x001650    program   0x000072
-             .code_putc.o       code   0x0016c2    program   0x000066
-         .code_spi_open.o       code   0x001728    program   0x000062
-          .code_u2putrs.o       code   0x00178a    program   0x00005c
-          .code_adcopen.o       code   0x0017e6    program   0x000058
-           .code_t1open.o       code   0x00183e    program   0x00004e
-           .code_u2puts.o       code   0x00188c    program   0x000046
-           .code_t0open.o       code   0x0018d2    program   0x000036
-          .code_t1write.o       code   0x001908    program   0x000030
-          .code_t0write.o       code   0x001938    program   0x000030
-          .code_u2write.o       code   0x001968    program   0x00002e
-                    CTYPE       code   0x001996    program   0x000024
-                    .code       code   0x0019ba    program   0x000020
-             _startup_scn       code   0x0019da    program   0x00001e
-                    STDIO       code   0x0019f8    program   0x00001c
-      .romdata_vfprintf.o    romdata   0x001a14    program   0x000011
-        .idata_SlaveO.o_i    romdata   0x001a25    program   0x0000dd
+           .code_SlaveO.o       code   0x00002c    program   0x00083a
+         .code_vfprintf.o       code   0x000866    program   0x000816
+         .code_ringbufs.o       code   0x00107c    program   0x0001e4
+                     PROG       code   0x001260    program   0x000146
+             .stringtable    romdata   0x0013a6    program   0x0000c4
+               _cinit_scn       code   0x00146a    program   0x00009e
+                   STRING       code   0x001508    program   0x00009a
+           .code_u2open.o       code   0x0015a2    program   0x000072
+          .code_sprintf.o       code   0x001614    program   0x000072
+             .code_putc.o       code   0x001686    program   0x000066
+         .code_spi_open.o       code   0x0016ec    program   0x000062
+          .code_u2putrs.o       code   0x00174e    program   0x00005c
+          .code_adcopen.o       code   0x0017aa    program   0x000058
+           .code_t1open.o       code   0x001802    program   0x00004e
+           .code_u2puts.o       code   0x001850    program   0x000046
+           .code_t0open.o       code   0x001896    program   0x000036
+          .code_t1write.o       code   0x0018cc    program   0x000030
+          .code_t0write.o       code   0x0018fc    program   0x000030
+          .code_u2write.o       code   0x00192c    program   0x00002e
+                    CTYPE       code   0x00195a    program   0x000024
+                    .code       code   0x00197e    program   0x000020
+             _startup_scn       code   0x00199e    program   0x00001e
+                    STDIO       code   0x0019bc    program   0x00001c
+      .romdata_vfprintf.o    romdata   0x0019d8    program   0x000011
+        .idata_SlaveO.o_i    romdata   0x0019e9    program   0x0000dd
   .config_300000_SlaveO.o    romdata   0x300000    program   0x000001
   .config_300001_SlaveO.o    romdata   0x300001    program   0x000001
   .config_300002_SlaveO.o    romdata   0x300002    program   0x000001
@@ -141,11 +141,11 @@ Linker Map File - Created Wed Oct  7 23:01:30 2015
                                Start         End      
                            ---------   ---------      
                             0x000000    0x00000f      
-                            0x000018    0x001b01      
+                            0x000018    0x001ac5      
                             0x300000    0x300003      
                             0x300005    0x300006      
                             0x300008    0x30000d      
-            6918 out of 33816 program addresses used, program memory utilization is 20%
+            6858 out of 33816 program addresses used, program memory utilization is 20%
 
 
 
@@ -154,30 +154,30 @@ Linker Map File - Created Wed Oct  7 23:01:30 2015
                 ---------  ---------  ---------  --------- ---------                
      InterruptHandlerHigh   0x00002c    program     extern /fujitsu/nidaq700/mx_test/SlaveO.c
       InterruptVectorHigh   0x000008    program     extern /fujitsu/nidaq700/mx_test/SlaveO.c
-               Open2USART   0x0015de    program     extern C:\MCC18\v3_39\src\pmc_common\USART\u2open.c
-                  OpenADC   0x0017e6    program     extern C:\MCC18\v3_39\src\pmc_common\ADC\adcopen.c
-                  OpenSPI   0x001728    program     extern C:\MCC18\v3_39\src\pmc_common\SPI\spi_open.c
-               OpenTimer0   0x0018d2    program     extern C:\MCC18\v3_39\src\pmc_common\Timers\t0open.c
-               OpenTimer1   0x00183e    program     extern C:\MCC18\v3_39\src\pmc_common\Timers\t1open.c
-                  RESTORE   0x001332    program     static C:\MCC18\v3_39\src\extended\math\div32u.asm
-              RETQUOTIENT   0x001322    program     static C:\MCC18\v3_39\src\extended\math\div32u.asm
-                 SETUPSTK   0x00129c    program     static C:\MCC18\v3_39\src\extended\math\div32u.asm
-              Write2USART   0x001968    program     extern C:\MCC18\v3_39\src\pmc_common\USART\u2write.c
-              WriteTimer0   0x001938    program     extern C:\MCC18\v3_39\src\pmc_common\Timers\t0write.c
-              WriteTimer1   0x001908    program     extern C:\MCC18\v3_39\src\pmc_common\Timers\t1write.c
-              _2jContinue   0x001564    program     static C:\MCC18\v3_39\src\extended\stdclib\memset.asm
-                   _2jEnd   0x0015c8    program     static C:\MCC18\v3_39\src\extended\stdclib\slenpgm.asm
-                   _3jEnd   0x00156e    program     static C:\MCC18\v3_39\src\extended\stdclib\memset.asm
-          ___for_lbl00047   0x000448    program     static                          
-          ___for_lbl00048   0x000456    program     static                          
-          ___for_lbl00050   0x00042c    program     static                          
-           ___if_lbl00049   0x000448    program     static                          
+               Open2USART   0x0015a2    program     extern C:\MCC18\v3_39\src\pmc_common\USART\u2open.c
+                  OpenADC   0x0017aa    program     extern C:\MCC18\v3_39\src\pmc_common\ADC\adcopen.c
+                  OpenSPI   0x0016ec    program     extern C:\MCC18\v3_39\src\pmc_common\SPI\spi_open.c
+               OpenTimer0   0x001896    program     extern C:\MCC18\v3_39\src\pmc_common\Timers\t0open.c
+               OpenTimer1   0x001802    program     extern C:\MCC18\v3_39\src\pmc_common\Timers\t1open.c
+                  RESTORE   0x0012f6    program     static C:\MCC18\v3_39\src\extended\math\div32u.asm
+              RETQUOTIENT   0x0012e6    program     static C:\MCC18\v3_39\src\extended\math\div32u.asm
+                 SETUPSTK   0x001260    program     static C:\MCC18\v3_39\src\extended\math\div32u.asm
+              Write2USART   0x00192c    program     extern C:\MCC18\v3_39\src\pmc_common\USART\u2write.c
+              WriteTimer0   0x0018fc    program     extern C:\MCC18\v3_39\src\pmc_common\Timers\t0write.c
+              WriteTimer1   0x0018cc    program     extern C:\MCC18\v3_39\src\pmc_common\Timers\t1write.c
+              _2jContinue   0x001528    program     static C:\MCC18\v3_39\src\extended\stdclib\memset.asm
+                   _2jEnd   0x00158c    program     static C:\MCC18\v3_39\src\extended\stdclib\slenpgm.asm
+                   _3jEnd   0x001532    program     static C:\MCC18\v3_39\src\extended\stdclib\memset.asm
+          ___for_lbl00047   0x00040c    program     static                          
+          ___for_lbl00048   0x00041a    program     static                          
+          ___for_lbl00050   0x0003f0    program     static                          
+           ___if_lbl00049   0x00040c    program     static                          
        ___return_lbl00000   0x00000c    program     static                          
        ___return_lbl00000   0x000004    program     static                          
        ___return_lbl00001   0x00001c    program     static                          
-       ___return_lbl00001   0x0019f6    program     static                          
-       ___return_lbl00002   0x001542    program     static                          
-       ___return_lbl00046   0x000456    program     static                          
+       ___return_lbl00001   0x0019ba    program     static                          
+       ___return_lbl00002   0x001506    program     static                          
+       ___return_lbl00046   0x00041a    program     static                          
                __config_0   0x300000    program     static /fujitsu/nidaq700/mx_test/SlaveO.c
                __config_1   0x300001    program     static /fujitsu/nidaq700/mx_test/SlaveO.c
               __config_10   0x30000c    program     static /fujitsu/nidaq700/mx_test/SlaveO.c
@@ -190,119 +190,119 @@ Linker Map File - Created Wed Oct  7 23:01:30 2015
                __config_7   0x300009    program     static /fujitsu/nidaq700/mx_test/SlaveO.c
                __config_8   0x30000a    program     static /fujitsu/nidaq700/mx_test/SlaveO.c
                __config_9   0x30000b    program     static /fujitsu/nidaq700/mx_test/SlaveO.c
-                 __div32u   0x0012b4    program     extern C:\MCC18\v3_39\src\extended\math\div32u.asm
+                 __div32u   0x001278    program     extern C:\MCC18\v3_39\src\extended\math\div32u.asm
                    __init   0x00000e    program     extern C:\MCC18\v3_39\src\extended\stdclib\__init.c
-                 __mod32u   0x0012ba    program     extern C:\MCC18\v3_39\src\extended\math\div32u.asm
-                  __mul32   0x001340    program     extern C:\MCC18\v3_39\src\extended\math\mul32.asm
-                   __pa_0   0x000f64    program     static C:\MCC18\v3_39\src\extended\stdclib\vfprintf.c
-                   __pa_0   0x001214    program     static /fujitsu/nidaq700/mx_test/ringbufs.c
-                   __pa_0   0x0007e8    program     static /fujitsu/nidaq700/mx_test/SlaveO.c
-                   __pa_1   0x0007fe    program     static /fujitsu/nidaq700/mx_test/SlaveO.c
-                   __pa_1   0x00121c    program     static /fujitsu/nidaq700/mx_test/ringbufs.c
-                   __pa_1   0x000f72    program     static C:\MCC18\v3_39\src\extended\stdclib\vfprintf.c
-                  __pa_10   0x001276    program     static /fujitsu/nidaq700/mx_test/ringbufs.c
-                  __pa_10   0x001000    program     static C:\MCC18\v3_39\src\extended\stdclib\vfprintf.c
-                  __pa_11   0x00127e    program     static /fujitsu/nidaq700/mx_test/ringbufs.c
-                  __pa_11   0x001010    program     static C:\MCC18\v3_39\src\extended\stdclib\vfprintf.c
-                  __pa_12   0x001020    program     static C:\MCC18\v3_39\src\extended\stdclib\vfprintf.c
-                  __pa_12   0x001288    program     static /fujitsu/nidaq700/mx_test/ringbufs.c
-                  __pa_13   0x00102e    program     static C:\MCC18\v3_39\src\extended\stdclib\vfprintf.c
-                  __pa_13   0x001292    program     static /fujitsu/nidaq700/mx_test/ringbufs.c
-                  __pa_14   0x00104c    program     static C:\MCC18\v3_39\src\extended\stdclib\vfprintf.c
-                  __pa_15   0x001056    program     static C:\MCC18\v3_39\src\extended\stdclib\vfprintf.c
-                  __pa_16   0x00105c    program     static C:\MCC18\v3_39\src\extended\stdclib\vfprintf.c
-                  __pa_17   0x00106c    program     static C:\MCC18\v3_39\src\extended\stdclib\vfprintf.c
-                  __pa_18   0x001078    program     static C:\MCC18\v3_39\src\extended\stdclib\vfprintf.c
-                  __pa_19   0x001086    program     static C:\MCC18\v3_39\src\extended\stdclib\vfprintf.c
-                   __pa_2   0x000f82    program     static C:\MCC18\v3_39\src\extended\stdclib\vfprintf.c
-                   __pa_2   0x001222    program     static /fujitsu/nidaq700/mx_test/ringbufs.c
-                   __pa_2   0x000828    program     static /fujitsu/nidaq700/mx_test/SlaveO.c
-                  __pa_20   0x001090    program     static C:\MCC18\v3_39\src\extended\stdclib\vfprintf.c
-                  __pa_21   0x00109a    program     static C:\MCC18\v3_39\src\extended\stdclib\vfprintf.c
-                  __pa_22   0x0010a4    program     static C:\MCC18\v3_39\src\extended\stdclib\vfprintf.c
-                  __pa_23   0x0010b2    program     static C:\MCC18\v3_39\src\extended\stdclib\vfprintf.c
-                   __pa_3   0x000f8e    program     static C:\MCC18\v3_39\src\extended\stdclib\vfprintf.c
-                   __pa_3   0x000838    program     static /fujitsu/nidaq700/mx_test/SlaveO.c
-                   __pa_3   0x00122a    program     static /fujitsu/nidaq700/mx_test/ringbufs.c
-                   __pa_4   0x000fa2    program     static C:\MCC18\v3_39\src\extended\stdclib\vfprintf.c
-                   __pa_4   0x001234    program     static /fujitsu/nidaq700/mx_test/ringbufs.c
-                   __pa_4   0x00084e    program     static /fujitsu/nidaq700/mx_test/SlaveO.c
-                   __pa_5   0x000fb4    program     static C:\MCC18\v3_39\src\extended\stdclib\vfprintf.c
-                   __pa_5   0x000858    program     static /fujitsu/nidaq700/mx_test/SlaveO.c
-                   __pa_5   0x00123c    program     static /fujitsu/nidaq700/mx_test/ringbufs.c
-                   __pa_6   0x000868    program     static /fujitsu/nidaq700/mx_test/SlaveO.c
-                   __pa_6   0x001244    program     static /fujitsu/nidaq700/mx_test/ringbufs.c
-                   __pa_6   0x000fc4    program     static C:\MCC18\v3_39\src\extended\stdclib\vfprintf.c
-                   __pa_7   0x000fd6    program     static C:\MCC18\v3_39\src\extended\stdclib\vfprintf.c
-                   __pa_7   0x000876    program     static /fujitsu/nidaq700/mx_test/SlaveO.c
-                   __pa_7   0x001252    program     static /fujitsu/nidaq700/mx_test/ringbufs.c
-                   __pa_8   0x000fe2    program     static C:\MCC18\v3_39\src\extended\stdclib\vfprintf.c
-                   __pa_8   0x000884    program     static /fujitsu/nidaq700/mx_test/SlaveO.c
-                   __pa_8   0x001260    program     static /fujitsu/nidaq700/mx_test/ringbufs.c
-                   __pa_9   0x000ff4    program     static C:\MCC18\v3_39\src\extended\stdclib\vfprintf.c
-                   __pa_9   0x00126c    program     static /fujitsu/nidaq700/mx_test/ringbufs.c
-                   __pa_9   0x000892    program     static /fujitsu/nidaq700/mx_test/SlaveO.c
-               __string_0   0x00149a    program     static /fujitsu/nidaq700/mx_test/SlaveO.c
-               __string_1   0x001491    program     static /fujitsu/nidaq700/mx_test/SlaveO.c
-               __string_2   0x001462    program     static /fujitsu/nidaq700/mx_test/SlaveO.c
-               __string_3   0x00143a    program     static /fujitsu/nidaq700/mx_test/SlaveO.c
-               __string_4   0x001417    program     static /fujitsu/nidaq700/mx_test/SlaveO.c
-               __string_5   0x0013e2    program     static /fujitsu/nidaq700/mx_test/SlaveO.c
-               __tmplbl_7   0x00043e    program     static                          
-            __zero_memory   0x0019ba    program     extern C:\MCC18\v3_39\src\extended\proc\p18F45K80.asm
-                _do_cinit   0x0014a6    program     extern C:\MCC18\v3_39\src\extended\startup\c018iz_e.c
-            _early32uexit   0x0012be    program     extern C:\MCC18\v3_39\src\extended\math\div32u.asm
+                 __mod32u   0x00127e    program     extern C:\MCC18\v3_39\src\extended\math\div32u.asm
+                  __mul32   0x001304    program     extern C:\MCC18\v3_39\src\extended\math\mul32.asm
+                   __pa_0   0x000f28    program     static C:\MCC18\v3_39\src\extended\stdclib\vfprintf.c
+                   __pa_0   0x0011d8    program     static /fujitsu/nidaq700/mx_test/ringbufs.c
+                   __pa_0   0x0007ac    program     static /fujitsu/nidaq700/mx_test/SlaveO.c
+                   __pa_1   0x0007c2    program     static /fujitsu/nidaq700/mx_test/SlaveO.c
+                   __pa_1   0x0011e0    program     static /fujitsu/nidaq700/mx_test/ringbufs.c
+                   __pa_1   0x000f36    program     static C:\MCC18\v3_39\src\extended\stdclib\vfprintf.c
+                  __pa_10   0x00123a    program     static /fujitsu/nidaq700/mx_test/ringbufs.c
+                  __pa_10   0x000fc4    program     static C:\MCC18\v3_39\src\extended\stdclib\vfprintf.c
+                  __pa_11   0x001242    program     static /fujitsu/nidaq700/mx_test/ringbufs.c
+                  __pa_11   0x000fd4    program     static C:\MCC18\v3_39\src\extended\stdclib\vfprintf.c
+                  __pa_12   0x000fe4    program     static C:\MCC18\v3_39\src\extended\stdclib\vfprintf.c
+                  __pa_12   0x00124c    program     static /fujitsu/nidaq700/mx_test/ringbufs.c
+                  __pa_13   0x000ff2    program     static C:\MCC18\v3_39\src\extended\stdclib\vfprintf.c
+                  __pa_13   0x001256    program     static /fujitsu/nidaq700/mx_test/ringbufs.c
+                  __pa_14   0x001010    program     static C:\MCC18\v3_39\src\extended\stdclib\vfprintf.c
+                  __pa_15   0x00101a    program     static C:\MCC18\v3_39\src\extended\stdclib\vfprintf.c
+                  __pa_16   0x001020    program     static C:\MCC18\v3_39\src\extended\stdclib\vfprintf.c
+                  __pa_17   0x001030    program     static C:\MCC18\v3_39\src\extended\stdclib\vfprintf.c
+                  __pa_18   0x00103c    program     static C:\MCC18\v3_39\src\extended\stdclib\vfprintf.c
+                  __pa_19   0x00104a    program     static C:\MCC18\v3_39\src\extended\stdclib\vfprintf.c
+                   __pa_2   0x000f46    program     static C:\MCC18\v3_39\src\extended\stdclib\vfprintf.c
+                   __pa_2   0x0011e6    program     static /fujitsu/nidaq700/mx_test/ringbufs.c
+                   __pa_2   0x0007ec    program     static /fujitsu/nidaq700/mx_test/SlaveO.c
+                  __pa_20   0x001054    program     static C:\MCC18\v3_39\src\extended\stdclib\vfprintf.c
+                  __pa_21   0x00105e    program     static C:\MCC18\v3_39\src\extended\stdclib\vfprintf.c
+                  __pa_22   0x001068    program     static C:\MCC18\v3_39\src\extended\stdclib\vfprintf.c
+                  __pa_23   0x001076    program     static C:\MCC18\v3_39\src\extended\stdclib\vfprintf.c
+                   __pa_3   0x000f52    program     static C:\MCC18\v3_39\src\extended\stdclib\vfprintf.c
+                   __pa_3   0x0007fc    program     static /fujitsu/nidaq700/mx_test/SlaveO.c
+                   __pa_3   0x0011ee    program     static /fujitsu/nidaq700/mx_test/ringbufs.c
+                   __pa_4   0x000f66    program     static C:\MCC18\v3_39\src\extended\stdclib\vfprintf.c
+                   __pa_4   0x0011f8    program     static /fujitsu/nidaq700/mx_test/ringbufs.c
+                   __pa_4   0x000812    program     static /fujitsu/nidaq700/mx_test/SlaveO.c
+                   __pa_5   0x000f78    program     static C:\MCC18\v3_39\src\extended\stdclib\vfprintf.c
+                   __pa_5   0x00081c    program     static /fujitsu/nidaq700/mx_test/SlaveO.c
+                   __pa_5   0x001200    program     static /fujitsu/nidaq700/mx_test/ringbufs.c
+                   __pa_6   0x00082c    program     static /fujitsu/nidaq700/mx_test/SlaveO.c
+                   __pa_6   0x001208    program     static /fujitsu/nidaq700/mx_test/ringbufs.c
+                   __pa_6   0x000f88    program     static C:\MCC18\v3_39\src\extended\stdclib\vfprintf.c
+                   __pa_7   0x000f9a    program     static C:\MCC18\v3_39\src\extended\stdclib\vfprintf.c
+                   __pa_7   0x00083a    program     static /fujitsu/nidaq700/mx_test/SlaveO.c
+                   __pa_7   0x001216    program     static /fujitsu/nidaq700/mx_test/ringbufs.c
+                   __pa_8   0x000fa6    program     static C:\MCC18\v3_39\src\extended\stdclib\vfprintf.c
+                   __pa_8   0x000848    program     static /fujitsu/nidaq700/mx_test/SlaveO.c
+                   __pa_8   0x001224    program     static /fujitsu/nidaq700/mx_test/ringbufs.c
+                   __pa_9   0x000fb8    program     static C:\MCC18\v3_39\src\extended\stdclib\vfprintf.c
+                   __pa_9   0x001230    program     static /fujitsu/nidaq700/mx_test/ringbufs.c
+                   __pa_9   0x000856    program     static /fujitsu/nidaq700/mx_test/SlaveO.c
+               __string_0   0x00145e    program     static /fujitsu/nidaq700/mx_test/SlaveO.c
+               __string_1   0x001455    program     static /fujitsu/nidaq700/mx_test/SlaveO.c
+               __string_2   0x001426    program     static /fujitsu/nidaq700/mx_test/SlaveO.c
+               __string_3   0x0013fe    program     static /fujitsu/nidaq700/mx_test/SlaveO.c
+               __string_4   0x0013db    program     static /fujitsu/nidaq700/mx_test/SlaveO.c
+               __string_5   0x0013a6    program     static /fujitsu/nidaq700/mx_test/SlaveO.c
+               __tmplbl_7   0x000402    program     static                          
+            __zero_memory   0x00197e    program     extern C:\MCC18\v3_39\src\extended\proc\p18F45K80.asm
+                _do_cinit   0x00146a    program     extern C:\MCC18\v3_39\src\extended\startup\c018iz_e.c
+            _early32uexit   0x001282    program     extern C:\MCC18\v3_39\src\extended\math\div32u.asm
                    _entry   0x000000    program     extern C:\MCC18\v3_39\src\extended\startup\c018iz_e.c
-                   _false   0x001302    program     static C:\MCC18\v3_39\src\extended\math\div32u.asm
-                 _startup   0x0019da    program     extern C:\MCC18\v3_39\src\extended\startup\c018iz_e.c
-              _usart_putc   0x0019f8    program     extern C:\MCC18\v3_39\src\pmc_common\USART\_usartpc.asm
+                   _false   0x0012c6    program     static C:\MCC18\v3_39\src\extended\math\div32u.asm
+                 _startup   0x00199e    program     extern C:\MCC18\v3_39\src\extended\startup\c018iz_e.c
+              _usart_putc   0x0019bc    program     extern C:\MCC18\v3_39\src\pmc_common\USART\_usartpc.asm
                _user_putc   0x000006    program     extern C:\MCC18\v3_39\src\extended\stdclib\_user_putc.c
-                compare_l   0x0019d0    program     static C:\MCC18\v3_39\src\extended\proc\p18F45K80.asm
-               config_pic   0x0004c0    program     extern /fujitsu/nidaq700/mx_test/SlaveO.c
-            config_pic_io   0x00045e    program     extern /fujitsu/nidaq700/mx_test/SlaveO.c
-                copy_loop   0x001518    program     static                          
-            copy_one_byte   0x00151e    program     static                          
-                divmod32u   0x0012c0    program     static C:\MCC18\v3_39\src\extended\math\div32u.asm
-                     done   0x001542    program     static                          
-             done_copying   0x00152c    program     static                          
-                  isdigit   0x001996    program     extern C:\MCC18\v3_39\src\extended\stdclib\isdigit.asm
-                     jEnd   0x001576    program     static C:\MCC18\v3_39\src\extended\stdclib\memset.asm
-                     jEnd   0x001592    program     static C:\MCC18\v3_39\src\extended\stdclib\strlen.asm
-                     jEnd   0x0015ca    program     static C:\MCC18\v3_39\src\extended\stdclib\slenpgm.asm
-                    jLoop   0x001558    program     static C:\MCC18\v3_39\src\extended\stdclib\memset.asm
-                    jLoop   0x001588    program     static C:\MCC18\v3_39\src\extended\stdclib\strlen.asm
-                    jLoop   0x0015b2    program     static C:\MCC18\v3_39\src\extended\stdclib\slenpgm.asm
-                   jMatch   0x0019b6    program     static C:\MCC18\v3_39\src\extended\stdclib\isdigit.asm
-                 jNoMatch   0x0019b8    program     static C:\MCC18\v3_39\src\extended\stdclib\isdigit.asm
-                     loop   0x001a08    program     static C:\MCC18\v3_39\src\pmc_common\USART\_usartpc.asm
-                     loop   0x0019ec    program     static                          
-                     loop   0x0012ce    program     static C:\MCC18\v3_39\src\extended\math\div32u.asm
-                   loop_h   0x0019c8    program     static C:\MCC18\v3_39\src\extended\proc\p18F45K80.asm
-                   loop_l   0x0019d2    program     static C:\MCC18\v3_39\src\extended\proc\p18F45K80.asm
-                     main   0x0005a0    program     extern /fujitsu/nidaq700/mx_test/SlaveO.c
-                   memset   0x001544    program     extern C:\MCC18\v3_39\src\extended\stdclib\memset.asm
-               modulo_dec   0x0010d2    program     extern /fujitsu/nidaq700/mx_test/ringbufs.c
-               modulo_inc   0x0010b8    program     extern /fujitsu/nidaq700/mx_test/ringbufs.c
-                     putc   0x0016c2    program     extern C:\MCC18\v3_39\src\extended\stdclib\putc.c
-              putrs2USART   0x00178a    program     extern C:\MCC18\v3_39\src\pmc_common\USART\u2putrs.c
-               puts2USART   0x00188c    program     extern C:\MCC18\v3_39\src\pmc_common\USART\u2puts.c
-           ringBufS_empty   0x001106    program     extern /fujitsu/nidaq700/mx_test/ringbufs.c
-           ringBufS_flush   0x0011e0    program     extern /fujitsu/nidaq700/mx_test/ringbufs.c
-            ringBufS_full   0x001116    program     extern /fujitsu/nidaq700/mx_test/ringbufs.c
-             ringBufS_get   0x001130    program     extern /fujitsu/nidaq700/mx_test/ringbufs.c
-            ringBufS_init   0x0010ec    program     extern /fujitsu/nidaq700/mx_test/ringbufs.c
-             ringBufS_put   0x00118e    program     extern /fujitsu/nidaq700/mx_test/ringbufs.c
-                 s_digits   0x001a14    program     static C:\MCC18\v3_39\src\extended\stdclib\vfprintf.c
-            s_put_n_chars   0x0008a2    program     static C:\MCC18\v3_39\src\extended\stdclib\vfprintf.c
-                  sprintf   0x001650    program     extern C:\MCC18\v3_39\src\extended\stdclib\sprintf.c
-                   strlen   0x001578    program     extern C:\MCC18\v3_39\src\extended\stdclib\strlen.asm
-                strlenpgm   0x001594    program     extern C:\MCC18\v3_39\src\extended\stdclib\slenpgm.asm
-                     test   0x0014c0    program     static                          
-                 vfprintf   0x0008d4    program     extern C:\MCC18\v3_39\src\extended\stdclib\vfprintf.c
-                 wdtdelay   0x000418    program     extern /fujitsu/nidaq700/mx_test/SlaveO.c
-             work_handler   0x0002ae    program     extern /fujitsu/nidaq700/mx_test/SlaveO.c
+                compare_l   0x001994    program     static C:\MCC18\v3_39\src\extended\proc\p18F45K80.asm
+               config_pic   0x000484    program     extern /fujitsu/nidaq700/mx_test/SlaveO.c
+            config_pic_io   0x000422    program     extern /fujitsu/nidaq700/mx_test/SlaveO.c
+                copy_loop   0x0014dc    program     static                          
+            copy_one_byte   0x0014e2    program     static                          
+                divmod32u   0x001284    program     static C:\MCC18\v3_39\src\extended\math\div32u.asm
+                     done   0x001506    program     static                          
+             done_copying   0x0014f0    program     static                          
+                  isdigit   0x00195a    program     extern C:\MCC18\v3_39\src\extended\stdclib\isdigit.asm
+                     jEnd   0x00153a    program     static C:\MCC18\v3_39\src\extended\stdclib\memset.asm
+                     jEnd   0x001556    program     static C:\MCC18\v3_39\src\extended\stdclib\strlen.asm
+                     jEnd   0x00158e    program     static C:\MCC18\v3_39\src\extended\stdclib\slenpgm.asm
+                    jLoop   0x00151c    program     static C:\MCC18\v3_39\src\extended\stdclib\memset.asm
+                    jLoop   0x00154c    program     static C:\MCC18\v3_39\src\extended\stdclib\strlen.asm
+                    jLoop   0x001576    program     static C:\MCC18\v3_39\src\extended\stdclib\slenpgm.asm
+                   jMatch   0x00197a    program     static C:\MCC18\v3_39\src\extended\stdclib\isdigit.asm
+                 jNoMatch   0x00197c    program     static C:\MCC18\v3_39\src\extended\stdclib\isdigit.asm
+                     loop   0x0019cc    program     static C:\MCC18\v3_39\src\pmc_common\USART\_usartpc.asm
+                     loop   0x0019b0    program     static                          
+                     loop   0x001292    program     static C:\MCC18\v3_39\src\extended\math\div32u.asm
+                   loop_h   0x00198c    program     static C:\MCC18\v3_39\src\extended\proc\p18F45K80.asm
+                   loop_l   0x001996    program     static C:\MCC18\v3_39\src\extended\proc\p18F45K80.asm
+                     main   0x000564    program     extern /fujitsu/nidaq700/mx_test/SlaveO.c
+                   memset   0x001508    program     extern C:\MCC18\v3_39\src\extended\stdclib\memset.asm
+               modulo_dec   0x001096    program     extern /fujitsu/nidaq700/mx_test/ringbufs.c
+               modulo_inc   0x00107c    program     extern /fujitsu/nidaq700/mx_test/ringbufs.c
+                     putc   0x001686    program     extern C:\MCC18\v3_39\src\extended\stdclib\putc.c
+              putrs2USART   0x00174e    program     extern C:\MCC18\v3_39\src\pmc_common\USART\u2putrs.c
+               puts2USART   0x001850    program     extern C:\MCC18\v3_39\src\pmc_common\USART\u2puts.c
+           ringBufS_empty   0x0010ca    program     extern /fujitsu/nidaq700/mx_test/ringbufs.c
+           ringBufS_flush   0x0011a4    program     extern /fujitsu/nidaq700/mx_test/ringbufs.c
+            ringBufS_full   0x0010da    program     extern /fujitsu/nidaq700/mx_test/ringbufs.c
+             ringBufS_get   0x0010f4    program     extern /fujitsu/nidaq700/mx_test/ringbufs.c
+            ringBufS_init   0x0010b0    program     extern /fujitsu/nidaq700/mx_test/ringbufs.c
+             ringBufS_put   0x001152    program     extern /fujitsu/nidaq700/mx_test/ringbufs.c
+                 s_digits   0x0019d8    program     static C:\MCC18\v3_39\src\extended\stdclib\vfprintf.c
+            s_put_n_chars   0x000866    program     static C:\MCC18\v3_39\src\extended\stdclib\vfprintf.c
+                  sprintf   0x001614    program     extern C:\MCC18\v3_39\src\extended\stdclib\sprintf.c
+                   strlen   0x00153c    program     extern C:\MCC18\v3_39\src\extended\stdclib\strlen.asm
+                strlenpgm   0x001558    program     extern C:\MCC18\v3_39\src\extended\stdclib\slenpgm.asm
+                     test   0x001484    program     static                          
+                 vfprintf   0x000898    program     extern C:\MCC18\v3_39\src\extended\stdclib\vfprintf.c
+                 wdtdelay   0x0003dc    program     extern /fujitsu/nidaq700/mx_test/SlaveO.c
+             work_handler   0x0002ba    program     extern /fujitsu/nidaq700/mx_test/SlaveO.c
                  work_int   0x000018    program     extern /fujitsu/nidaq700/mx_test/SlaveO.c
-               zero_block   0x0019c8    program     static C:\MCC18\v3_39\src\extended\proc\p18F45K80.asm
+               zero_block   0x00198c    program     static C:\MCC18\v3_39\src\extended\proc\p18F45K80.asm
                    ADCON0   0x000fc2       data     extern C:\MCC18\v3_39\src\extended\proc\p18F45K80.asm
                ADCON0bits   0x000fc2       data     extern C:\MCC18\v3_39\src\extended\proc\p18F45K80.asm
                    ADCON1   0x000fc1       data     extern C:\MCC18\v3_39\src\extended\proc\p18F45K80.asm
@@ -1201,136 +1201,136 @@ Linker Map File - Created Wed Oct  7 23:01:30 2015
                  work_int   0x000018    program     extern /fujitsu/nidaq700/mx_test/SlaveO.c
        ___return_lbl00001   0x00001c    program     static                          
      InterruptHandlerHigh   0x00002c    program     extern /fujitsu/nidaq700/mx_test/SlaveO.c
-             work_handler   0x0002ae    program     extern /fujitsu/nidaq700/mx_test/SlaveO.c
-                 wdtdelay   0x000418    program     extern /fujitsu/nidaq700/mx_test/SlaveO.c
-          ___for_lbl00050   0x00042c    program     static                          
-               __tmplbl_7   0x00043e    program     static                          
-           ___if_lbl00049   0x000448    program     static                          
-          ___for_lbl00047   0x000448    program     static                          
-       ___return_lbl00046   0x000456    program     static                          
-          ___for_lbl00048   0x000456    program     static                          
-            config_pic_io   0x00045e    program     extern /fujitsu/nidaq700/mx_test/SlaveO.c
-               config_pic   0x0004c0    program     extern /fujitsu/nidaq700/mx_test/SlaveO.c
-                     main   0x0005a0    program     extern /fujitsu/nidaq700/mx_test/SlaveO.c
-                   __pa_0   0x0007e8    program     static /fujitsu/nidaq700/mx_test/SlaveO.c
-                   __pa_1   0x0007fe    program     static /fujitsu/nidaq700/mx_test/SlaveO.c
-                   __pa_2   0x000828    program     static /fujitsu/nidaq700/mx_test/SlaveO.c
-                   __pa_3   0x000838    program     static /fujitsu/nidaq700/mx_test/SlaveO.c
-                   __pa_4   0x00084e    program     static /fujitsu/nidaq700/mx_test/SlaveO.c
-                   __pa_5   0x000858    program     static /fujitsu/nidaq700/mx_test/SlaveO.c
-                   __pa_6   0x000868    program     static /fujitsu/nidaq700/mx_test/SlaveO.c
-                   __pa_7   0x000876    program     static /fujitsu/nidaq700/mx_test/SlaveO.c
-                   __pa_8   0x000884    program     static /fujitsu/nidaq700/mx_test/SlaveO.c
-                   __pa_9   0x000892    program     static /fujitsu/nidaq700/mx_test/SlaveO.c
-            s_put_n_chars   0x0008a2    program     static C:\MCC18\v3_39\src\extended\stdclib\vfprintf.c
-                 vfprintf   0x0008d4    program     extern C:\MCC18\v3_39\src\extended\stdclib\vfprintf.c
-                   __pa_0   0x000f64    program     static C:\MCC18\v3_39\src\extended\stdclib\vfprintf.c
-                   __pa_1   0x000f72    program     static C:\MCC18\v3_39\src\extended\stdclib\vfprintf.c
-                   __pa_2   0x000f82    program     static C:\MCC18\v3_39\src\extended\stdclib\vfprintf.c
-                   __pa_3   0x000f8e    program     static C:\MCC18\v3_39\src\extended\stdclib\vfprintf.c
-                   __pa_4   0x000fa2    program     static C:\MCC18\v3_39\src\extended\stdclib\vfprintf.c
-                   __pa_5   0x000fb4    program     static C:\MCC18\v3_39\src\extended\stdclib\vfprintf.c
-                   __pa_6   0x000fc4    program     static C:\MCC18\v3_39\src\extended\stdclib\vfprintf.c
-                   __pa_7   0x000fd6    program     static C:\MCC18\v3_39\src\extended\stdclib\vfprintf.c
-                   __pa_8   0x000fe2    program     static C:\MCC18\v3_39\src\extended\stdclib\vfprintf.c
-                   __pa_9   0x000ff4    program     static C:\MCC18\v3_39\src\extended\stdclib\vfprintf.c
-                  __pa_10   0x001000    program     static C:\MCC18\v3_39\src\extended\stdclib\vfprintf.c
-                  __pa_11   0x001010    program     static C:\MCC18\v3_39\src\extended\stdclib\vfprintf.c
-                  __pa_12   0x001020    program     static C:\MCC18\v3_39\src\extended\stdclib\vfprintf.c
-                  __pa_13   0x00102e    program     static C:\MCC18\v3_39\src\extended\stdclib\vfprintf.c
-                  __pa_14   0x00104c    program     static C:\MCC18\v3_39\src\extended\stdclib\vfprintf.c
-                  __pa_15   0x001056    program     static C:\MCC18\v3_39\src\extended\stdclib\vfprintf.c
-                  __pa_16   0x00105c    program     static C:\MCC18\v3_39\src\extended\stdclib\vfprintf.c
-                  __pa_17   0x00106c    program     static C:\MCC18\v3_39\src\extended\stdclib\vfprintf.c
-                  __pa_18   0x001078    program     static C:\MCC18\v3_39\src\extended\stdclib\vfprintf.c
-                  __pa_19   0x001086    program     static C:\MCC18\v3_39\src\extended\stdclib\vfprintf.c
-                  __pa_20   0x001090    program     static C:\MCC18\v3_39\src\extended\stdclib\vfprintf.c
-                  __pa_21   0x00109a    program     static C:\MCC18\v3_39\src\extended\stdclib\vfprintf.c
-                  __pa_22   0x0010a4    program     static C:\MCC18\v3_39\src\extended\stdclib\vfprintf.c
-                  __pa_23   0x0010b2    program     static C:\MCC18\v3_39\src\extended\stdclib\vfprintf.c
-               modulo_inc   0x0010b8    program     extern /fujitsu/nidaq700/mx_test/ringbufs.c
-               modulo_dec   0x0010d2    program     extern /fujitsu/nidaq700/mx_test/ringbufs.c
-            ringBufS_init   0x0010ec    program     extern /fujitsu/nidaq700/mx_test/ringbufs.c
-           ringBufS_empty   0x001106    program     extern /fujitsu/nidaq700/mx_test/ringbufs.c
-            ringBufS_full   0x001116    program     extern /fujitsu/nidaq700/mx_test/ringbufs.c
-             ringBufS_get   0x001130    program     extern /fujitsu/nidaq700/mx_test/ringbufs.c
-             ringBufS_put   0x00118e    program     extern /fujitsu/nidaq700/mx_test/ringbufs.c
-           ringBufS_flush   0x0011e0    program     extern /fujitsu/nidaq700/mx_test/ringbufs.c
-                   __pa_0   0x001214    program     static /fujitsu/nidaq700/mx_test/ringbufs.c
-                   __pa_1   0x00121c    program     static /fujitsu/nidaq700/mx_test/ringbufs.c
-                   __pa_2   0x001222    program     static /fujitsu/nidaq700/mx_test/ringbufs.c
-                   __pa_3   0x00122a    program     static /fujitsu/nidaq700/mx_test/ringbufs.c
-                   __pa_4   0x001234    program     static /fujitsu/nidaq700/mx_test/ringbufs.c
-                   __pa_5   0x00123c    program     static /fujitsu/nidaq700/mx_test/ringbufs.c
-                   __pa_6   0x001244    program     static /fujitsu/nidaq700/mx_test/ringbufs.c
-                   __pa_7   0x001252    program     static /fujitsu/nidaq700/mx_test/ringbufs.c
-                   __pa_8   0x001260    program     static /fujitsu/nidaq700/mx_test/ringbufs.c
-                   __pa_9   0x00126c    program     static /fujitsu/nidaq700/mx_test/ringbufs.c
-                  __pa_10   0x001276    program     static /fujitsu/nidaq700/mx_test/ringbufs.c
-                  __pa_11   0x00127e    program     static /fujitsu/nidaq700/mx_test/ringbufs.c
-                  __pa_12   0x001288    program     static /fujitsu/nidaq700/mx_test/ringbufs.c
-                  __pa_13   0x001292    program     static /fujitsu/nidaq700/mx_test/ringbufs.c
-                 SETUPSTK   0x00129c    program     static C:\MCC18\v3_39\src\extended\math\div32u.asm
-                 __div32u   0x0012b4    program     extern C:\MCC18\v3_39\src\extended\math\div32u.asm
-                 __mod32u   0x0012ba    program     extern C:\MCC18\v3_39\src\extended\math\div32u.asm
-            _early32uexit   0x0012be    program     extern C:\MCC18\v3_39\src\extended\math\div32u.asm
-                divmod32u   0x0012c0    program     static C:\MCC18\v3_39\src\extended\math\div32u.asm
-                     loop   0x0012ce    program     static C:\MCC18\v3_39\src\extended\math\div32u.asm
-                   _false   0x001302    program     static C:\MCC18\v3_39\src\extended\math\div32u.asm
-              RETQUOTIENT   0x001322    program     static C:\MCC18\v3_39\src\extended\math\div32u.asm
-                  RESTORE   0x001332    program     static C:\MCC18\v3_39\src\extended\math\div32u.asm
-                  __mul32   0x001340    program     extern C:\MCC18\v3_39\src\extended\math\mul32.asm
-               __string_5   0x0013e2    program     static /fujitsu/nidaq700/mx_test/SlaveO.c
-               __string_4   0x001417    program     static /fujitsu/nidaq700/mx_test/SlaveO.c
-               __string_3   0x00143a    program     static /fujitsu/nidaq700/mx_test/SlaveO.c
-               __string_2   0x001462    program     static /fujitsu/nidaq700/mx_test/SlaveO.c
-               __string_1   0x001491    program     static /fujitsu/nidaq700/mx_test/SlaveO.c
-               __string_0   0x00149a    program     static /fujitsu/nidaq700/mx_test/SlaveO.c
-                _do_cinit   0x0014a6    program     extern C:\MCC18\v3_39\src\extended\startup\c018iz_e.c
-                     test   0x0014c0    program     static                          
-                copy_loop   0x001518    program     static                          
-            copy_one_byte   0x00151e    program     static                          
-             done_copying   0x00152c    program     static                          
-                     done   0x001542    program     static                          
-       ___return_lbl00002   0x001542    program     static                          
-                   memset   0x001544    program     extern C:\MCC18\v3_39\src\extended\stdclib\memset.asm
-                    jLoop   0x001558    program     static C:\MCC18\v3_39\src\extended\stdclib\memset.asm
-              _2jContinue   0x001564    program     static C:\MCC18\v3_39\src\extended\stdclib\memset.asm
-                   _3jEnd   0x00156e    program     static C:\MCC18\v3_39\src\extended\stdclib\memset.asm
-                     jEnd   0x001576    program     static C:\MCC18\v3_39\src\extended\stdclib\memset.asm
-                   strlen   0x001578    program     extern C:\MCC18\v3_39\src\extended\stdclib\strlen.asm
-                    jLoop   0x001588    program     static C:\MCC18\v3_39\src\extended\stdclib\strlen.asm
-                     jEnd   0x001592    program     static C:\MCC18\v3_39\src\extended\stdclib\strlen.asm
-                strlenpgm   0x001594    program     extern C:\MCC18\v3_39\src\extended\stdclib\slenpgm.asm
-                    jLoop   0x0015b2    program     static C:\MCC18\v3_39\src\extended\stdclib\slenpgm.asm
-                   _2jEnd   0x0015c8    program     static C:\MCC18\v3_39\src\extended\stdclib\slenpgm.asm
-                     jEnd   0x0015ca    program     static C:\MCC18\v3_39\src\extended\stdclib\slenpgm.asm
-               Open2USART   0x0015de    program     extern C:\MCC18\v3_39\src\pmc_common\USART\u2open.c
-                  sprintf   0x001650    program     extern C:\MCC18\v3_39\src\extended\stdclib\sprintf.c
-                     putc   0x0016c2    program     extern C:\MCC18\v3_39\src\extended\stdclib\putc.c
-                  OpenSPI   0x001728    program     extern C:\MCC18\v3_39\src\pmc_common\SPI\spi_open.c
-              putrs2USART   0x00178a    program     extern C:\MCC18\v3_39\src\pmc_common\USART\u2putrs.c
-                  OpenADC   0x0017e6    program     extern C:\MCC18\v3_39\src\pmc_common\ADC\adcopen.c
-               OpenTimer1   0x00183e    program     extern C:\MCC18\v3_39\src\pmc_common\Timers\t1open.c
-               puts2USART   0x00188c    program     extern C:\MCC18\v3_39\src\pmc_common\USART\u2puts.c
-               OpenTimer0   0x0018d2    program     extern C:\MCC18\v3_39\src\pmc_common\Timers\t0open.c
-              WriteTimer1   0x001908    program     extern C:\MCC18\v3_39\src\pmc_common\Timers\t1write.c
-              WriteTimer0   0x001938    program     extern C:\MCC18\v3_39\src\pmc_common\Timers\t0write.c
-              Write2USART   0x001968    program     extern C:\MCC18\v3_39\src\pmc_common\USART\u2write.c
-                  isdigit   0x001996    program     extern C:\MCC18\v3_39\src\extended\stdclib\isdigit.asm
-                   jMatch   0x0019b6    program     static C:\MCC18\v3_39\src\extended\stdclib\isdigit.asm
-                 jNoMatch   0x0019b8    program     static C:\MCC18\v3_39\src\extended\stdclib\isdigit.asm
-            __zero_memory   0x0019ba    program     extern C:\MCC18\v3_39\src\extended\proc\p18F45K80.asm
-               zero_block   0x0019c8    program     static C:\MCC18\v3_39\src\extended\proc\p18F45K80.asm
-                   loop_h   0x0019c8    program     static C:\MCC18\v3_39\src\extended\proc\p18F45K80.asm
-                compare_l   0x0019d0    program     static C:\MCC18\v3_39\src\extended\proc\p18F45K80.asm
-                   loop_l   0x0019d2    program     static C:\MCC18\v3_39\src\extended\proc\p18F45K80.asm
-                 _startup   0x0019da    program     extern C:\MCC18\v3_39\src\extended\startup\c018iz_e.c
-                     loop   0x0019ec    program     static                          
-       ___return_lbl00001   0x0019f6    program     static                          
-              _usart_putc   0x0019f8    program     extern C:\MCC18\v3_39\src\pmc_common\USART\_usartpc.asm
-                     loop   0x001a08    program     static C:\MCC18\v3_39\src\pmc_common\USART\_usartpc.asm
-                 s_digits   0x001a14    program     static C:\MCC18\v3_39\src\extended\stdclib\vfprintf.c
+             work_handler   0x0002ba    program     extern /fujitsu/nidaq700/mx_test/SlaveO.c
+                 wdtdelay   0x0003dc    program     extern /fujitsu/nidaq700/mx_test/SlaveO.c
+          ___for_lbl00050   0x0003f0    program     static                          
+               __tmplbl_7   0x000402    program     static                          
+           ___if_lbl00049   0x00040c    program     static                          
+          ___for_lbl00047   0x00040c    program     static                          
+       ___return_lbl00046   0x00041a    program     static                          
+          ___for_lbl00048   0x00041a    program     static                          
+            config_pic_io   0x000422    program     extern /fujitsu/nidaq700/mx_test/SlaveO.c
+               config_pic   0x000484    program     extern /fujitsu/nidaq700/mx_test/SlaveO.c
+                     main   0x000564    program     extern /fujitsu/nidaq700/mx_test/SlaveO.c
+                   __pa_0   0x0007ac    program     static /fujitsu/nidaq700/mx_test/SlaveO.c
+                   __pa_1   0x0007c2    program     static /fujitsu/nidaq700/mx_test/SlaveO.c
+                   __pa_2   0x0007ec    program     static /fujitsu/nidaq700/mx_test/SlaveO.c
+                   __pa_3   0x0007fc    program     static /fujitsu/nidaq700/mx_test/SlaveO.c
+                   __pa_4   0x000812    program     static /fujitsu/nidaq700/mx_test/SlaveO.c
+                   __pa_5   0x00081c    program     static /fujitsu/nidaq700/mx_test/SlaveO.c
+                   __pa_6   0x00082c    program     static /fujitsu/nidaq700/mx_test/SlaveO.c
+                   __pa_7   0x00083a    program     static /fujitsu/nidaq700/mx_test/SlaveO.c
+                   __pa_8   0x000848    program     static /fujitsu/nidaq700/mx_test/SlaveO.c
+                   __pa_9   0x000856    program     static /fujitsu/nidaq700/mx_test/SlaveO.c
+            s_put_n_chars   0x000866    program     static C:\MCC18\v3_39\src\extended\stdclib\vfprintf.c
+                 vfprintf   0x000898    program     extern C:\MCC18\v3_39\src\extended\stdclib\vfprintf.c
+                   __pa_0   0x000f28    program     static C:\MCC18\v3_39\src\extended\stdclib\vfprintf.c
+                   __pa_1   0x000f36    program     static C:\MCC18\v3_39\src\extended\stdclib\vfprintf.c
+                   __pa_2   0x000f46    program     static C:\MCC18\v3_39\src\extended\stdclib\vfprintf.c
+                   __pa_3   0x000f52    program     static C:\MCC18\v3_39\src\extended\stdclib\vfprintf.c
+                   __pa_4   0x000f66    program     static C:\MCC18\v3_39\src\extended\stdclib\vfprintf.c
+                   __pa_5   0x000f78    program     static C:\MCC18\v3_39\src\extended\stdclib\vfprintf.c
+                   __pa_6   0x000f88    program     static C:\MCC18\v3_39\src\extended\stdclib\vfprintf.c
+                   __pa_7   0x000f9a    program     static C:\MCC18\v3_39\src\extended\stdclib\vfprintf.c
+                   __pa_8   0x000fa6    program     static C:\MCC18\v3_39\src\extended\stdclib\vfprintf.c
+                   __pa_9   0x000fb8    program     static C:\MCC18\v3_39\src\extended\stdclib\vfprintf.c
+                  __pa_10   0x000fc4    program     static C:\MCC18\v3_39\src\extended\stdclib\vfprintf.c
+                  __pa_11   0x000fd4    program     static C:\MCC18\v3_39\src\extended\stdclib\vfprintf.c
+                  __pa_12   0x000fe4    program     static C:\MCC18\v3_39\src\extended\stdclib\vfprintf.c
+                  __pa_13   0x000ff2    program     static C:\MCC18\v3_39\src\extended\stdclib\vfprintf.c
+                  __pa_14   0x001010    program     static C:\MCC18\v3_39\src\extended\stdclib\vfprintf.c
+                  __pa_15   0x00101a    program     static C:\MCC18\v3_39\src\extended\stdclib\vfprintf.c
+                  __pa_16   0x001020    program     static C:\MCC18\v3_39\src\extended\stdclib\vfprintf.c
+                  __pa_17   0x001030    program     static C:\MCC18\v3_39\src\extended\stdclib\vfprintf.c
+                  __pa_18   0x00103c    program     static C:\MCC18\v3_39\src\extended\stdclib\vfprintf.c
+                  __pa_19   0x00104a    program     static C:\MCC18\v3_39\src\extended\stdclib\vfprintf.c
+                  __pa_20   0x001054    program     static C:\MCC18\v3_39\src\extended\stdclib\vfprintf.c
+                  __pa_21   0x00105e    program     static C:\MCC18\v3_39\src\extended\stdclib\vfprintf.c
+                  __pa_22   0x001068    program     static C:\MCC18\v3_39\src\extended\stdclib\vfprintf.c
+                  __pa_23   0x001076    program     static C:\MCC18\v3_39\src\extended\stdclib\vfprintf.c
+               modulo_inc   0x00107c    program     extern /fujitsu/nidaq700/mx_test/ringbufs.c
+               modulo_dec   0x001096    program     extern /fujitsu/nidaq700/mx_test/ringbufs.c
+            ringBufS_init   0x0010b0    program     extern /fujitsu/nidaq700/mx_test/ringbufs.c
+           ringBufS_empty   0x0010ca    program     extern /fujitsu/nidaq700/mx_test/ringbufs.c
+            ringBufS_full   0x0010da    program     extern /fujitsu/nidaq700/mx_test/ringbufs.c
+             ringBufS_get   0x0010f4    program     extern /fujitsu/nidaq700/mx_test/ringbufs.c
+             ringBufS_put   0x001152    program     extern /fujitsu/nidaq700/mx_test/ringbufs.c
+           ringBufS_flush   0x0011a4    program     extern /fujitsu/nidaq700/mx_test/ringbufs.c
+                   __pa_0   0x0011d8    program     static /fujitsu/nidaq700/mx_test/ringbufs.c
+                   __pa_1   0x0011e0    program     static /fujitsu/nidaq700/mx_test/ringbufs.c
+                   __pa_2   0x0011e6    program     static /fujitsu/nidaq700/mx_test/ringbufs.c
+                   __pa_3   0x0011ee    program     static /fujitsu/nidaq700/mx_test/ringbufs.c
+                   __pa_4   0x0011f8    program     static /fujitsu/nidaq700/mx_test/ringbufs.c
+                   __pa_5   0x001200    program     static /fujitsu/nidaq700/mx_test/ringbufs.c
+                   __pa_6   0x001208    program     static /fujitsu/nidaq700/mx_test/ringbufs.c
+                   __pa_7   0x001216    program     static /fujitsu/nidaq700/mx_test/ringbufs.c
+                   __pa_8   0x001224    program     static /fujitsu/nidaq700/mx_test/ringbufs.c
+                   __pa_9   0x001230    program     static /fujitsu/nidaq700/mx_test/ringbufs.c
+                  __pa_10   0x00123a    program     static /fujitsu/nidaq700/mx_test/ringbufs.c
+                  __pa_11   0x001242    program     static /fujitsu/nidaq700/mx_test/ringbufs.c
+                  __pa_12   0x00124c    program     static /fujitsu/nidaq700/mx_test/ringbufs.c
+                  __pa_13   0x001256    program     static /fujitsu/nidaq700/mx_test/ringbufs.c
+                 SETUPSTK   0x001260    program     static C:\MCC18\v3_39\src\extended\math\div32u.asm
+                 __div32u   0x001278    program     extern C:\MCC18\v3_39\src\extended\math\div32u.asm
+                 __mod32u   0x00127e    program     extern C:\MCC18\v3_39\src\extended\math\div32u.asm
+            _early32uexit   0x001282    program     extern C:\MCC18\v3_39\src\extended\math\div32u.asm
+                divmod32u   0x001284    program     static C:\MCC18\v3_39\src\extended\math\div32u.asm
+                     loop   0x001292    program     static C:\MCC18\v3_39\src\extended\math\div32u.asm
+                   _false   0x0012c6    program     static C:\MCC18\v3_39\src\extended\math\div32u.asm
+              RETQUOTIENT   0x0012e6    program     static C:\MCC18\v3_39\src\extended\math\div32u.asm
+                  RESTORE   0x0012f6    program     static C:\MCC18\v3_39\src\extended\math\div32u.asm
+                  __mul32   0x001304    program     extern C:\MCC18\v3_39\src\extended\math\mul32.asm
+               __string_5   0x0013a6    program     static /fujitsu/nidaq700/mx_test/SlaveO.c
+               __string_4   0x0013db    program     static /fujitsu/nidaq700/mx_test/SlaveO.c
+               __string_3   0x0013fe    program     static /fujitsu/nidaq700/mx_test/SlaveO.c
+               __string_2   0x001426    program     static /fujitsu/nidaq700/mx_test/SlaveO.c
+               __string_1   0x001455    program     static /fujitsu/nidaq700/mx_test/SlaveO.c
+               __string_0   0x00145e    program     static /fujitsu/nidaq700/mx_test/SlaveO.c
+                _do_cinit   0x00146a    program     extern C:\MCC18\v3_39\src\extended\startup\c018iz_e.c
+                     test   0x001484    program     static                          
+                copy_loop   0x0014dc    program     static                          
+            copy_one_byte   0x0014e2    program     static                          
+             done_copying   0x0014f0    program     static                          
+                     done   0x001506    program     static                          
+       ___return_lbl00002   0x001506    program     static                          
+                   memset   0x001508    program     extern C:\MCC18\v3_39\src\extended\stdclib\memset.asm
+                    jLoop   0x00151c    program     static C:\MCC18\v3_39\src\extended\stdclib\memset.asm
+              _2jContinue   0x001528    program     static C:\MCC18\v3_39\src\extended\stdclib\memset.asm
+                   _3jEnd   0x001532    program     static C:\MCC18\v3_39\src\extended\stdclib\memset.asm
+                     jEnd   0x00153a    program     static C:\MCC18\v3_39\src\extended\stdclib\memset.asm
+                   strlen   0x00153c    program     extern C:\MCC18\v3_39\src\extended\stdclib\strlen.asm
+                    jLoop   0x00154c    program     static C:\MCC18\v3_39\src\extended\stdclib\strlen.asm
+                     jEnd   0x001556    program     static C:\MCC18\v3_39\src\extended\stdclib\strlen.asm
+                strlenpgm   0x001558    program     extern C:\MCC18\v3_39\src\extended\stdclib\slenpgm.asm
+                    jLoop   0x001576    program     static C:\MCC18\v3_39\src\extended\stdclib\slenpgm.asm
+                   _2jEnd   0x00158c    program     static C:\MCC18\v3_39\src\extended\stdclib\slenpgm.asm
+                     jEnd   0x00158e    program     static C:\MCC18\v3_39\src\extended\stdclib\slenpgm.asm
+               Open2USART   0x0015a2    program     extern C:\MCC18\v3_39\src\pmc_common\USART\u2open.c
+                  sprintf   0x001614    program     extern C:\MCC18\v3_39\src\extended\stdclib\sprintf.c
+                     putc   0x001686    program     extern C:\MCC18\v3_39\src\extended\stdclib\putc.c
+                  OpenSPI   0x0016ec    program     extern C:\MCC18\v3_39\src\pmc_common\SPI\spi_open.c
+              putrs2USART   0x00174e    program     extern C:\MCC18\v3_39\src\pmc_common\USART\u2putrs.c
+                  OpenADC   0x0017aa    program     extern C:\MCC18\v3_39\src\pmc_common\ADC\adcopen.c
+               OpenTimer1   0x001802    program     extern C:\MCC18\v3_39\src\pmc_common\Timers\t1open.c
+               puts2USART   0x001850    program     extern C:\MCC18\v3_39\src\pmc_common\USART\u2puts.c
+               OpenTimer0   0x001896    program     extern C:\MCC18\v3_39\src\pmc_common\Timers\t0open.c
+              WriteTimer1   0x0018cc    program     extern C:\MCC18\v3_39\src\pmc_common\Timers\t1write.c
+              WriteTimer0   0x0018fc    program     extern C:\MCC18\v3_39\src\pmc_common\Timers\t0write.c
+              Write2USART   0x00192c    program     extern C:\MCC18\v3_39\src\pmc_common\USART\u2write.c
+                  isdigit   0x00195a    program     extern C:\MCC18\v3_39\src\extended\stdclib\isdigit.asm
+                   jMatch   0x00197a    program     static C:\MCC18\v3_39\src\extended\stdclib\isdigit.asm
+                 jNoMatch   0x00197c    program     static C:\MCC18\v3_39\src\extended\stdclib\isdigit.asm
+            __zero_memory   0x00197e    program     extern C:\MCC18\v3_39\src\extended\proc\p18F45K80.asm
+               zero_block   0x00198c    program     static C:\MCC18\v3_39\src\extended\proc\p18F45K80.asm
+                   loop_h   0x00198c    program     static C:\MCC18\v3_39\src\extended\proc\p18F45K80.asm
+                compare_l   0x001994    program     static C:\MCC18\v3_39\src\extended\proc\p18F45K80.asm
+                   loop_l   0x001996    program     static C:\MCC18\v3_39\src\extended\proc\p18F45K80.asm
+                 _startup   0x00199e    program     extern C:\MCC18\v3_39\src\extended\startup\c018iz_e.c
+                     loop   0x0019b0    program     static                          
+       ___return_lbl00001   0x0019ba    program     static                          
+              _usart_putc   0x0019bc    program     extern C:\MCC18\v3_39\src\pmc_common\USART\_usartpc.asm
+                     loop   0x0019cc    program     static C:\MCC18\v3_39\src\pmc_common\USART\_usartpc.asm
+                 s_digits   0x0019d8    program     static C:\MCC18\v3_39\src\extended\stdclib\vfprintf.c
                __config_0   0x300000    program     static /fujitsu/nidaq700/mx_test/SlaveO.c
                __config_1   0x300001    program     static /fujitsu/nidaq700/mx_test/SlaveO.c
                __config_2   0x300002    program     static /fujitsu/nidaq700/mx_test/SlaveO.c

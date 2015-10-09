@@ -150,7 +150,7 @@ static void DelaySPI(WORD delay, int srq)
 		OpenCoreTimer(500000 / 2000);
 		INTRestoreInterrupts(int_status);
 		mCTClearIntFlag();
-		while (!mCTGetIntFlag());
+		while (!mCTGetIntFlag() && !spi_flag); // timeout or SRQ flag set
 	}
 DelaySPI_exit:
 	mCTClearIntFlag();
@@ -584,6 +584,7 @@ unsigned int SpiIOPoll(unsigned int lamp)
 /*
  * Need a delay for remote SPI processing
  */
+	spi_flag = LOW; // reset the SRQ flag
 	p_switch[0] = xmit_spi_bus(SPI_CMD_RW, 1);
 	p_switch[1] = xmit_spi_bus(lamp, 1);
 	p_switch[2] = xmit_spi_bus(lamp, 1);
@@ -594,7 +595,7 @@ int SpiADCRead(unsigned char channel)
 {
 	V.adc_count++;
 	xmit_spi_bus(CMD_DUMMY_CFG, 1);
-	spi_flag = HIGH;
+	spi_flag = HIGH; // don't wait
 	cmd_response_port = xmit_spi_bus(CMD_ADC_GO_H | (channel & 0x0f), 1);
 	DelaySPI(50, HIGH); // delay for adc conversion time and look for SRQ signal
 	cmd_data[0] = xmit_spi_bus(CMD_ADC_DATA, 1);
