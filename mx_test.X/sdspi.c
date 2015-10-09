@@ -581,10 +581,12 @@ unsigned char SpiStringWrite(char* data)
 unsigned int SpiIOPoll(unsigned int lamp)
 {
 	unsigned char p_switch[3];
-
-	p_switch[0] = xmit_spi_bus(SPI_CMD_RW, 0);
-	p_switch[1] = xmit_spi_bus(lamp, 0);
-	p_switch[2] = xmit_spi_bus(lamp, 0);
+/*
+ * Need a delay for remote SPI processing
+ */
+	p_switch[0] = xmit_spi_bus(SPI_CMD_RW, 1);
+	p_switch[1] = xmit_spi_bus(lamp, 1);
+	p_switch[2] = xmit_spi_bus(lamp, 1);
 	return p_switch[1];
 }
 
