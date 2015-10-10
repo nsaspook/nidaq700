@@ -447,7 +447,7 @@ void InterruptHandlerHigh(void)
 		/*
 		 * The master has sent a data RW command
 		 */
-		if (data_in2 == (SPI_CMD_RW || SPI_CMD_R_ONLY) && !S.frame) {
+		if ((data_in2 == SPI_CMD_RW) && !S.frame) {
 			LATBbits.LATB2 = 1;
 			S.frame = TRUE; // set the inprogress flag
 			S.seq = 0;
@@ -823,7 +823,7 @@ void main(void) /* SPI Master/Slave loopback */
 		if (spi_comm.REMOTE_LINK) {
 			wdtdelay(600000, TRUE);
 		} else {
-			wdtdelay(600000, FALSE);
+			wdtdelay(600000, TRUE);
 		}
 		sprintf(comm_stat_buffer, "\r\n  count %lu, adc %lu, data %lu, char %lu, comm %lu", report_stat.slave_int_count,
 			report_stat.adc_count, report_stat.port_count, report_stat.char_count, report_stat.comm_count);

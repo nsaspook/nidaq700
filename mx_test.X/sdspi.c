@@ -150,6 +150,7 @@ static void DelaySPI(WORD delay, int srq)
 		OpenCoreTimer(500000 / 2000);
 		INTRestoreInterrupts(int_status);
 		mCTClearIntFlag();
+		//				while (!mCTGetIntFlag()); // timeout
 		while (!mCTGetIntFlag() && !spi_flag); // timeout or SRQ flag set
 	}
 DelaySPI_exit:
@@ -162,7 +163,7 @@ DelaySPI_exit:
 
 /*-----------------------------------------------------------------------*/
 
-unsigned char xmit_spi_bus(unsigned char dat, WORD pace)
+unsigned char xmit_spi_bus(unsigned char dat, WORD pace, WORD srq)
 {
 	unsigned char rec_buffer;
 
@@ -170,7 +171,7 @@ unsigned char xmit_spi_bus(unsigned char dat, WORD pace)
 	SpiChnPutC(BUS_CHAN, dat); // Send data on the master channel, SPI2
 	while (SpiChnIsBusy(BUS_CHAN));
 	rec_buffer = SpiChnGetC(BUS_CHAN); // Get the received data
-	DelaySPI(pace, HIGH);
+	DelaySPI(pace, srq);
 	return rec_buffer; // Get the received data
 }
 
@@ -183,7 +184,7 @@ unsigned char xmit_spi_bus(unsigned char dat, WORD pace)
 unsigned char rcvr_spi_bus(void)
 {
 	V.spi_count++;
-	return xmit_spi_bus(0xff, 0);
+	return xmit_spi_bus(0xff, 0, HIGH);
 }
 
 /*-----------------------------------------------------------------------*/
@@ -581,43 +582,43 @@ unsigned char SpiStringWrite(char* data)
 unsigned int SpiIOPoll(unsigned int lamp)
 {
 	unsigned char p_switch[3];
-/*
- * Need a delay for remote SPI processing
- */
+	/*
+	 * Need a delay for remote SPI processing
+	 */
 	spi_flag = LOW; // reset the SRQ flag
-	p_switch[0] = xmit_spi_bus(SPI_CMD_RW, 1);
-	p_switch[1] = xmit_spi_bus(lamp, 1);
-	p_switch[2] = xmit_spi_bus(lamp, 1);
+	p_switch[0] = xmit_spi_bus(SPI_CMD_RW, 1, LOW);
+	p_switch[1] = xmit_spi_bus(lamp, 1, LOW);
+	p_switch[2] = xmit_spi_bus(lamp, 1, LOW);
 	return p_switch[1];
 }
 
 int SpiADCRead(unsigned char channel)
 {
 	V.adc_count++;
-	xmit_spi_bus(CMD_DUMMY_CFG, 1);
+	xmit_spi_bus(CMD_DUMMY_CFG, 1, HIGH);
 	spi_flag = HIGH; // don't wait
-	cmd_response_port = xmit_spi_bus(CMD_ADC_GO_H | (channel & 0x0f), 1);
+	cmd_response_port = xmit_spi_bus(CMD_ADC_GO_H | (channel & 0x0f), 1, HIGH);
 	DelaySPI(50, HIGH); // delay for adc conversion time and look for SRQ signal
-	cmd_data[0] = xmit_spi_bus(CMD_ADC_DATA, 1);
-	cmd_data[1] = xmit_spi_bus(CMD_DUMMY_CFG, 1);
+	cmd_data[0] = xmit_spi_bus(CMD_ADC_DATA, 1, HIGH);
+	cmd_data[1] = xmit_spi_bus(CMD_DUMMY_CFG, 1, HIGH);
 	return(short int) (cmd_data[0] | (cmd_data[1] << 8)); /* use the short to make this a signed type */
 }
 
 unsigned char SpiPortWrite(unsigned char data)
 {
 	V.data_count++;
-	xmit_spi_bus(CMD_DUMMY_CFG, 1);
-	cmd_response_port = xmit_spi_bus(CMD_PORT_GO | (data & 0x0f), 1);
-	cmd_data[1] = xmit_spi_bus(CMD_PORT_DATA | ((data >> 4) &0x0f), 1);
+	xmit_spi_bus(CMD_DUMMY_CFG, 1, HIGH);
+	cmd_response_port = xmit_spi_bus(CMD_PORT_GO | (data & 0x0f), 1, HIGH);
+	cmd_data[1] = xmit_spi_bus(CMD_PORT_DATA | ((data >> 4) &0x0f), 1, HIGH);
 	return cmd_data[1];
 }
 
 unsigned char SpiSerialWrite(unsigned char data)
 {
 	V.char_count++;
-	xmit_spi_bus(CMD_DUMMY_CFG, 1);
-	cmd_response_char = xmit_spi_bus(CMD_CHAR_GO | (data & 0x0f), 1);
-	cmd_data[0] = xmit_spi_bus(CMD_CHAR_DATA | ((data >> 4) &0x0f), 1);
+	xmit_spi_bus(CMD_DUMMY_CFG, 1, HIGH);
+	cmd_response_char = xmit_spi_bus(CMD_CHAR_GO | (data & 0x0f), 1, HIGH);
+	cmd_data[0] = xmit_spi_bus(CMD_CHAR_DATA | ((data >> 4) &0x0f), 1, HIGH);
 	return cmd_data[0];
 }
 
@@ -632,20 +633,20 @@ int SpiSerialReadOk(void)
 
 int SpiSerialReadReady(void)
 {
-	cmd_response_char = xmit_spi_bus(CMD_DUMMY_CFG, 1);
+	cmd_response_char = xmit_spi_bus(CMD_DUMMY_CFG, 1, HIGH);
 	if (cmd_response_char & UART_DUMMY_MASK) return TRUE;
 	return FALSE;
 }
 
 unsigned char SpiSerialGetChar(void)
 {
-	cmd_response_char = xmit_spi_bus(CMD_CHAR_RX, 1);
-	return xmit_spi_bus(CMD_DUMMY_CFG, 1);
+	cmd_response_char = xmit_spi_bus(CMD_CHAR_RX, 1, HIGH);
+	return xmit_spi_bus(CMD_DUMMY_CFG, 1, HIGH);
 }
 
 int SpiStatus(void)
 {
-	cmd_response_char = xmit_spi_bus(CMD_DUMMY_CFG, 1);
+	cmd_response_char = xmit_spi_bus(CMD_DUMMY_CFG, 1, HIGH);
 	if (cmd_response_char != 0xff) return TRUE;
 	return FALSE;
 }

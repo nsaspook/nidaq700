@@ -16,7 +16,7 @@ DWORD get_fattime(void);
 void RTC_Init();
 int MMC_get_volume_info(void); // Read card info
 void init_spi_ports(void); // open spi ports and config
-unsigned char xmit_spi_bus(unsigned char, WORD); // Send 1 byte to SPI2 and delay if needed
+unsigned char xmit_spi_bus(unsigned char, WORD, WORD); // Send 1 byte to SPI2 and delay or wait for SRQ if needed
 unsigned char rcvr_spi_bus(void); // Receive 1 byte from SPI2
 unsigned char xmit_spi_sdcard(unsigned char); // Send 1 byte to card, SPI1
 unsigned char rcvr_spi_sdcard(void); // Receive 1 byte from card, SPI1

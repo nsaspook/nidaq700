@@ -6,8 +6,6 @@
         <group name="MBMC">
             <file>file:/fujitsu/nidaq700/mx_test.X/sdspi.c</file>
             <file>file:/fujitsu/nidaq700/mx_test.X/mx_test_defs.h</file>
-            <file>file:/fujitsu/nidaq700/mx_test.X/sdspi.h</file>
-            <file>file:/sdd/opt/microchip/xc32/v1.40/pic32mx/include/peripheral/spi_1xx_2xx.h</file>
             <file>file:/fujitsu/nidaq700/mx_test.X/test_main.c</file>
         </group>
     </open-files>
