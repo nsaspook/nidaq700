@@ -218,10 +218,10 @@ int main(void)
 	while (1) {
 		eresult = SpiIOPoll(0x12);
 		sprintf(comm_buffer, " IO Poll %i \r\n", eresult);
-		if (eresult & 0x01)
+//		if (eresult & 0x01)
 			SpiStringWrite(comm_buffer);
-//		V.Timer1 = update_rate;
-//		while (V.Timer1);
+		V.Timer1 = update_rate;
+		while (V.Timer1);
 	}
 
 	/* Create destination file on the drive 1 */
