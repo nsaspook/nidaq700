@@ -309,7 +309,7 @@ struct spi_stat_type {
 	char_count, char_error_count,
 	slave_int_count, last_slave_int_count,
 	comm_count;
-	volatile uint8_t comm_ok;
+	volatile uint8_t comm_ok, reconfig, reconfig_id;
 };
 
 struct serial_bounce_buffer_type {
@@ -449,6 +449,10 @@ void InterruptHandlerHigh(void)
 		 */
 		if ((data_in2 == SPI_CMD_RW) && !S.frame) {
 			LATBbits.LATB2 = 1;
+			if (spi_stat.reconfig_id == 0) {
+				spi_stat.reconfig_id = 1;
+				spi_stat.reconfig = TRUE;
+			}
 			S.frame = TRUE; // set the inprogress flag
 			S.seq = 0;
 			b_tmp.button = P.button;
@@ -580,8 +584,12 @@ void work_handler(void)
 		P.button.button3 = PORTDbits.RD3;
 		P.button.button4 = PORTDbits.RD4;
 		P.button.button5 = PORTDbits.RD5;
-		P.button.button6 = PORTDbits.RD6;
-		P.button.button7 = PORTDbits.RD7;
+
+		P.button.button6 = 0;
+		P.button.button7 = 0;
+
+		//		P.button.button6 = PORTDbits.RD6;
+		//		P.button.button7 = PORTDbits.RD7;
 		if (!S.frame) {
 			b_tmp.button = P.button;
 			SSPBUF = b_tmp.b_byte[0]; // preload the first byte into the SPI buffer
@@ -611,6 +619,7 @@ void wdtdelay(unsigned long delay, unsigned char clearit)
 
 void config_pic_io(void)
 {
+	spi_stat.reconfig_id = 1;
 	if (RCONbits.TO == (uint8_t) LOW) WDT_TO = TRUE;
 	if (EECON1bits.WRERR && (EECON1bits.EEPGD == (uint8_t) LOW)) EEP_ER = TRUE;
 	/*
@@ -640,6 +649,17 @@ void config_pic_io(void)
 
 	/* setup the SPI interface */
 	OpenSPI(SLV_SSON, MODE_00, SMPMID); // Must be SMPMID in slave mode
+
+	/* RS-232 #2 TX/RX setup */
+	TRISDbits.TRISD6 = 0; // digital output,TX
+	TRISDbits.TRISD7 = 1; // digital input, RX
+	/*
+	 * Open the USART configured as
+	 * 8N1, 19200 baud,  polled mode
+	 */
+	Open2USART(USART_TX_INT_OFF & USART_RX_INT_OFF & USART_ASYNCH_MODE & USART_EIGHT_BIT & USART_CONT_RX & USART_BRGH_LOW, 51); // 64mhz osc
+	SPBRGH2 = 0x00;
+	SPBRG2 = 51;
 
 	/* System activity timer */
 	OpenTimer0(TIMER_INT_ON & T0_16BIT & T0_SOURCE_INT & T0_PS_1_256);
@@ -677,6 +697,9 @@ void config_pic(void)
 {
 	unsigned char dump;
 
+	spi_stat.reconfig_id = 0;
+	if (RCONbits.TO == (uint8_t) LOW) WDT_TO = TRUE;
+	if (EECON1bits.WRERR && (EECON1bits.EEPGD == (uint8_t) LOW)) EEP_ER = TRUE;
 	spi_comm.tx1 = &ring_buf1;
 	spi_comm.rx1 = &ring_buf2;
 	ringBufS_init(spi_comm.tx1);
@@ -769,11 +792,25 @@ void config_pic(void)
 	dump = RCREG2;
 	/* Enable all high priority interrupts */
 	INTCONbits.GIEH = 1;
-	INTCONbits.GIEL = HIGH;
+	INTCONbits.GIEL = LOW;
 #endif
 	/* clear any SSP error bits */
 	SSPCON1bits.WCOL = SSPCON1bits.SSPOV = LOW;
 
+}
+
+void check_config(void)
+{
+	if (spi_stat.reconfig) {
+		INTCONbits.GIEH = 0;
+		INTCONbits.GIEL = 0;
+		spi_stat.reconfig = FALSE;
+		if (spi_stat.reconfig_id == 0) {
+			config_pic();
+		} else {
+			config_pic_io();
+		}
+	}
 }
 
 void main(void) /* SPI Master/Slave loopback */
@@ -785,7 +822,10 @@ void main(void) /* SPI Master/Slave loopback */
 	spi_stat.comm_ok = FALSE;
 	spi_comm.REMOTE_LINK = TRUE;
 
-	config_pic(); // setup the slave for work
+	spi_stat.reconfig = TRUE;
+	spi_stat.reconfig_id = 0;
+	check_config();
+
 	wdtdelay(500, TRUE); // short delay after boot
 	putrs2USART("\r\r\r\r\r\r\n #### \x1b[7m SPI Slave Ready! \x1b[0m ####\r\n");
 	putrs2USART(" #### \x1b[7m SPI Slave Ready! \x1b[0m ####\r\n");
@@ -795,12 +835,15 @@ void main(void) /* SPI Master/Slave loopback */
 
 	while (1) { // just loop
 
+		check_config();
+
 		if (SSPCON1bits.WCOL || SSPCON1bits.SSPOV) { // check for overruns/collisions
 			SSPCON1bits.WCOL = SSPCON1bits.SSPOV = 0;
 			spi_stat.adc_error_count = spi_stat.adc_count - spi_stat.adc_error_count;
 			spi_stat.port_error_count = spi_stat.port_count - spi_stat.port_error_count;
 			sprintf(comm_stat_buffer, "\r\n  error count: adc %lu, port %lu", report_stat.adc_error_count, report_stat.port_error_count);
-			puts2USART(comm_stat_buffer);
+			if (spi_stat.reconfig_id == 0)
+				puts2USART(comm_stat_buffer);
 		}
 		if (RCSTA2bits.OERR || RCSTA2bits.FERR) {
 			if (RCSTA2bits.FERR) {
@@ -827,8 +870,8 @@ void main(void) /* SPI Master/Slave loopback */
 		}
 		sprintf(comm_stat_buffer, "\r\n  count %lu, adc %lu, data %lu, char %lu, comm %lu", report_stat.slave_int_count,
 			report_stat.adc_count, report_stat.port_count, report_stat.char_count, report_stat.comm_count);
-		puts2USART(comm_stat_buffer);
-		//		SRQ = !SRQ;
+		if (spi_stat.reconfig_id == 0)
+			puts2USART(comm_stat_buffer);
 	}
 
 }
