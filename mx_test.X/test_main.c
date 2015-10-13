@@ -5,7 +5,7 @@
  *		0.2	Start to swap the SPI ports so the buss can be 5v tolerant using PPS ports
  *
  * External Slave connections
- * Slave #1 select pin: B3
+ * Slave #1 select pin: B0 pin 4, B1 pin 5, B3 pin 7
  * Slave #2 select pin: A3
  *
  * Slave1 Inputs struct INBITS
