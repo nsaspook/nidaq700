@@ -39,8 +39,7 @@ volatile static struct timeval current_time;
 
 /*-----------------------------------------------------------------------*/
 
-static
-int wait_ready(void)
+static int wait_ready(void)
 {
 	BYTE d;
 
@@ -58,16 +57,26 @@ void sd_deselect(void)
 	xmit_spi_sdcard(0xFF); /* Dummy clock (force DO hi-z for multiple slave SPI) */
 }
 
+/*
+ * return TRUE on select (proper response to dummies from card)
+ */
 int sd_select(void)
 {
 	mPORTBClearBits(BIT_2); // select
 	xmit_spi_sdcard(0xFF); /* Dummy clock (force DO enabled) */
 
-	if (wait_ready()) return 1; /* OK */
-	sd_deselect();
-	return 0; /* Timeout */
+	if (wait_ready()) {
+		return 1; /* OK */
+	} else {
+		sd_deselect(); /* bad response, no card? */
+		return 0; /* Timeout */
+	}
 }
 
+/*
+ *  B3 is the slave (de)select bit for the address decoder 74HC138
+ *  B0|B1 are the address bits for the slave [0..2] for 4 possible devices on the bus
+ */
 void ps_deselect(void)
 {
 	mPORTBSetBits(BIT_3); // deselect
@@ -76,7 +85,7 @@ void ps_deselect(void)
 
 void ps_select(int ps_id)
 {
-	mPORTASetBits(BIT_3); // deselect
+	mPORTASetBits(BIT_3); // deselect move cs signal out of the device range
 	mPORTBSetBits(BIT_0 | BIT_1); // set address
 	switch (ps_id) {
 	case 0:
@@ -96,7 +105,7 @@ void ps_select(int ps_id)
 	default:
 		return;
 	}
-	mPORTBClearBits(BIT_3); // clear enable bit
+	mPORTBClearBits(BIT_3); // clear enable bit to move cs bit into the device range
 }
 
 /*
@@ -558,6 +567,7 @@ unsigned char SpiStringWrite(char* data)
 {
 	unsigned int i, len, ret_char, tmp_char;
 
+	ps_select(0);
 	len = strlen(data);
 	if (len > MAXSTRLEN) len = MAXSTRLEN - 2;
 	if (len) {
@@ -585,15 +595,17 @@ unsigned int SpiIOPoll(unsigned int lamp)
 	/*
 	 * Need a delay for remote SPI processing
 	 */
+	ps_select(1);
 	spi_flag = LOW; // reset the SRQ flag
 	p_switch[0] = xmit_spi_bus(SPI_CMD_RW, 1, LOW);
 	p_switch[1] = xmit_spi_bus(lamp, 1, LOW);
 	p_switch[2] = xmit_spi_bus(lamp, 1, LOW);
-	return p_switch[1]+(p_switch[2]<<8);
+	return p_switch[1]+(p_switch[2] << 8);
 }
 
 int SpiADCRead(unsigned char channel)
 {
+	ps_select(0);
 	V.adc_count++;
 	xmit_spi_bus(CMD_DUMMY_CFG, 1, HIGH);
 	spi_flag = HIGH; // don't wait
@@ -606,6 +618,7 @@ int SpiADCRead(unsigned char channel)
 
 unsigned char SpiPortWrite(unsigned char data)
 {
+	ps_select(0);
 	V.data_count++;
 	xmit_spi_bus(CMD_DUMMY_CFG, 1, HIGH);
 	cmd_response_port = xmit_spi_bus(CMD_PORT_GO | (data & 0x0f), 1, HIGH);
@@ -615,6 +628,7 @@ unsigned char SpiPortWrite(unsigned char data)
 
 unsigned char SpiSerialWrite(unsigned char data)
 {
+	ps_select(0);
 	V.char_count++;
 	xmit_spi_bus(CMD_DUMMY_CFG, 1, HIGH);
 	cmd_response_char = xmit_spi_bus(CMD_CHAR_GO | (data & 0x0f), 1, HIGH);
@@ -624,6 +638,7 @@ unsigned char SpiSerialWrite(unsigned char data)
 
 int SpiSerialReadOk(void)
 {
+	ps_select(0);
 	if (valid_rec_char) {
 		valid_rec_char = FALSE;
 		return TRUE;
@@ -633,6 +648,7 @@ int SpiSerialReadOk(void)
 
 int SpiSerialReadReady(void)
 {
+	ps_select(0);
 	cmd_response_char = xmit_spi_bus(CMD_DUMMY_CFG, 1, HIGH);
 	if (cmd_response_char & UART_DUMMY_MASK) return TRUE;
 	return FALSE;
@@ -640,12 +656,14 @@ int SpiSerialReadReady(void)
 
 unsigned char SpiSerialGetChar(void)
 {
+	ps_select(0);
 	cmd_response_char = xmit_spi_bus(CMD_CHAR_RX, 1, HIGH);
 	return xmit_spi_bus(CMD_DUMMY_CFG, 1, HIGH);
 }
 
 int SpiStatus(void)
 {
+	ps_select(0);
 	cmd_response_char = xmit_spi_bus(CMD_DUMMY_CFG, 1, HIGH);
 	if (cmd_response_char != 0xff) return TRUE;
 	return FALSE;
@@ -668,7 +686,9 @@ void SpiInitDevice2(SpiChannel chn, int speed)
 void init_spi_ports(void)
 {
 	SpiInitDevice1(SDCARD_CHAN, 16); // Initialize the SPI channel 1 as master. slow SCK for SDCARD init
+
 	SpiInitDevice2(BUS_CHAN, 2); // Initialize the SPI channel 2 as master, 2.083 mhz SCK
+	ps_select(0);
 }
 
 DRESULT MMC_disk_ioctl(BYTE cmd, void *buff)
