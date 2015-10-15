@@ -575,14 +575,14 @@ unsigned char SpiStringWrite(char* data)
 		if (SpiSerialReadReady()) { // ready status
 			valid_rec_char = TRUE;
 		}
-		DelaySPI(60, LOW);
+		DelaySPI(52, LOW);
 		for (i = 1; i <= len; i++) {
 			tmp_char = SpiSerialWrite(data[i]);
 			if (SpiSerialReadReady()) { // ready status
 				valid_rec_char = TRUE;
 				ret_char = tmp_char;
 			}
-			DelaySPI(55, LOW);
+			DelaySPI(52, LOW);
 		}
 		return ret_char;
 	}

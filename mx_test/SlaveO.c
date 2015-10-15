@@ -421,7 +421,7 @@ void InterruptHandlerHigh(void)
 		S.timeout = 3;
 
 		/*
-		 * We are processing the Master CMD request
+		 * We are processing the Master I/O CMD request
 		 */
 		if (S.frame) {
 			switch (S.seq) {
