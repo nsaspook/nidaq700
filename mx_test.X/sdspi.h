@@ -42,7 +42,7 @@ extern int cmd_response, cmd_response_char, cmd_response_port, SD_NOTRDY;
 extern int cmd_data[3];
 extern volatile struct V_data V;
 extern union Obits2 LEDS;
-extern volatile int32_t spi_flag;
+extern volatile int32_t spi_flag, spi_flag0, spi_flag1;
 
 #endif /* SDSPI_H_INCLUDED */
 
