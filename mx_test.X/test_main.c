@@ -147,7 +147,7 @@ int main(void)
 	SDEV_TYPE1 S1 = {0}, *S1_p = &S1;
 	char comm_buffer[MAXSTRLEN];
 	int update_rate = 4;
-	int eresult = 0, records = 0, file_errors = 0, presult;
+	int file_result = 0, records = 0, file_errors = 0, io_result;
 	double Vval, Vcal0;
 
 	// Init remote device data
@@ -203,9 +203,9 @@ int main(void)
 	// send some text to clean the buffers
 	SpiStringWrite("\r\n                                                                              \n\r");
 
-	eresult = f_mount(&FatFs, "0:", 1);
-	if (eresult) {
-		sprintf(comm_buffer, "\r\n Mount error %i ", eresult);
+	file_result = f_mount(&FatFs, "0:", 1);
+	if (file_result) {
+		sprintf(comm_buffer, "\r\n Mount error %i ", file_result);
 		SpiStringWrite(comm_buffer); /* Register work area to the logical drive 1 */
 		blink_led(GREEN_LED, LED_OFF, FALSE);
 		blink_led(RED_LED, LED_ON, FALSE);
@@ -216,12 +216,12 @@ int main(void)
 	}
 
 	/* Create destination file on the drive 1 */
-	eresult = f_open(&File[0], "0:logfile.txt", FA_CREATE_ALWAYS | FA_WRITE);
+	file_result = f_open(&File[0], "0:logfile.txt", FA_CREATE_ALWAYS | FA_WRITE);
 
 	while (1) { // loop and move data
 
-		presult = SpiIOPoll(0x12);
-		sprintf(comm_buffer, " IO Poll %i \r\n", presult);
+		io_result = SpiIOPoll(0x12);
+		sprintf(comm_buffer, " IO Poll %i \r\n", io_result);
 		//		if (presult & 0x01)
 		SpiStringWrite(comm_buffer);
 
@@ -252,7 +252,7 @@ int main(void)
 		}
 		a = 0;
 
-		if (((records % 100)) == 0 && !eresult) {
+		if (((records % 100)) == 0 && !file_result) {
 			Vval = S1_p->adc_data[0];
 			Vcal0 = ((Vval / ADSCALE * ADREF) + ADOFFSET) * ADGAIN;
 			if (S1_p->char_ready) {
@@ -281,9 +281,9 @@ int main(void)
 						SpiStringWrite("/\r\n Mounting Disk ");
 						S1_p->obits.out_bits.eject_led = ON;
 						S1_p->ibits.in_byte = SpiPortWrite(S1_p->obits.out_byte);
-						eresult = f_mount(&FatFs, "0:", 1);
-						if (eresult) {
-							sprintf(comm_buffer, "\r\n Mount error %i ", eresult);
+						file_result = f_mount(&FatFs, "0:", 1);
+						if (file_result) {
+							sprintf(comm_buffer, "\r\n Mount error %i ", file_result);
 							SpiStringWrite(comm_buffer); /* Register work area to the logical drive 1 */
 							blink_led(GREEN_LED, LED_OFF, FALSE);
 							blink_led(RED_LED, LED_ON, FALSE);
@@ -293,7 +293,7 @@ int main(void)
 							blink_led(GREEN_LED, LED_ON, TRUE);
 						}
 						/* Create destination file on the drive 1 */
-						eresult = f_open(&File[0], "0:logfile.txt", FA_CREATE_ALWAYS | FA_WRITE);
+						file_result = f_open(&File[0], "0:logfile.txt", FA_CREATE_ALWAYS | FA_WRITE);
 						SpiStringWrite("\r\n Mount Complete ");
 
 						S1_p->ibits.in_byte = SpiPortWrite(S1_p->obits.out_byte);
@@ -315,7 +315,7 @@ int main(void)
 
 						if (f_mount(0, "0:", 0)) SpiStringWrite("\r\n UMount error "); /* Unregister work area from the logical drive 1 */
 						SpiStringWrite("\r\n Ejection Complete ");
-						eresult = 1;
+						file_result = 1;
 
 						S1_p->ibits.in_byte = SpiPortWrite(S1_p->obits.out_byte);
 						if (S1_p->ibits.in_bits.card_detect) SD_NOTRDY = STA_NOINIT;
@@ -336,7 +336,8 @@ int main(void)
 			//            blink_led(0, LED_ON, FALSE);
 		}
 
-		if (!eresult) {
+		if (!file_result) {
+			f_sync(&File[0]);
 			a = f_puts(comm_buffer, &File[0]);
 			blink_led(RED_LED, LED_OFF, FALSE);
 			blink_led(GREEN_LED, LED_ON, TRUE);
@@ -350,7 +351,7 @@ int main(void)
 			}
 		}
 
-		if ((a == (-1))&&(eresult != 1)) {
+		if ((a == (-1))&&(file_result != 1)) {
 			if ((file_errors % 100) == 0) {
 				sprintf(comm_buffer, "\r\n File Write error %i ", a);
 				SpiStringWrite(comm_buffer);
