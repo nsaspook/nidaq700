@@ -216,23 +216,22 @@ typedef signed long long int64_t;
  */
 
 typedef struct button_type { // Button to bit structure
-	uint16_t button0 : 1;
-	uint16_t button1 : 1;
-	uint16_t button2 : 1;
-	uint16_t button3 : 1;
-	uint16_t button4 : 1;
-	uint16_t button5 : 1;
-	uint16_t button6 : 1;
-	uint16_t button7 : 1;
-	uint16_t button8 : 1;
-	uint16_t button9 : 1;
-	uint16_t button10 : 1;
-	uint16_t button11 : 1;
-	uint16_t button12 : 1;
-	uint16_t button13 : 1;
-	uint16_t button14 : 1;
-	uint16_t button15 : 1;
-
+	uint8_t button0 : 1;
+	uint8_t button1 : 1;
+	uint8_t button2 : 1;
+	uint8_t button3 : 1;
+	uint8_t button4 : 1;
+	uint8_t button5 : 1;
+	uint8_t button6 : 1;
+	uint8_t button7 : 1;
+	uint8_t button8 : 1;
+	uint8_t button9 : 1;
+	uint8_t button10 : 1;
+	uint8_t button11 : 1;
+	uint8_t button12 : 1;
+	uint8_t button13 : 1;
+	uint8_t button14 : 1;
+	uint8_t button15 : 1;
 } button_type;
 
 typedef struct lamp_type { //Lamp to bit structure
@@ -435,7 +434,6 @@ void InterruptHandlerHigh(void)
 				P.lamp = l_tmp.lamp;
 			default:
 				data_in2 = SPI_CMD_DUMMY; // make sure the data does not match the CMD code
-				SSPBUF = b_tmp.b_byte[0]; // preload the first byte into the SPI buffer
 				S.frame = FALSE;
 				LATBbits.LATB2 = 0;
 				break;
@@ -584,12 +582,11 @@ void work_handler(void)
 		P.button.button3 = PORTDbits.RD3;
 		P.button.button4 = PORTDbits.RD4;
 		P.button.button5 = PORTDbits.RD5;
-
-		P.button.button6 = 0;
-		P.button.button7 = 0;
-
-		//		P.button.button6 = PORTDbits.RD6;
-		//		P.button.button7 = PORTDbits.RD7;
+		P.button.button6 = PORTDbits.RD6;
+		P.button.button7 = PORTDbits.RD7;
+		P.button.button8 = PORTEbits.RE0;
+		P.button.button9 = PORTEbits.RE1;
+		P.button.button10 = PORTEbits.RE2;
 		if (!S.frame) {
 			b_tmp.button = P.button;
 			SSPBUF = b_tmp.b_byte[0]; // preload the first byte into the SPI buffer
@@ -626,16 +623,20 @@ void config_pic_io(void)
 	 * default operation mode
 	 */
 
+	Close2USART();
+	CloseADC();
 	OSCCON = 0x70; // internal osc 16mhz, CONFIG OPTION 4XPLL for 64MHZ
 	OSCTUNE = 0b01000000; // 4x pll
 	SLRCON = 0x00; // all slew rates to max
-	ADCON0 = 0;
-	ADCON1 = 0;
+	ANCON0 = 0;
+	ANCON1 = 0;
 	TRISA = 0x00; // all outputs
 	TRISB = 0x00;
 	TRISC = 0x00;
 	TRISD = 0xff; // all inputs
+	PADCFG1bits.RDPU = HIGH;
 	TRISE = 0xff;
+	PADCFG1bits.REPU = HIGH;
 	LATA = 0xff;
 	LATB = 0xff;
 	LATC = 0xff;
@@ -646,20 +647,8 @@ void config_pic_io(void)
 	TRISCbits.TRISC4 = IN; // SDI
 	TRISCbits.TRISC5 = OUT; // SDO
 
-
 	/* setup the SPI interface */
 	OpenSPI(SLV_SSON, MODE_00, SMPMID); // Must be SMPMID in slave mode
-
-	/* RS-232 #2 TX/RX setup */
-	TRISDbits.TRISD6 = 0; // digital output,TX
-	TRISDbits.TRISD7 = 1; // digital input, RX
-	/*
-	 * Open the USART configured as
-	 * 8N1, 19200 baud,  polled mode
-	 */
-	Open2USART(USART_TX_INT_OFF & USART_RX_INT_OFF & USART_ASYNCH_MODE & USART_EIGHT_BIT & USART_CONT_RX & USART_BRGH_LOW, 51); // 64mhz osc
-	SPBRGH2 = 0x00;
-	SPBRG2 = 51;
 
 	/* System activity timer */
 	OpenTimer0(TIMER_INT_ON & T0_16BIT & T0_SOURCE_INT & T0_PS_1_256);
