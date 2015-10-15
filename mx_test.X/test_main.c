@@ -3,6 +3,7 @@
  * The RS-232 port access functions are very useful for debugging low pin count pic32mx devices
  * Version	0.1	Started adding ChaN FatFS routines for MSDOS SDCARD usage
  *		0.2	Start to swap the SPI ports so the buss can be 5v tolerant using PPS ports
+ *		0.3	Dual 45K80 slave processors
  *
  * External Slave connections
  * Slave #1 select pin: B0 pin 4, B1 pin 5, B3 pin 7
@@ -97,7 +98,7 @@ volatile SDCARD_TYPE SDC0 = {MAGIC, 0, FALSE, FALSE}; // active program SD buffe
 int cmd_response = 0, cmd_response_char = 0, cmd_response_port = 0, SD_NOTRDY = STA_NOINIT;
 int cmd_data[3] = {0};
 volatile struct V_data V;
-volatile int32_t spi_flag;
+volatile int32_t spi_flag, spi_flag0, spi_flag1;
 
 FATFS FatFs; /* File system object */
 FIL File[2]; /* File objects */
@@ -136,8 +137,17 @@ void Show_MMC_Info(void)
  */
 void __ISR(_EXTERNAL_1_VECTOR, IPL2AUTO) External_Interrupt_1(void)
 {
-	spi_flag = HIGH;
+	spi_flag = spi_flag0 = HIGH;
 	mINT1ClearIntFlag();
+}
+
+/*
+ * SPI service request interrupt
+ */
+void __ISR(_EXTERNAL_2_VECTOR, IPL2AUTO) External_Interrupt_2(void)
+{
+	spi_flag = spi_flag1 = HIGH;
+	mINT2ClearIntFlag();
 }
 
 int main(void)
@@ -177,11 +187,16 @@ int main(void)
 	mPORTBSetBits(BIT_2); // deselect SDCARD
 	PORTSetPinsDigitalOut(IOPORT_B, BIT_3); // select pin enable for SPI slaves bit 2 to 74hc138
 	mPORTBSetBits(BIT_3); // deselect Slave1
-	PORTSetPinsDigitalIn(IOPORT_A, BIT_3); // for SPI 2 slave interrupt input
+	PORTSetPinsDigitalIn(IOPORT_A, BIT_3); // for SPI 2 slave interrupt input #0
+	PORTSetPinsDigitalIn(IOPORT_A, BIT_4); // for SPI 2 slave interrupt input #1
 	PPSInput(4, INT1, RPA3); // EXT Interrupt #1 Port A3 chip pin 10
+	PPSInput(3, INT2, RPA4); // EXT Interrupt #2 Port A4 chip pin 12
 	ConfigINT1(EXT_INT_PRI_2 | FALLING_EDGE_INT | EXT_INT_ENABLE);
 	SetSubPriorityINT1(EXT_INT_SUB_PRI_3);
+	ConfigINT2(EXT_INT_PRI_2 | FALLING_EDGE_INT | EXT_INT_ENABLE);
+	SetSubPriorityINT2(EXT_INT_SUB_PRI_3);
 	mINT1ClearIntFlag(); // clear before enable
+	mINT2ClearIntFlag(); // clear before enable
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	// Diag Led pins
 	PORTSetPinsDigitalOut(IOPORT_A, BIT_0 | BIT_1); // bi-color LED
@@ -261,7 +276,7 @@ int main(void)
 				snprintf(comm_buffer, 64, "\r\n  B data %x , %i , %i , %i , %i , %i  , %2.4f volts                                             ", S1_p->ibits.in_byte, records, S1_p->adc_data[0], S1_p->adc_data[1], S1_p->adc_data[2], S1_p->adc_data[3], Vcal0);
 			}
 			S1_p->rec_tmp = SpiStringWrite(comm_buffer);
-			if (spi_flag) {
+			if (spi_flag0) {
 				//				spi_flag = 0;
 				SpiStringWrite("\r\n  SRQ received");
 			}
