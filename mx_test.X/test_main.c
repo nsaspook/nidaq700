@@ -147,7 +147,7 @@ int main(void)
 	SDEV_TYPE1 S1 = {0}, *S1_p = &S1;
 	char comm_buffer[MAXSTRLEN];
 	int update_rate = 4;
-	int eresult = 0, records = 0, file_errors = 0;
+	int eresult = 0, records = 0, file_errors = 0, presult;
 	double Vval, Vcal0;
 
 	// Init remote device data
@@ -215,25 +215,16 @@ int main(void)
 		blink_led(GREEN_LED, LED_ON, TRUE);
 	}
 
-//	while (1) {
-//		eresult = SpiIOPoll(0x12);
-//		sprintf(comm_buffer, " IO Poll %i \r\n", eresult);
-		//		if (eresult & 0x01)
-//		SpiStringWrite(comm_buffer);
-//		V.Timer1 = update_rate;
-//		while (V.Timer1);
-//	}
-
 	/* Create destination file on the drive 1 */
 	eresult = f_open(&File[0], "0:logfile.txt", FA_CREATE_ALWAYS | FA_WRITE);
 
 	while (1) { // loop and move data
-		
-//		eresult = SpiIOPoll(0x12);
-//		sprintf(comm_buffer, " IO Poll %i \r\n", eresult);
-		//		if (eresult & 0x01)
-//		SpiStringWrite(comm_buffer);
-		
+
+		presult = SpiIOPoll(0x12);
+		sprintf(comm_buffer, " IO Poll %i \r\n", presult);
+		//		if (presult & 0x01)
+		SpiStringWrite(comm_buffer);
+
 		V.Timer1 = update_rate;
 		while (V.Timer1);
 
