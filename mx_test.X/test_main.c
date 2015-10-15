@@ -98,7 +98,6 @@ volatile SDCARD_TYPE SDC0 = {MAGIC, 0, FALSE, FALSE}; // active program SD buffe
 int cmd_response = 0, cmd_response_char = 0, cmd_response_port = 0, SD_NOTRDY = STA_NOINIT;
 int cmd_data[3] = {0};
 volatile struct V_data V;
-volatile int32_t spi_flag, spi_flag0, spi_flag1;
 
 FATFS FatFs; /* File system object */
 FIL File[2]; /* File objects */
@@ -137,7 +136,8 @@ void Show_MMC_Info(void)
  */
 void __ISR(_EXTERNAL_1_VECTOR, IPL2AUTO) External_Interrupt_1(void)
 {
-	spi_flag = spi_flag0 = HIGH;
+	V.spi_flag = HIGH;
+	V.spi_flag0++;
 	mINT1ClearIntFlag();
 }
 
@@ -146,7 +146,8 @@ void __ISR(_EXTERNAL_1_VECTOR, IPL2AUTO) External_Interrupt_1(void)
  */
 void __ISR(_EXTERNAL_2_VECTOR, IPL2AUTO) External_Interrupt_2(void)
 {
-	spi_flag = spi_flag1 = HIGH;
+	V.spi_flag = HIGH;
+	V.spi_flag1++;
 	mINT2ClearIntFlag();
 }
 
@@ -236,7 +237,7 @@ int main(void)
 	while (1) { // loop and move data
 
 		io_result = SpiIOPoll(0x12);
-		sprintf(comm_buffer, " IO Poll %i \r\n", io_result);
+		sprintf(comm_buffer, " IO Poll %i, 0 %i, 1 %i\r\n", io_result, V.spi_flag0, V.spi_flag1);
 		//		if (presult & 0x01)
 		SpiStringWrite(comm_buffer);
 
@@ -276,8 +277,8 @@ int main(void)
 				snprintf(comm_buffer, 64, "\r\n  B data %x , %i , %i , %i , %i , %i  , %2.4f volts                                             ", S1_p->ibits.in_byte, records, S1_p->adc_data[0], S1_p->adc_data[1], S1_p->adc_data[2], S1_p->adc_data[3], Vcal0);
 			}
 			S1_p->rec_tmp = SpiStringWrite(comm_buffer);
-			if (spi_flag0) {
-				//				spi_flag = 0;
+			if (V.spi_flag) {
+				//				V.spi_flag = 0;
 				SpiStringWrite("\r\n  SRQ received");
 			}
 		}
