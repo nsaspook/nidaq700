@@ -597,9 +597,9 @@ unsigned int SpiIOPoll(unsigned int lamp)
 	 */
 	ps_select(1);
 	V.spi_flag = LOW; // reset the SRQ flag
-	p_switch[0] = xmit_spi_bus(SPI_CMD_RW, 1, LOW);
-	p_switch[1] = xmit_spi_bus(lamp, 1, LOW);
-	p_switch[2] = xmit_spi_bus(lamp, 1, LOW);
+	p_switch[0] = xmit_spi_bus(SPI_CMD_RW, 1, HIGH);
+	p_switch[1] = xmit_spi_bus(lamp, 1, HIGH);
+	p_switch[2] = xmit_spi_bus(lamp, 1, HIGH);
 	return p_switch[1]+(p_switch[2] << 8);
 }
 
