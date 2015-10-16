@@ -575,6 +575,7 @@ unsigned char SpiStringWrite(char* data)
 		if (SpiSerialReadReady()) { // ready status
 			valid_rec_char = TRUE;
 		}
+		V.spi_flag = LOW; // reset the SRQ flag
 		DelaySPI(60, HIGH);
 		for (i = 1; i <= len; i++) {
 			tmp_char = SpiSerialWrite(data[i]);
@@ -582,6 +583,7 @@ unsigned char SpiStringWrite(char* data)
 				valid_rec_char = TRUE;
 				ret_char = tmp_char;
 			}
+			V.spi_flag = LOW; // reset the SRQ flag
 			DelaySPI(60, HIGH);
 		}
 		return ret_char;

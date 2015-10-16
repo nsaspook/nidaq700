@@ -124,6 +124,7 @@ extern "C" {
 		uint32_t data_count, blink_count, display_count, adc_count;
 		uint16_t blink, blink_out, blink_alt;
 		uint32_t Timer1, Timer2, Timer3, Timer4;
+		int spi_flag, spi_flag0, spi_flag1;
 	} V_data;
 
 #ifdef	__cplusplus

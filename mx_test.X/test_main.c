@@ -241,9 +241,6 @@ int main(void)
 		//		if (presult & 0x01)
 		SpiStringWrite(comm_buffer);
 
-		V.Timer1 = update_rate;
-		while (V.Timer1);
-
 		/* loop back testing */
 		data_mix_old = data_mix; // save the old data
 		data_mix = rand(); // make new data
@@ -277,10 +274,7 @@ int main(void)
 				snprintf(comm_buffer, 64, "\r\n  B data %x , %i , %i , %i , %i , %i  , %2.4f volts                                             ", S1_p->ibits.in_byte, records, S1_p->adc_data[0], S1_p->adc_data[1], S1_p->adc_data[2], S1_p->adc_data[3], Vcal0);
 			}
 			S1_p->rec_tmp = SpiStringWrite(comm_buffer);
-			if (V.spi_flag) {
-				//				V.spi_flag = 0;
-				SpiStringWrite("\r\n  SRQ received");
-			}
+			f_sync(&File[0]);
 		}
 		if (SpiSerialReadOk() || !S1_p->ibits.in_bits.eject) {
 			S1_p->char_ready = TRUE;
@@ -353,7 +347,7 @@ int main(void)
 		}
 
 		if (!file_result) {
-			f_sync(&File[0]);
+//			f_sync(&File[0]);
 			a = f_puts(comm_buffer, &File[0]);
 			blink_led(RED_LED, LED_OFF, FALSE);
 			blink_led(GREEN_LED, LED_ON, TRUE);
@@ -375,7 +369,7 @@ int main(void)
 				blink_led(RED_LED, LED_ON, FALSE);
 			}
 		}
-		f_sync(&File[0]);
+//		f_sync(&File[0]);
 	}
 }
 

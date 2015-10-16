@@ -11,10 +11,10 @@
 #ifdef	__cplusplus
 extern "C" {
 #endif
-#define	MAGIC		0x0001  				// data version checkmark
+#define	MAGIC		0x0003  				// data version checkmark
 
 #define SDSPEED         0               // SDCARD fast SPI speed 0=fastest
-#define	SDPOWER				// SD card 3.3vdc power enable
+#define	SDPOWER							// SD card 3.3vdc power enable
 #define SPI_CS			0
 
 #define	SDBUFFERSIZE	512l
@@ -79,12 +79,6 @@ extern "C" {
 #define CMD55	(0x40+55)       /* APP_CMD */
 #define CMD58	(0x40+58)       /* READ_OCR */
 #define CRC_ON_OFF	(0x40+59)       // turn off CRC , it's default to off anyway
-
-	/* Control signals (Platform dependent) */
-
-	//#define SDINFO		0		// SD card data info block
-	//#define SDSTART		1		// SD card first data block
-	//#define	SDC0EEP		510             // start address of SD mirror block data in EEPROM
 
 	/* PIC Slave commands */
 #define CMD_ADC_GO		0b10000000
