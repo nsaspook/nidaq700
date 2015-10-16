@@ -763,11 +763,11 @@ void config_pic(void)
 
 	/*
 	 * Open the USART configured as
-	 * 8N1, 19200 baud,  polled mode
+	 * 8N1, 38400 baud,  polled mode
 	 */
 	Open2USART(USART_TX_INT_ON & USART_RX_INT_OFF & USART_ASYNCH_MODE & USART_EIGHT_BIT & USART_CONT_RX & USART_BRGH_LOW, 51); // 64mhz osc
 	SPBRGH2 = 0x00;
-	SPBRG2 = 51;
+	SPBRG2 = 25;
 	//	BAUDCON2bits.TXCKP=1;	// reverse TX
 	PIE3bits.TX2IE = LOW;
 
