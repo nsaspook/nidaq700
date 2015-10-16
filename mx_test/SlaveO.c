@@ -365,14 +365,16 @@ void InterruptHandlerHigh(void)
 		b_dummy = PORTB;
 	}
 
+	/*
+	 * sends a SRQ to the host controller, polls TRMT and handles other ISR flags
+	 * by retriggering the TX2 interrupt until the shift register is empty
+	 */
 	if (PIE3bits.TX2IE && PIR3bits.TX2IF) {
 		SRQ = HIGH;
-		DLED2 = !DLED2;
 
 		if (TXSTA2bits.TRMT) {
 			PIE3bits.TX2IE = LOW;
 			SRQ = LOW;
-			DLED2 = LOW;
 			spi_stat.tx_int++;
 		}
 	}
@@ -582,6 +584,7 @@ void work_handler(void)
 {
 	static union b_union b_tmp;
 	if (PIR1bits.TMR1IF) {
+		DLED2 = !DLED2;
 		P.times++;
 
 		PIR1bits.TMR1IF = LOW; // clear TMR1 interrupt flag
@@ -667,12 +670,12 @@ void config_pic_io(void)
 
 	/* event timer */
 	OpenTimer1(T1_SOURCE_FOSC_4 & T1_16BIT_RW & T1_PS_1_8 & T1_OSC1EN_OFF & T1_SYNC_EXT_OFF, 0);
-	IPR1bits.TMR1IP = 0; // set timer2 low pri interrupt
+	IPR1bits.TMR1IP = LOW; // set timer2 low pri interrupt
 	WriteTimer1(PDELAY);
 
 	/* CAN TX/RX setup, alt MUX to PORT C */
-	TRISCbits.TRISC6 = 0; // digital output,CAN TX
-	TRISCbits.TRISC7 = 1; // digital input, CAN RX
+	TRISCbits.TRISC6 = OUT; // digital output,CAN TX
+	TRISCbits.TRISC7 = IN; // digital input, CAN RX
 
 	/* clear SPI module possible flag */
 	PIR1bits.SSPIF = LOW;
@@ -715,10 +718,10 @@ void config_pic(void)
 	TRISA = 0b00111111; // [0..5] input, [6..7] outputs for LEDS
 	LATA = 0b11000000;
 	TRISB = 0b00111011; // RB6..7 outputs, 2 DLED TESTING BIT
-	INTCON2bits.RBPU = 0; // turn on weak pullups
-	INTCONbits.RBIE = 0; // disable PORTB interrupts
-	INTCONbits.INT0IE = 0; // disable interrupt
-	INTCONbits.INT0IF = 0; // disable interrupt
+	INTCON2bits.RBPU = LOW; // turn on weak pullups
+	INTCONbits.RBIE = LOW; // disable PORTB interrupts
+	INTCONbits.INT0IE = LOW; // disable interrupt
+	INTCONbits.INT0IF = LOW; // disable interrupt
 	INTCONbits.RBIF = LOW; // reset B flag
 	IOCB = 0x00;
 	TRISC = 0b10011000; // [0..2,5..6] outputs
@@ -727,11 +730,11 @@ void config_pic(void)
 	TRISE = 0b00000111; // [0..2] inputs, N/A others for 40 pin chip
 
 	/* SPI pins setup */
-	TRISCbits.TRISC3 = 1; // SCK pins clk in SLAVE
-	TRISCbits.TRISC4 = 1; // SDI
-	TRISCbits.TRISC5 = 0; // SDO
-	TRISAbits.TRISA5 = 1; // SS2
-	TRISCbits.TRISC2 = 0; // master service request output
+	TRISCbits.TRISC3 = IN; // SCK pins clk in SLAVE
+	TRISCbits.TRISC4 = IN; // SDI
+	TRISCbits.TRISC5 = OUT; // SDO
+	TRISAbits.TRISA5 = IN; // SS2
+	TRISCbits.TRISC2 = OUT; // master service request output
 
 	/* ADC channels setup */
 	TRISAbits.TRISA0 = HIGH; // an0
@@ -746,12 +749,12 @@ void config_pic(void)
 	TRISBbits.TRISB4 = HIGH; // an9
 
 	/* CAN TX/RX setup, alt MUX to PORT C */
-	TRISCbits.TRISC6 = 0; // digital output,CAN TX
-	TRISCbits.TRISC7 = 1; // digital input, CAN RX
+	TRISCbits.TRISC6 = OUT; // digital output,CAN TX
+	TRISCbits.TRISC7 = IN; // digital input, CAN RX
 
 	/* RS-232 #2 TX/RX setup */
-	TRISDbits.TRISD6 = 0; // digital output,TX
-	TRISDbits.TRISD7 = 1; // digital input, RX
+	TRISDbits.TRISD6 = OUT; // digital output,TX
+	TRISDbits.TRISD7 = IN; // digital input, RX
 
 	OpenADC(ADC_FOSC_64 & ADC_RIGHT_JUST & ADC_2_TAD, ADC_CH0 & ADC_INT_ON, ADC_REF_VDD_VSS); // open ADC channel
 	ANCON0 = 0b11101111; // analog bit enables
@@ -782,7 +785,7 @@ void config_pic(void)
 
 	/* event timer */
 	OpenTimer1(T1_SOURCE_FOSC_4 & T1_16BIT_RW & T1_PS_1_8 & T1_OSC1EN_OFF & T1_SYNC_EXT_OFF, 0);
-	IPR1bits.TMR1IP = 0; // set timer2 low pri interrupt
+	IPR1bits.TMR1IP = LOW; // set timer2 low pri interrupt
 	WriteTimer1(PDELAY);
 
 	/* clear SPI module possible flag and enable interrupts*/
@@ -791,12 +794,12 @@ void config_pic(void)
 
 #ifdef P45K80
 	/* Enable interrupt priority */
-	RCONbits.IPEN = 1;
+	RCONbits.IPEN = HIGH;
 	dump = RCREG2; // clear receive double buffer
 	dump = RCREG2;
 	dump = RCREG2;
 	/* Enable all high priority interrupts */
-	INTCONbits.GIEH = 1;
+	INTCONbits.GIEH = HIGH;
 	INTCONbits.GIEL = LOW;
 #endif
 	/* clear any SSP error bits */
@@ -807,8 +810,8 @@ void config_pic(void)
 void check_config(void)
 {
 	if (spi_stat.reconfig) {
-		INTCONbits.GIEH = 0;
-		INTCONbits.GIEL = 0;
+		INTCONbits.GIEH = LOW;
+		INTCONbits.GIEL = LOW;
 		spi_stat.reconfig = FALSE;
 		if (spi_stat.reconfig_id == 0) {
 			config_pic();
@@ -864,9 +867,9 @@ void main(void) /* SPI Master/Slave loopback */
 		}
 
 
-		INTCONbits.GIEH = 0;
+		INTCONbits.GIEH = LOW;
 		report_stat = spi_stat;
-		INTCONbits.GIEH = 1;
+		INTCONbits.GIEH = HIGH;
 		if (spi_comm.REMOTE_LINK) {
 			wdtdelay(600000, TRUE);
 		} else {
