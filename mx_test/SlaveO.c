@@ -303,7 +303,7 @@ struct spi_link_type { // internal state table
 };
 
 struct spi_stat_type {
-	volatile uint32_t adc_count, adc_error_count,
+	volatile uint32_t adc_count, adc_error_count, tx_int,
 	port_count, port_error_count,
 	char_count, char_error_count,
 	slave_int_count, last_slave_int_count,
@@ -363,6 +363,15 @@ void InterruptHandlerHigh(void)
 	if (INTCONbits.RBIF) { // PORT B int handler
 		INTCONbits.RBIF = LOW;
 		b_dummy = PORTB;
+	}
+
+	if (PIE3bits.TX2IE && PIR3bits.TX2IF) {
+		SRQ = HIGH;
+		if (TXSTA2bits.TRMT) {
+			PIE3bits.TX2IE = LOW;
+			SRQ = LOW;
+			spi_stat.tx_int++;
+		}
 	}
 
 	if (INTCONbits.TMR0IF) { // check timer0 irq 1 second timer int handler
@@ -490,6 +499,7 @@ void InterruptHandlerHigh(void)
 			if (command == CMD_CHAR_DATA) { // get upper 4 bits send bits and send the data
 				if (TXSTA2bits.TRMT) { // The USART send buffer is ready
 					TXREG2 = ((data_in2 & LO_NIBBLE) << 4) | char_txtmp; // send data to RS-232 #2 output
+					PIE3bits.TX2IE = HIGH; // enable the serial interrupt
 				}
 				SSPBUF = cmd_dummy; // send rx status first, the next SPI transfer will contain it.
 				cmd_dummy = CMD_DUMMY; // clear rx bit
@@ -755,10 +765,11 @@ void config_pic(void)
 	 * Open the USART configured as
 	 * 8N1, 19200 baud,  polled mode
 	 */
-	Open2USART(USART_TX_INT_OFF & USART_RX_INT_OFF & USART_ASYNCH_MODE & USART_EIGHT_BIT & USART_CONT_RX & USART_BRGH_LOW, 51); // 64mhz osc
+	Open2USART(USART_TX_INT_ON & USART_RX_INT_OFF & USART_ASYNCH_MODE & USART_EIGHT_BIT & USART_CONT_RX & USART_BRGH_LOW, 51); // 64mhz osc
 	SPBRGH2 = 0x00;
 	SPBRG2 = 51;
 	//	BAUDCON2bits.TXCKP=1;	// reverse TX
+	PIE3bits.TX2IE = LOW;
 
 	/* System activity timer, can reset the processor */
 	OpenTimer0(TIMER_INT_ON & T0_16BIT & T0_SOURCE_INT & T0_PS_1_256);
@@ -857,8 +868,8 @@ void main(void) /* SPI Master/Slave loopback */
 		} else {
 			wdtdelay(600000, TRUE);
 		}
-		sprintf(comm_stat_buffer, "\r\n  count %lu, adc %lu, data %lu, char %lu, comm %lu", report_stat.slave_int_count,
-			report_stat.adc_count, report_stat.port_count, report_stat.char_count, report_stat.comm_count);
+		sprintf(comm_stat_buffer, "\r\n  count %lu, adc %lu, data %lu, char %lu, comm %lu, tx int %lu\r\n", report_stat.slave_int_count,
+			report_stat.adc_count, report_stat.port_count, report_stat.char_count, report_stat.comm_count, report_stat.tx_int);
 		if (spi_stat.reconfig_id == 0)
 			puts2USART(comm_stat_buffer);
 	}
