@@ -153,18 +153,17 @@ static void DelaySPI(WORD delay, int srq)
 	unsigned int int_status;
 
 	while (delay--) {
-		if (likely(srq & spi_flag)) // make the instruction cache preload the exit code
+		if (likely(srq & V.spi_flag)) // make the instruction cache preload the exit code
 			goto DelaySPI_exit;
 		int_status = INTDisableInterrupts();
 		OpenCoreTimer(500000 / 2000);
 		INTRestoreInterrupts(int_status);
 		mCTClearIntFlag();
-		//				while (!mCTGetIntFlag()); // timeout
-		while (!mCTGetIntFlag() && !spi_flag); // timeout or SRQ flag set
+		while (!mCTGetIntFlag() && !V.spi_flag); // timeout or SRQ flag set
 	}
 DelaySPI_exit:
 	mCTClearIntFlag();
-	spi_flag = LOW;
+	V.spi_flag = LOW;
 }
 
 /*-----------------------------------------------------------------------*/
@@ -397,7 +396,7 @@ int MMC_disk_initialize()
 	}
 	SDC0.sdinit = TRUE;
 	SD_NOTRDY = RES_OK;
-	SpiChnSetBrg(SDCARD_CHAN, 4); // set SCK to high speed
+	SpiChnSetBrg(SDCARD_CHAN, 2); // set SCK to high speed
 	MMC_get_volume_info();
 	return RES_OK;
 }
@@ -571,18 +570,19 @@ unsigned char SpiStringWrite(char* data)
 	len = strlen(data);
 	if (len > MAXSTRLEN) len = MAXSTRLEN - 2;
 	if (len) {
+		V.spi_flag = LOW; // reset the SRQ flag
 		ret_char = SpiSerialWrite(data[0]);
 		if (SpiSerialReadReady()) { // ready status
 			valid_rec_char = TRUE;
 		}
-		DelaySPI(52, LOW);
+		DelaySPI(60, HIGH);
 		for (i = 1; i <= len; i++) {
 			tmp_char = SpiSerialWrite(data[i]);
 			if (SpiSerialReadReady()) { // ready status
 				valid_rec_char = TRUE;
 				ret_char = tmp_char;
 			}
-			DelaySPI(52, LOW);
+			DelaySPI(60, HIGH);
 		}
 		return ret_char;
 	}
@@ -596,7 +596,7 @@ unsigned int SpiIOPoll(unsigned int lamp)
 	 * Need a delay for remote SPI processing
 	 */
 	ps_select(1);
-	spi_flag = LOW; // reset the SRQ flag
+	V.spi_flag = LOW; // reset the SRQ flag
 	p_switch[0] = xmit_spi_bus(SPI_CMD_RW, 1, LOW);
 	p_switch[1] = xmit_spi_bus(lamp, 1, LOW);
 	p_switch[2] = xmit_spi_bus(lamp, 1, LOW);
@@ -608,7 +608,7 @@ int SpiADCRead(unsigned char channel)
 	ps_select(0);
 	V.adc_count++;
 	xmit_spi_bus(CMD_DUMMY_CFG, 1, HIGH);
-	spi_flag = HIGH; // don't wait
+	V.spi_flag = HIGH; // don't wait
 	cmd_response_port = xmit_spi_bus(CMD_ADC_GO_H | (channel & 0x0f), 1, HIGH);
 	DelaySPI(50, HIGH); // delay for adc conversion time and look for SRQ signal
 	cmd_data[0] = xmit_spi_bus(CMD_ADC_DATA, 1, HIGH);
