@@ -168,8 +168,8 @@
 #define R_ALL_ON	0xff
 #define NO		LOW
 #define YES		HIGH
-#define IN			HIGH
-#define OUT			LOW
+#define IN		HIGH
+#define OUT		LOW
 
 #define	SRQ		LATCbits.LATC2
 
@@ -187,7 +187,7 @@
 #else
 #define DLED0		LATCbits.LATC0
 #define DLED1		LATCbits.LATC0
-#define DLED2		LATCbits.LATC0
+#define DLED2		LATBbits.LATB2
 #define DLED3		LATCbits.LATC0
 #define DLED4		LATCbits.LATC0
 #define DLED5		LATCbits.LATC0
@@ -343,7 +343,7 @@ void InterruptVectorHigh(void)
 
 void work_int(void)
 {
-	_asm goto work_handler _endasm // low
+	_asm goto work_handler _endasm // low pri interrupt
 }
 #pragma code
 
@@ -367,9 +367,12 @@ void InterruptHandlerHigh(void)
 
 	if (PIE3bits.TX2IE && PIR3bits.TX2IF) {
 		SRQ = HIGH;
+		DLED2 = !DLED2;
+
 		if (TXSTA2bits.TRMT) {
 			PIE3bits.TX2IE = LOW;
 			SRQ = LOW;
+			DLED2 = LOW;
 			spi_stat.tx_int++;
 		}
 	}
@@ -444,7 +447,6 @@ void InterruptHandlerHigh(void)
 			default:
 				data_in2 = SPI_CMD_DUMMY; // make sure the data does not match the CMD code
 				S.frame = FALSE;
-				LATBbits.LATB2 = 0;
 				break;
 			}
 			S.seq++;
@@ -455,7 +457,6 @@ void InterruptHandlerHigh(void)
 		 * The master has sent a data RW command
 		 */
 		if ((data_in2 == SPI_CMD_RW) && !S.frame) {
-			LATBbits.LATB2 = 1;
 			if (spi_stat.reconfig_id == 0) {
 				spi_stat.reconfig_id = 1;
 				spi_stat.reconfig = TRUE;
@@ -607,7 +608,7 @@ void work_handler(void)
 		LATAbits.LATA2 = P.lamp.lamp2;
 		LATAbits.LATA3 = P.lamp.lamp3;
 		LATBbits.LATB0 = P.lamp.lamp4;
-		//	LATBbits.LATB1 = P.lamp.lamp5;
+		LATBbits.LATB1 = P.lamp.lamp5;
 		//	LATBbits.LATB2 = P.lamp.lamp6;
 		LATBbits.LATB3 = P.lamp.lamp7;
 
@@ -669,6 +670,10 @@ void config_pic_io(void)
 	IPR1bits.TMR1IP = 0; // set timer2 low pri interrupt
 	WriteTimer1(PDELAY);
 
+	/* CAN TX/RX setup, alt MUX to PORT C */
+	TRISCbits.TRISC6 = 0; // digital output,CAN TX
+	TRISCbits.TRISC7 = 1; // digital input, CAN RX
+
 	/* clear SPI module possible flag */
 	PIR1bits.SSPIF = LOW;
 	S.link = FALSE;
@@ -709,7 +714,7 @@ void config_pic(void)
 	SLRCON = 0x00; // all slew rates to max
 	TRISA = 0b00111111; // [0..5] input, [6..7] outputs for LEDS
 	LATA = 0b11000000;
-	TRISB = 0b00111011; // RB6..7 outputs
+	TRISB = 0b00111011; // RB6..7 outputs, 2 DLED TESTING BIT
 	INTCON2bits.RBPU = 0; // turn on weak pullups
 	INTCONbits.RBIE = 0; // disable PORTB interrupts
 	INTCONbits.INT0IE = 0; // disable interrupt
@@ -831,7 +836,6 @@ void main(void) /* SPI Master/Slave loopback */
 	putrs2USART(" #### \x1b[7m SPI Slave Ready! \x1b[0m ####\r\n");
 	LATD = 0b00111111; // all LEDS off/outputs high
 	LATA = 0b11000000;
-	DLED6 = DLED7 = HIGH;
 
 	while (1) { // just loop
 
@@ -847,9 +851,9 @@ void main(void) /* SPI Master/Slave loopback */
 		}
 		if (RCSTA2bits.OERR || RCSTA2bits.FERR) {
 			if (RCSTA2bits.FERR) {
-				DLED1 = !DLED1;
+				DLED2 = !DLED2;
 			} else {
-				DLED1 = LOW;
+				DLED2 = LOW;
 			}
 			RCSTA2bits.CREN = LOW; // clear overrun
 			RCSTA2bits.CREN = HIGH; // re-enable
