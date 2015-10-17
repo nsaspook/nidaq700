@@ -50,7 +50,7 @@ void Blink_Init(void)
 	OpenTimer4(T4_ON | T4_SOURCE_INT | T4_PS_1_8, (50000000 / 2 / 64 / 2)); // for 2hz
 }
 
-void Drive_leds(void)
+static void Drive_leds(void)
 {
 
 	if (LEDS.out_bits.b0) {

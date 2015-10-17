@@ -10,6 +10,8 @@ int MMC_disk_initialize(void); // Check for card and init via SPI
 int MMC_disk_status(void); // card mounted and ready
 int MMC_disk_read(BYTE*, DWORD, UINT);
 int MMC_disk_write(const BYTE*, DWORD, UINT);
+void MM_state(int);
+unsigned char MM_detect(void);
 DRESULT MMC_disk_ioctl(BYTE, void*);
 void disk_timerproc(void);
 DWORD get_fattime(void);
@@ -33,13 +35,8 @@ int SpiADCRead(unsigned char);
 unsigned char SpiStringWrite(char*);
 unsigned char SpiSerialGetChar(void);
 
-extern unsigned char csd[18], cid[18], ocr[4];
-extern VOLUME_INFO_TYPE MMC_volume_Info, *vinf;
-extern volatile SDCARD_TYPE SDC0;
-
+extern VOLUME_INFO_TYPE *vinf;
 extern void wdttime(unsigned long int);
-extern int cmd_response, cmd_response_char, cmd_response_port, SD_NOTRDY;
-extern int cmd_data[3];
 extern volatile struct V_data V;
 extern union Obits2 LEDS;
 

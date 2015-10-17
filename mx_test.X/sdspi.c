@@ -27,6 +27,11 @@
 static int valid_rec_char = FALSE;
 static UINT CardType;
 volatile static struct timeval current_time;
+static uint8_t csd[18] = {0}, cid[18] = {0}, ocr[4] = {0};
+static VOLUME_INFO_TYPE MMC_volume_Info = {0};
+static int cmd_data[3] = {0}, SD_NOTRDY = STA_NOINIT;
+static int cmd_response_char = 0, cmd_response_port = 0;
+static volatile SDCARD_TYPE SDC0 = {MAGIC, 0, FALSE, FALSE}; // active program SD buffer
 
 /* 
  * branch macros for MIPS 
@@ -322,6 +327,16 @@ int MMC_get_volume_info(void)
 /* Initialize Disk Drive                                                 */
 
 /*-----------------------------------------------------------------------*/
+
+void MM_state(int flag)
+{
+	SD_NOTRDY = flag;
+}
+
+unsigned char MM_detect(void)
+{
+	return SDC0.sddetect;
+}
 
 int MMC_disk_initialize()
 {

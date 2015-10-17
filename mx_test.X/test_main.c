@@ -90,15 +90,16 @@
 #define ADGAIN		0.983	// correct for voltage offset from calibration value 2.000 volts
 
 /*
- * SDCARD variables and buffer storage
+ * SDCARD variable
  */
-VOLUME_INFO_TYPE MMC_volume_Info = {0}, *vinf = 0;
-uint8_t csd[18] = {0}, cid[18] = {0}, ocr[4] = {0};
-volatile SDCARD_TYPE SDC0 = {MAGIC, 0, FALSE, FALSE}; // active program SD buffer
-int cmd_response = 0, cmd_response_char = 0, cmd_response_port = 0, SD_NOTRDY = STA_NOINIT;
-int cmd_data[3] = {0};
+VOLUME_INFO_TYPE *vinf = 0;
+/*
+ * ISR data
+ */
 volatile struct V_data V;
-
+/*
+ * File system data
+ */
 FATFS FatFs; /* File system object */
 FIL File[2]; /* File objects */
 
@@ -124,7 +125,7 @@ void DelayMs(WORD delay)
 void Show_MMC_Info(void)
 {
 	char comm_buffer[128];
-	if (SDC0.sddetect) {
+	if (MM_detect()) {
 		sprintf(comm_buffer, "\r\n Mounted %s, Serial Number %u, Size %u MB\r\n", vinf->name, (unsigned int) vinf->serial, (unsigned int) vinf->size_MB);
 		SpiStringWrite(comm_buffer);
 	}
@@ -256,7 +257,7 @@ int main(void)
 		S1_p->ibits.in_byte = SpiPortWrite(S1_p->obits.out_byte);
 		if (S1_p->ibits.in_bits.card_detect) {
 			S1_p->obits.out_bits.eject_led = OFF;
-			SD_NOTRDY = STA_NOINIT;
+			MM_state(STA_NOINIT);
 		} else {
 			S1_p->obits.out_bits.eject_led = ~S1_p->obits.out_bits.eject_led;
 		}
@@ -307,7 +308,7 @@ int main(void)
 						SpiStringWrite("\r\n Mount Complete ");
 
 						S1_p->ibits.in_byte = SpiPortWrite(S1_p->obits.out_byte);
-						if (S1_p->ibits.in_bits.card_detect) SD_NOTRDY = STA_NOINIT;
+						if (S1_p->ibits.in_bits.card_detect) MM_state(STA_NOINIT);
 					}
 				} else { // Eject current disk
 					blink_led(0, LED_ON, FALSE);
@@ -328,7 +329,7 @@ int main(void)
 						file_result = 1;
 
 						S1_p->ibits.in_byte = SpiPortWrite(S1_p->obits.out_byte);
-						if (S1_p->ibits.in_bits.card_detect) SD_NOTRDY = STA_NOINIT;
+						if (S1_p->ibits.in_bits.card_detect) MM_state(STA_NOINIT);
 					}
 				}
 			}
