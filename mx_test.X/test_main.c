@@ -348,7 +348,7 @@ int main(void)
 		}
 
 		if (!file_result) {
-//			f_sync(&File[0]);
+			f_sync(&File[0]);
 			a = f_puts(comm_buffer, &File[0]);
 			blink_led(RED_LED, LED_OFF, FALSE);
 			blink_led(GREEN_LED, LED_ON, TRUE);
