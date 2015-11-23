@@ -733,7 +733,7 @@ void config_pic(void)
 	TRISCbits.TRISC3 = IN; // SCK pins clk in SLAVE
 	TRISCbits.TRISC4 = IN; // SDI
 	TRISCbits.TRISC5 = OUT; // SDO
-	TRISAbits.TRISA5 = IN; // SS2
+	TRISAbits.TRISA5 = IN; // SS1
 	TRISCbits.TRISC2 = OUT; // master service request output
 
 	/* ADC channels setup */
