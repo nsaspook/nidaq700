@@ -39,3 +39,4 @@ Module.symvers
 /supermoon/moonlight/bmc_x86/build/
 /supermoon/moonlight/build/
 /supermoon/moonlight/dist/
+/pic24/picmmc.X/nbproject/private/
