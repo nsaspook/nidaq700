@@ -630,6 +630,9 @@ void wdtdelay(unsigned long delay, unsigned char clearit)
 
 void config_pic_io(void)
 {
+	/* set these boot bits so we can check for rests later */
+	RCONbits.BOR = 1;
+	RCONbits.POR = 1;
 	spi_stat.reconfig_id = 1;
 	if (RCONbits.TO == (uint8_t) LOW) WDT_TO = TRUE;
 	if (EECON1bits.WRERR && (EECON1bits.EEPGD == (uint8_t) LOW)) EEP_ER = TRUE;
