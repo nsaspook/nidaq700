@@ -181,6 +181,7 @@ by the module option variable daqgert_conf in the /etc/modprobe.d directory
 #include <linux/timer.h> 
 #include <linux/list.h>  
 #include "comedi_8254.h"  
+#include <mach/platform.h> /* for GPIO_BASE and ST_BASE */
 
 /* Error Return Values */
 #define ADS1220_NO_ERROR           0
