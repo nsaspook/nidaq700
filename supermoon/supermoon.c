@@ -1084,6 +1084,9 @@ static int32_t piBoardRev(struct comedi_device *dev)
 		case 1:
 			boardRev = 3;
 			break;
+		case 2:
+			boardRev = 3;
+			break;
 		default:
 			boardRev = -1;
 		}
@@ -1102,7 +1105,7 @@ static int32_t piBoardRev(struct comedi_device *dev)
 		}
 	}
 
-	dev_info(dev->class_dev, "driver gpio board rev %u\n",
+	dev_info(dev->class_dev, "driver gpio board rev %i\n",
 		boardRev);
 	dio_conf = boardRev; /* set module param */
 
@@ -3510,7 +3513,7 @@ module_exit(daqgert_exit);
 
 MODULE_AUTHOR("Fred Brooks <spam@sma2.rain.com>");
 MODULE_DESCRIPTION("RPi DIO/AI/AO Driver");
-MODULE_VERSION("4.1.8");
+MODULE_VERSION("4.6.0");
 MODULE_LICENSE("GPL");
 MODULE_ALIAS("spi:spigert");
 
