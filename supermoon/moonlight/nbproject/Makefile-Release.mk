@@ -21,7 +21,7 @@ FC=gfortran
 AS=as
 
 # Macros
-CND_PLATFORM=GNU-Linux-x86
+CND_PLATFORM=GNU-Linux
 CND_DLIB_EXT=so
 CND_CONF=Release
 CND_DISTDIR=dist
@@ -35,9 +35,9 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 
 # Object Files
 OBJECTFILES= \
-	${OBJECTDIR}/_ext/1360920745/bmc.o \
-	${OBJECTDIR}/_ext/1685954798/daq.o \
-	${OBJECTDIR}/_ext/1181056713/bmcnet.o
+	${OBJECTDIR}/_ext/511e00a9/bmc.o \
+	${OBJECTDIR}/_ext/9b825f12/daq.o \
+	${OBJECTDIR}/_ext/46657ec9/bmcnet.o
 
 
 # C Compiler Flags
@@ -64,20 +64,20 @@ ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/moonlight: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
 	${LINK.c} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/moonlight ${OBJECTFILES} ${LDLIBSOPTIONS}
 
-${OBJECTDIR}/_ext/1360920745/bmc.o: ../bmc/bmc.c 
-	${MKDIR} -p ${OBJECTDIR}/_ext/1360920745
+${OBJECTDIR}/_ext/511e00a9/bmc.o: ../bmc/bmc.c 
+	${MKDIR} -p ${OBJECTDIR}/_ext/511e00a9
 	${RM} "$@.d"
-	$(COMPILE.c) -O2 `pkg-config --cflags comedilib` `pkg-config --cflags xaw7`   -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1360920745/bmc.o ../bmc/bmc.c
+	$(COMPILE.c) -O2 `pkg-config --cflags comedilib` `pkg-config --cflags xaw7`   -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/511e00a9/bmc.o ../bmc/bmc.c
 
-${OBJECTDIR}/_ext/1685954798/daq.o: ../bmc/bmc/daq.c 
-	${MKDIR} -p ${OBJECTDIR}/_ext/1685954798
+${OBJECTDIR}/_ext/9b825f12/daq.o: ../bmc/bmc/daq.c 
+	${MKDIR} -p ${OBJECTDIR}/_ext/9b825f12
 	${RM} "$@.d"
-	$(COMPILE.c) -O2 `pkg-config --cflags comedilib` `pkg-config --cflags xaw7`   -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1685954798/daq.o ../bmc/bmc/daq.c
+	$(COMPILE.c) -O2 `pkg-config --cflags comedilib` `pkg-config --cflags xaw7`   -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/9b825f12/daq.o ../bmc/bmc/daq.c
 
-${OBJECTDIR}/_ext/1181056713/bmcnet.o: ../bmc/bmc_x86/bmcnet.c 
-	${MKDIR} -p ${OBJECTDIR}/_ext/1181056713
+${OBJECTDIR}/_ext/46657ec9/bmcnet.o: ../bmc/bmc_x86/bmcnet.c 
+	${MKDIR} -p ${OBJECTDIR}/_ext/46657ec9
 	${RM} "$@.d"
-	$(COMPILE.c) -O2 `pkg-config --cflags comedilib` `pkg-config --cflags xaw7`   -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1181056713/bmcnet.o ../bmc/bmc_x86/bmcnet.c
+	$(COMPILE.c) -O2 `pkg-config --cflags comedilib` `pkg-config --cflags xaw7`   -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/46657ec9/bmcnet.o ../bmc/bmc_x86/bmcnet.c
 
 # Subprojects
 .build-subprojects:
