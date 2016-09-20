@@ -40,3 +40,5 @@ Module.symvers
 /supermoon/moonlight/build/
 /supermoon/moonlight/dist/
 /pic24/picmmc.X/nbproject/private/
+/pic24/pic24.X/nbproject/private/
+/pic24/pic24.X/build/default/
