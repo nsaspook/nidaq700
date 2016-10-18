@@ -42,3 +42,5 @@ Module.symvers
 /pic24/picmmc.X/nbproject/private/
 /pic24/pic24.X/nbproject/private/
 /pic24/pic24.X/build/default/
+/pic24/pictest.X/nbproject/private/
+/pic24/pictest.X/dist/default/
